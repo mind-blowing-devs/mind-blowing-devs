@@ -1,4 +1,4 @@
-name: Lint
+name: CI Checks
 
 on:
   pull_request:
@@ -8,18 +8,36 @@ on:
       - dev
 
 jobs:
-  eslint:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+
+      # Базовая настройка Node.js и кэширование зависимостей
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install main deps
+          cache: 'yarn'
+
+      - name: Install dependencies
         run: yarn
-      - name: Initialize
-        run: yarn lerna bootstrap
-      - name: Lint
+
+      - name: Initialize project
+        run: yarn bootstrap
+
+      - name: Run linting
         run: yarn lint
-      - name: Test
+
+      # Проверка типов TypeScript
+      # На начальном этапе можно закомментировать, если проверка мешает разработке
+      - name: Run type checking
+        run: yarn workspace client tsc --noEmit
+
+      - name: Run tests
         run: yarn test
+
+      # Проверка успешности сборки проекта
+      # На начальном этапе можно закомментировать, если проверка мешает разработке
+      - name: Build check
+        run: yarn build
