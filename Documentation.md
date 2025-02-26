@@ -38,7 +38,7 @@ Minesweeper game — это классическая 2D-игра с разным
 - **React Hook Form** (сбор данных с форм)
 - **Tailwind** (стили)
 - **Axios** (работа с сетевыми запросами)
-- **Husky** (Добавление автоматизации, pre-commit, pr-checks)
+- **Lefthook** (Добавление хуков для автоматизации, pre-commit, pr-checks)
 - **TypeScript** (статическая типизация)
 - **Vite** (система сборки)
 - **Canvas API** (отрисовка игрового поля)
@@ -55,9 +55,20 @@ Minesweeper game — это классическая 2D-игра с разным
 
 ### 2.3 Архитектура игры
 
-- `GameBoard.tsx`: render игрового поля с помощью Canvas API.
-- `GameController.ts`: управляет пользовательскими взаимодействиями и обновляет global state. Является связующим звеном между UI и логикой игры.
-- `GameEngine.ts`: управляет игровой логикой.
+### GameBoard.tsx (Компонент рендера игрового поля)
+- Отрисовывает поле с помощью **Canvas API**
+- Подписывается на глобальное состояние Redux (`CellData[][]`)
+- Делегирует события кликов в `GameController.ts`
+
+### GameController.ts (Компонент управления игрой)
+- Обрабатывает пользовательские взаимодействия
+- Обновляет глобальное состояние **Redux** на основе данных из GameEngine.ts
+- Связывает UI и игровую логику
+
+### GameEngine.ts (Игровая логика)
+- Управляет расстановкой мин, открытием клеток и постановкой флагов
+- Обрабатывает игровые события, включая завершение игры
+- Содержит алгоритмы генерации и обновления игрового поля
 
 ## GameBoard.tsx
 
@@ -124,9 +135,10 @@ constructor(rows: number, cols: number, mines: number)
 ### **Interface: `CellData`**
 ```ts
 interface CellData {
-    isRevealed: boolean; // Whether the cell is revealed
-    isMine: boolean;     // Whether the cell contains a mine
-    isFlagged: boolean;  // Whether the cell is flagged
+    isRevealed: boolean;
+    isMine: boolean;
+    isFlagged: boolean;
+    surroundingMines: number; // Number of mines connected to the cell (3x3 around)
 }
 ```
 
@@ -135,7 +147,7 @@ interface CellData {
 type GameState = CellData[][] // Game Fielld 2D representation
 ```
 
-![enemy_1](images/game-relationships.png)
+![game_core_representation](images/game-relationships.png)
 
 ---
 
@@ -145,9 +157,6 @@ type GameState = CellData[][] // Game Fielld 2D representation
 2. **`GameController.ts` обновляет state** полученный от `GameEngine.ts`.
 3. **Обновленное состояние хранится в Redux**.
 4. **`GameBoard.tsx` ожидает изменений state** и ререндерит поле согласно изменениям.
-
-Эта архитектура разделяет полномочия.
-Следование ей гарантирует, что игра будет модульной, легкой в тестировании и внедрении новой функциональности.
 
 ---
 
@@ -160,7 +169,7 @@ type GameState = CellData[][] // Game Fielld 2D representation
 Методы контроллера часто вызываются UI-компонентом или другим контроллером.
 Хранятся в папке `/сontrollers` находящиеся в корневой папке с ресурсами, или в папке с компонентом (если controller специфичный и используется только этим компонентом). Примеры названий `SessionController.ts`, `ProfileController.ts`.
 
-![enemy_1](images/request-architecture.png)
+![requests_architecture_representation](images/request-architecture.png)
 
 ---
 
@@ -172,31 +181,31 @@ React Router должен ориентироваться на global state и п
 
 ## 3. Серверная часть
 ### 3.1 Технологии
-- **Node.js** (среда выполнения JavaScript)
+- **Node.js** (серверная среда выполнения JavaScript)
 - **Express.js** (фреймворк для API)
-- **PostgreSQL** (база данных)
-- **Sequelize** (ORM)
-- **OAuth** (аутентификация)
+- **PostgreSQL** (реляционная база данных)
+- **Sequelize** (ORM для PostgreSQL)
+- **OAuth** (аутентификация пользователей)
 
 ### 3.2 API-эндпоинты
 #### Пользовательская аутентификация
-- `POST /api/auth/register` — регистрация.
-- `POST /api/auth/login` — вход.
-- `POST /api/auth/logout` — выход.
+- `POST /api/auth/register` — регистрация пользователя.
+- `POST /api/auth/login` — вход в систему.
+- `POST /api/auth/logout` — выход из системы.
 
 #### Профиль
 - `GET /api/user` — получение данных о пользователе.
-- `PUT /api/user` — обновление данных о пользователе.
-- `PUT /api/avatar` — обновление аватара.
+- `PUT /api/user` — обновление профиля.
+- `PUT /api/avatar` — загрузка нового аватара.
 - `DELETE /api/avatar` — удаление аватара.
 
 #### Лидерборд
 - `GET /api/leaderboard` — получение списка лидеров.
-- `POST /api/leaderboard` — обновление рекордов.
+- `POST /api/leaderboard` — добавление нового рекорда.
 
 #### Форум
-- `GET /api/forum/topics` — получение списка тем.
-- `POST /api/forum/topics` — создание темы.
+- `GET /api/forum/topics` — полученить список тем форума.
+- `POST /api/forum/topics` — создание новой темы.
 - `POST /api/forum/topics/{topic_id}/comment` — добавление комментария.
 
 ### 3.3 Пример API-контроллера
@@ -215,18 +224,20 @@ export default router;
 ```
 
 ## 4. Безопасность
-- Использование OAuth для аутентификации пользователей.
-- Защита от XSS и SQL-инъекций.
-- CSP для предотвращения вредоносных скриптов.
+- **OAuth** для аутентификации.
+- **Защита от XSS и SQL-инъекций**.
+- **CSP** для предотвращения внедрения вредоносных скриптов.
 
 ## 5. Развёртывание
 - Клиентская часть хостится на Yandex.Cloud.
 - Серверная часть развернута на DigitalOcean.
 - PostgreSQL развернута на отдельном сервере.
-- Nginx настроен с поддержкой HTTP/2 и HTTP/3 (QUIC).
+- Nginx настроен с поддержкой HTTP/2 и HTTP/3 (QUIC), сжатие GZIP.
 
 ## 6. Дальнейшее развитие
 - Добавление онлайн функционала с помощью WebSocket.
-- Улучшение UI/UX.
-- Реализация мобильной версии.
-- Оптимизация производительности и поиск утечек памяти.
+- Оптимизация UI/UX.
+- Адаптация под мобильные устройства.
+- Улучшение производительности и устранение утечек памяти.
+
+Этот документ описывает текущую архитектуру проекта, его ключевые компоненты и направления развития. Он поможет команде структурировать процесс разработки и обеспечит единообразный подход к коду.
