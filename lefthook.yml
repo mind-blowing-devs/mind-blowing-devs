@@ -8,3 +8,12 @@ pre-commit:
       glob: '*.{ts,tsx,css}'
       run: yarn prettier -w {staged_files}
       stage_fixed: true
+    test:
+      run: yarn test
+
+pre-push:
+  commands:
+    lint-all:
+      run: yarn lint
+    test-all:
+      run: yarn test
