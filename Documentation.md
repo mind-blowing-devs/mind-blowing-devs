@@ -47,7 +47,6 @@ Minesweeper game — это классическая 2D-игра с разным
 
 ### 2.2 Scripts
 
-- `npm run build` — build project
 - `npm run lint` — run ESLint
 - `npm run format` — run Prettier
 - `npm run test` — run Jest
@@ -230,9 +229,7 @@ export default router;
 - **CSP** для предотвращения внедрения вредоносных скриптов.
 
 ## 5. Развёртывание
-- Клиентская часть хостится на Yandex.Cloud.
-- Серверная часть развернута на DigitalOcean.
-- PostgreSQL развернута на отдельном сервере.
+- Проект хостится на Yandex.Cloud.
 - Nginx настроен с поддержкой HTTP/2 и HTTP/3 (QUIC), сжатие GZIP.
 
 ## 6. Дальнейшее развитие
