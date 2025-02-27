@@ -1,7 +1,7 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import AppSpinner from '../../components/AppSpinner/AppSpinner'
 
-function App() {
+function Login() {
   const {
     register,
     handleSubmit,
@@ -57,4 +57,4 @@ function App() {
   )
 }
 
-export default App
+export default Login
