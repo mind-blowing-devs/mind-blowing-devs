@@ -1,5 +1,16 @@
 import { useEffect } from 'react'
 import './App.css'
+import Main from './pages/Main'
+import Error404 from './pages/Error404'
+import Error500 from './pages/Error500'
+import Forum from './pages/Forum'
+import ForumTopic from './pages/ForumTopic'
+import Game from './pages/Game'
+import LeaderBoard from './pages/LeaderBoard'
+import Profile from './pages/Profile'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import { Routes, Route, Link } from 'react-router-dom'
 
 function App() {
   useEffect(() => {
@@ -12,7 +23,39 @@ function App() {
 
     fetchServerData()
   }, [])
-  return <div className="App">Вот тут будет жить ваше приложение :)</div>
+  return (
+    <div className="App">
+      <nav>
+        <ul className="px-6 absolute">
+          {[
+            'Forum',
+            'ForumTopic',
+            'Game',
+            'LeaderBoard',
+            'Profile',
+            'SignIn',
+            'SignUp',
+          ].map(page => (
+            <li>
+              <Link to={page}>{page}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <Routes>
+        <Route index element={<Main />}></Route>
+        <Route path="*" element={<Error404 />}></Route>
+        <Route path="/500" element={<Error500 />}></Route>
+        <Route path="/forum" element={<Forum />}></Route>
+        <Route path="/forumtopic" element={<ForumTopic />}></Route>
+        <Route path="/game" element={<Game />}></Route>
+        <Route path="/leaderBoard" element={<LeaderBoard />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/signIn" element={<SignIn />}></Route>
+        <Route path="/signUp" element={<SignUp />}></Route>
+      </Routes>
+    </div>
+  )
 }
 
 export default App
