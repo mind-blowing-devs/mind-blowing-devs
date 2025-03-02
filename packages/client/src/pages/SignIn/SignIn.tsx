@@ -1,58 +1,62 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import AppSpinner from '../../components/AppSpinner/AppSpinner'
+import { AppInput } from '../../components/AppInput/AppInput'
 
 function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
     reset,
   } = useForm()
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data)
 
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Имитация запроса
+    await new Promise(resolve => setTimeout(resolve, 3000)) // Имитация запроса
 
     reset() // Очистка инпутов
   }
 
   return (
-    <main className="w-screen h-screen flex flex-col items-center justify-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
-        <input
-          {...register('SignIn')}
-          placeholder="Логин"
-          className="border border-black min-w-[25rem] text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <div style={{ visibility: errors.login ? 'visible' : 'hidden' }}>
-          <p className="text-red-500">{`${errors?.login?.message}`}</p>
-        </div>
-        <input
-          {...register('password')}
-          placeholder="Пароль"
-          className="mt-2 border border-black text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <div style={{ visibility: errors.password ? 'visible' : 'hidden' }}>
-          <p className="text-red-500">{`${errors?.password?.message}`}</p>
+    <main className="font-press w-screen h-screen flex flex-col items-center justify-center bg-[#BFBFBF] gap-10">
+      <div className="text-gray-600 mb-4 max-w-[30rem] text-center">
+        Log in to start your minefield adventure!
+      </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
+        <div className="flex  flex-col gap-10">
+          <AppInput register={register} label="username" />
+
+          <AppInput register={register} label="password" type="password" />
         </div>
 
         {!isSubmitting ? (
-          <button
-            disabled={isSubmitting}
-            className="mt-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 disabled:bg-gray-500">
-            Войти
-          </button>
+          <div className="flex justify-center">
+            <button
+              disabled={isSubmitting}
+              className="bg-black text-white w-fit px-2 text-[20px]">
+              start game
+            </button>
+          </div>
         ) : (
           <div className="flex justify-center">
-            <AppSpinner />
+            <AppSpinner color={'#000'} />
           </div>
         )}
       </form>
-      {/*Переделать на Link*/}
-      <button className="mt-4 text-blue-600 hover:underline">
-        Нет аккаунта?
-      </button>
+
+      <div className="mt-4 flex flex-col gap-2 text-gray-600">
+        <div className="flex text-[13px] gap-2">
+          <p>New Player?</p>
+          <button className="text-black hover:text-gray-500">[Sign Up]</button>
+        </div>
+
+        <button className="text-[12px] hover:text-gray-500">
+          Forgot your password?
+        </button>
+      </div>
     </main>
   )
 }
