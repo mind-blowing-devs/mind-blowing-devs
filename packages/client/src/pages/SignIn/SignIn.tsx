@@ -1,5 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import { AppInput, AppSpinner } from '../../components'
+import { Link } from 'react-router-dom'
 
 function SignIn() {
   const {
@@ -49,7 +50,9 @@ function SignIn() {
       <div className="mt-4 flex flex-col gap-2 text-gray-600">
         <div className="flex text-[13px] gap-2">
           <p>New Player?</p>
-          <button className="text-black hover:text-gray-500">[Sign Up]</button>
+          <Link to="/signUp" className="text-black hover:text-gray-500">
+            [Sign Up]
+          </Link>
         </div>
 
         <button className="text-[12px] hover:text-gray-500">
