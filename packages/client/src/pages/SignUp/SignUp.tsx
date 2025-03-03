@@ -1,10 +1,12 @@
 import { FieldValues, useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { AppInput, AppSpinner } from '../../components'
 
 function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
     reset,
   } = useForm()
 
@@ -16,70 +18,92 @@ function SignUp() {
     reset() // Очистка инпутов
   }
 
+  const pageInputs: {
+    label: string
+    name: string
+    type?: string
+    error?: string
+  }[] = [
+    {
+      label: 'first name',
+      name: 'first_name',
+    },
+    {
+      label: 'second name',
+      name: 'second_name',
+    },
+    {
+      label: 'login',
+      name: 'login',
+    },
+    {
+      label: 'email',
+      type: 'email',
+      name: 'email',
+    },
+    {
+      label: 'password',
+      type: 'password',
+      name: 'password',
+    },
+    {
+      label: 'password again',
+      type: 'password',
+      name: 'password_again',
+    },
+    {
+      label: 'phone',
+      type: 'tel',
+      name: 'phone',
+    },
+  ]
+
   return (
-    <main className="w-screen h-screen flex flex-col items-center justify-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-        <input
-          {...register('first_name')}
-          name="first_name"
-          placeholder="Имя"
-          className="border border-black min-w-[25rem] text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <p className="text-red-500">{errors?.first_name?.message as string}</p>
+    <main className="font-press w-screen h-screen flex flex-col items-center justify-center bg-[#BFBFBF] gap-10 ">
+      <div className="text-gray-600 mb-4 max-w-[30rem] text-center">
+        Create your account to start sweeping mines!
+      </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md  relative">
+        <div className="flex  flex-col gap-10">
+          {pageInputs.map(inputItem => (
+            <AppInput
+              register={register}
+              label={inputItem.label}
+              name={inputItem.name}
+              type={inputItem.type}
+            />
+          ))}
+        </div>
 
-        <input
-          {...register('second_name')}
-          name="second_name"
-          placeholder="Фамилия"
-          className="border border-black text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <p className="text-red-500">{errors?.second_name?.message as string}</p>
-
-        <input
-          {...register('login')}
-          name="login"
-          placeholder="Логин"
-          className="border border-black text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <p className="text-red-500">{errors?.login?.message as string}</p>
-
-        <input
-          {...register('email')}
-          name="email"
-          type="email"
-          placeholder="Email"
-          className="border border-black text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <p className="text-red-500">{errors?.email?.message as string}</p>
-
-        <input
-          {...register('password')}
-          name="password"
-          type="password"
-          placeholder="Пароль"
-          className="border border-black text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <p className="text-red-500">{errors?.password?.message as string}</p>
-
-        <input
-          {...register('phone')}
-          name="phone"
-          type="tel"
-          placeholder="Телефон"
-          className="border border-black text-black text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        />
-        <p className="text-red-500">{errors?.phone?.message as string}</p>
-
-        <button
-          disabled={isSubmitting}
-          className="mt-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 disabled:bg-gray-500">
-          Зарегистрироваться
-        </button>
+        {!isSubmitting ? (
+          <div className="flex justify-center">
+            <button
+              disabled={isSubmitting}
+              className="bg-black text-white w-fit px-2 text-[20px]">
+              start game
+            </button>
+          </div>
+        ) : (
+          <div className="flex justify-center">
+            <AppSpinner color={'#000'} />
+          </div>
+        )}
       </form>
 
-      <a href="/login" className="mt-4 text-blue-600 hover:underline">
-        Есть аккаунт?
-      </a>
+      <div className="mt-4 flex flex-col gap-2 text-gray-600">
+        <div className="flex text-[13px] gap-2">
+          <p>Have an account?</p>
+          <Link to="/signUp" className="text-black hover:text-gray-500">
+            [Sign In]
+          </Link>
+        </div>
+
+        <button className="text-[12px] hover:text-gray-500">
+          Forgot your password?
+        </button>
+      </div>
     </main>
   )
 }
