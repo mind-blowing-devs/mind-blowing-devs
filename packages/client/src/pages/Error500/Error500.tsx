@@ -2,16 +2,14 @@ import { Link } from 'react-router-dom'
 
 export default function Error500() {
   return (
-    <main className="flex h-screen flex-col items-center justify-center px-6 text-center">
+    <main className="font-press bg-[#BFBFBF] flex h-screen flex-col items-center justify-center px-6 text-center">
       <h1 className="text-6xl font-bold">500</h1>
-      <p className="mt-4 text-xl">
-        Что-то пошло не так. Мы уже работаем над этим.
-      </p>
+      <p className="mt-4 text-xl text-gray-700">Unexpected error. We're on it!</p>
       <Link
         to="/"
-        className="mt-6 rounded-lg bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
-        aria-label="Вернуться на главную страницу">
-        На главную
+        className="mt-8 hover:text-gray-500"
+        aria-label="Back to home page">
+        [Back Home]
       </Link>
     </main>
   )
