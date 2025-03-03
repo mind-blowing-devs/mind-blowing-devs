@@ -9,7 +9,7 @@ interface AppInputProps<T extends FieldValues>
   register: UseFormRegister<T>
 }
 
-export const AppInput = <T extends object>({
+const AppInput = <T extends object>({
   register,
   label,
   error,
@@ -33,3 +33,5 @@ export const AppInput = <T extends object>({
     </div>
   )
 }
+
+export default AppInput

@@ -1,6 +1,5 @@
 import { FieldValues, useForm } from 'react-hook-form'
-import AppSpinner from '../../components/AppSpinner/AppSpinner'
-import { AppInput } from '../../components/AppInput/AppInput'
+import { AppInput, AppSpinner } from '../../components'
 
 function SignIn() {
   const {
