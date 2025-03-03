@@ -25,11 +25,16 @@ function SignIn() {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
+        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md relative">
         <div className="flex  flex-col gap-10">
-          <AppInput register={register} label="username" />
+          <AppInput register={register} label="username" name="login" />
 
-          <AppInput register={register} label="password" type="password" />
+          <AppInput
+            register={register}
+            label="password"
+            name="password"
+            type="password"
+          />
         </div>
 
         {!isSubmitting ? (
