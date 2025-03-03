@@ -95,7 +95,7 @@ function SignUp() {
       <div className="mt-4 flex flex-col gap-2 text-gray-600">
         <div className="flex text-[13px] gap-2">
           <p>Have an account?</p>
-          <Link to="/signUp" className="text-black hover:text-gray-500">
+          <Link to="/signIn" className="text-black hover:text-gray-500">
             [Sign In]
           </Link>
         </div>
