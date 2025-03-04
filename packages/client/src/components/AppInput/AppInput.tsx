@@ -29,8 +29,8 @@ const AppInput = <T extends object>({
       </div>
       <div
         style={{ display: error ? 'block' : 'none' }}
-        className="max-w-[20rem] text-[13px] max-h-[2rem] absolute right-[-23rem]">
-        <p className="text-red-500">{`${error?.message}`}</p>
+        className="max-w-[30rem] w-max text-[13px] max-h-[2rem] absolute right-[-33rem]">
+        <p className="text-red-500 text-[10px]">{`${error?.message}`}</p>
       </div>
     </div>
   )

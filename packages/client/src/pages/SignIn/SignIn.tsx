@@ -1,14 +1,45 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import { AppInput, AppSpinner } from '../../components'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { getValidationRules } from '../../utlis/getValidationRules'
+
+const pageInputs: {
+  label: string
+  name: string
+  type?: string
+  error?: string
+}[] = [
+  {
+    label: 'login',
+    name: 'login',
+  },
+  {
+    label: 'password',
+    type: 'password',
+    name: 'password',
+  },
+]
+
+const signInSchema = z.object(
+  Object.fromEntries(
+    pageInputs.map(({ name }) => {
+      const [regex, message] = getValidationRules(name)
+      return [name, z.string().regex(regex, message)]
+    })
+  )
+)
 
 function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     reset,
-  } = useForm()
+  } = useForm<TSignInSchema>({ resolver: zodResolver(signInSchema) })
+
+  type TSignInSchema = z.infer<typeof signInSchema>
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data)
@@ -27,14 +58,15 @@ function SignIn() {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md relative">
         <div className="flex  flex-col gap-10">
-          <AppInput register={register} label="username" name="login" />
-
-          <AppInput
-            register={register}
-            label="password"
-            name="password"
-            type="password"
-          />
+          {pageInputs.map(inputItem => (
+            <AppInput
+              register={register}
+              label={inputItem.label}
+              name={inputItem.name}
+              type={inputItem.type}
+              error={errors[inputItem.name as keyof TSignInSchema]}
+            />
+          ))}
         </div>
 
         {!isSubmitting ? (
