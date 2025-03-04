@@ -59,18 +59,15 @@ export default function Profile() {
       userAchievements={{ gamesPlayed: 43, gamesWon: 25, bestTime: '1.25' }}
     />
   )
-  let title = user.first_name
   let isEditableAvatar = false
   let onAvatarChange: (() => void) | undefined
 
   if (isEditData) {
     content = <ChangeData user={user} onDataChange={handleDataChange} />
-    title = 'Изменить данные'
     isEditableAvatar = true
     onAvatarChange = () => updateSearchParams('isEditAvatar', 'true')
   } else if (isEditPassword) {
     content = <ChangePassword onPasswordChange={handlePasswordChange} />
-    title = 'Изменить пароль'
   }
 
   useEffect(() => {
@@ -91,7 +88,7 @@ export default function Profile() {
         Your Minesweeper Profile
       </h1>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-12 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
         <div className="flex flex-col items-center">
           <Avatar
             avatar={user.avatar}
@@ -126,7 +123,7 @@ export default function Profile() {
             key={index}
             type="button"
             onClick={onClick}
-            className={`w-auto inline-block bg-transparent text-sm ${
+            className={`w-auto inline-block bg-transparent text-xs sm:text-sm ${
               text === '[log out]'
                 ? 'text-red-600 hover:text-red-400'
                 : 'hover:text-gray-500'
