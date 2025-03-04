@@ -56,7 +56,7 @@ export default memo(function Avatar({
 
   return (
     <div
-      className={`rounded-full bg-gray-300 flex items-center justify-center overflow-hidden ${sizeClasses[size]}`}>
+      className='rounded-full bg-[#BFBFBF] w-36 h-36 flex items-center justify-center overflow-hidden'>
       {content}
     </div>
   )

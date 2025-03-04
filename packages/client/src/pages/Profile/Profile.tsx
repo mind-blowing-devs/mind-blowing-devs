@@ -55,9 +55,8 @@ export default function Profile() {
 
   let content = (
     <ProfileDetails
-      user={user}
-      onChangeData={() => updateSearchParams('edit', 'data')}
-      onChangePassword={() => updateSearchParams('edit', 'password')}
+      username={user.login}
+      userAchievements={{ gamesPlayed: 43, gamesWon: 25, bestTime: '1.25' }}
     />
   )
   let title = user.first_name
@@ -87,25 +86,55 @@ export default function Profile() {
   }, [])
 
   return (
-    <main className="flex flex-col items-center max-w-lg mx-auto mt-10">
-      <header className="flex flex-col items-center gap-4">
-        <Avatar
-          avatar={user.avatar}
-          name={user.first_name}
-          size="xl"
-          editable={isEditableAvatar}
-          onClick={onAvatarChange}
-        />
-        <h1 className="text-4xl font-bold">{title}</h1>
-      </header>
-      <div className="mt-6 w-full">{content}</div>
+    <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+      <h1 className="mt-10 sm:text-xl text-center text-[#585656]">
+        Your Minesweeper Profile
+      </h1>
 
-      {isEditAvatar && (
-        <ChangeAvatar
-          onChange={handleAvatarChange}
-          onClose={() => updateSearchParams('isEditAvatar', null)}
-        />
-      )}
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-12 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
+        <div className="flex flex-col items-center">
+          <Avatar
+            avatar={user.avatar}
+            name={user.first_name}
+            editable={isEditableAvatar}
+            onClick={onAvatarChange}
+          />
+        </div>
+
+        <div className="mt-6 w-full">{content}</div>
+
+        {isEditAvatar && (
+          <ChangeAvatar
+            onChange={handleAvatarChange}
+            onClose={() => updateSearchParams('isEditAvatar', null)}
+          />
+        )}
+      </div>
+      <div className="mt-8 flex flex-col justify-center items-center gap-4 max-w-md mx-auto">
+        {[
+          {
+            text: '[edit profile]',
+            onClick: () => updateSearchParams('edit', 'data'),
+          },
+          {
+            text: '[change password]',
+            onClick: () => updateSearchParams('edit', 'password'),
+          },
+          { text: '[log out]', onClick: undefined },
+        ].map(({ text, onClick }, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={onClick}
+            className={`w-auto inline-block bg-transparent text-sm ${
+              text === '[log out]'
+                ? 'text-red-600 hover:text-red-400'
+                : 'hover:text-gray-500'
+            }`}>
+            {text}
+          </button>
+        ))}
+      </div>
     </main>
   )
 }
