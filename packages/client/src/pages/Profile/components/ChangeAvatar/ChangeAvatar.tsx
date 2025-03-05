@@ -11,8 +11,8 @@ const MAX_FILE_SIZE = 1024 * 1024 // 1 MB
 
 const schema = z.object({
   file: z
-    .instanceof(File, { message: 'Нужно выбрать файл' })
-    .refine(file => file.size <= MAX_FILE_SIZE, 'Слишком большой файл'),
+    .instanceof(File, { message: 'Choose a file' })
+    .refine(file => file.size <= MAX_FILE_SIZE, { message: 'Too big file' }),
 })
 
 export default function ChangeAvatar({ onChange, onClose }: ChangeAvatarProps) {
@@ -44,15 +44,15 @@ export default function ChangeAvatar({ onChange, onClose }: ChangeAvatarProps) {
       await onChange(data.file)
       onClose()
     } catch (error) {
-      console.error('Ошибка загрузки файла', error)
+      console.error('Error durring file upload', error)
     }
   }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white p-10 rounded-2xl shadow-lg max-w-sm w-full relative">
-        <h1 className="text-xl font-semibold text-gray-800 text-center mb-8">
-          Изменить аватар
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] p-10 max-w-md w-full relative mx-2">
+        <h1 className="text-lg sm:text-xl text-center mb-8">
+          Change avatar
         </h1>
 
         <form
@@ -61,8 +61,9 @@ export default function ChangeAvatar({ onChange, onClose }: ChangeAvatarProps) {
           onSubmit={handleSubmit(onSubmit)}>
           <label
             htmlFor="file"
-            className="block text-center text-blue-500 hover:text-blue-600 cursor-pointer font-medium border border-blue-500 rounded-lg py-2 px-4 transition">
-            Выбрать файл на компьютере (до 1 Мб)
+            className="flex flex-col text-center text-xs sm:text-sm cursor-pointer border border-[#818181] py-2 px-4 transition">
+            <div>Choose a file</div>
+            <div>(up to 1 MB)</div>
           </label>
 
           <input
@@ -75,7 +76,7 @@ export default function ChangeAvatar({ onChange, onClose }: ChangeAvatarProps) {
           />
 
           {selectedFile && (
-            <p className="text-sm text-gray-700 text-center truncate">
+            <p className="text-sm text-center truncate">
               {selectedFile.name}
             </p>
           )}
@@ -89,15 +90,15 @@ export default function ChangeAvatar({ onChange, onClose }: ChangeAvatarProps) {
           <div className="flex flex-row-reverse justify-between gap-2">
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition disabled:cursor-wait disabled:bg-gray-400"
+              className="max-w-xs text-xs sm:text-sm px-4 bg-black hover:opacity-80 text-white disabled:cursor-wait disabled:bg-gray-400"
               disabled={isSubmitting}>
-              Загрузить
+              upload
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="w-full bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-400 transition">
-              Отмена
+              className="text-red-600 hover:opacity-80 text-xs sm:text-sm">
+              [cancel]
             </button>
           </div>
         </form>
