@@ -19,18 +19,18 @@ const mockData: TopicItemProps[] = [
     lastPost: '2024-10-22',
   },
   {
-    id: 3,
-    name: 'Бум или Бах?',
-    author: 'SweeperPro',
-    replies: 124124,
-    lastPost: '1998-10-21',
-  },
-  {
     id: 4,
     name: 'Вы слышали про mind-blowing-devs ',
     author: 'You',
     replies: 1212,
     lastPost: '2023-10-01',
+  },
+  {
+    id: 3,
+    name: 'Бум или Бах?',
+    author: 'SweeperPro',
+    replies: 124124,
+    lastPost: '1998-10-21',
   },
 ]
 
@@ -40,11 +40,11 @@ export default function Forum() {
       <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
         Minesweeper Forum
       </h2>
-      <span className="font-roboto font-sm w-full sm:text-base text-black mb-[60px]">
+      <span className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
       </span>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full px-[32px] lg:h-[524px] md:h-[424px] h-[364px] text-xs md:text-base sm:text-sm">
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] lg:h-[524px] md:h-[424px] h-[364px] text-xs md:text-base sm:text-sm overflow-y-auto">
         <Filter />
         <TopicsList topics={mockData} />
       </div>
