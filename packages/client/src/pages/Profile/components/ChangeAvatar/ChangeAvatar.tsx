@@ -90,7 +90,7 @@ export default function ChangeAvatar({ onChange, onClose }: ChangeAvatarProps) {
           <div className="flex flex-row-reverse justify-between gap-2">
             <button
               type="submit"
-              className="max-w-xs text-xs sm:text-sm px-4 bg-black hover:opacity-80 text-white disabled:cursor-wait disabled:bg-gray-400"
+              className="max-w-xs text-xs sm:text-sm px-4 py-1 bg-black hover:opacity-80 text-white disabled:cursor-wait disabled:bg-gray-400"
               disabled={isSubmitting}>
               upload
             </button>

@@ -3,39 +3,22 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { type ChangePasswordData } from '../../../../api/userAPI'
 
-export function isValidPassword(password: string) {
-  if (password === '') {
-    return { isValid: false, message: 'Это поле обязательно' }
-  }
-  const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/
-  return {
-    isValid: regex.test(password),
-    message: '8-40 символов, цифра и одна заглавная буква',
-  }
-}
+const passwordSchema = z
+  .string()
+  .nonempty({ message: 'this field is required' })
+  .regex(
+    /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
+    '8-40 chars, a number and one capital letter'
+  )
 
 const formSchema = z
   .object({
-    email: z.string().email('Некорректный email'),
-    login: z.string().min(3, 'Логин должен быть не короче 3 символов'),
-    first_name: z.string().min(1, 'Введите имя'),
-    second_name: z.string().min(1, 'Введите фамилию'),
-    display_name: z.string().min(3, 'Отображаемое имя слишком короткое'),
-    phone: z.string().regex(/^\+?\d{10,15}$/, 'Некорректный номер телефона'),
-    oldPassword: z
-      .string()
-      .refine(password => isValidPassword(password).isValid, {
-        message: '8-40 символов, цифра и одна заглавная буква',
-      }),
-    newPassword: z
-      .string()
-      .refine(password => isValidPassword(password).isValid, {
-        message: '8-40 символов, цифра и одна заглавная буква',
-      }),
+    oldPassword: passwordSchema,
+    newPassword: passwordSchema,
     confirmPassword: z.string(),
   })
   .refine(data => data.newPassword === data.confirmPassword, {
-    message: 'Пароли не совпадают',
+    message: "passwords don't match",
     path: ['confirmPassword'],
   })
 
@@ -56,70 +39,53 @@ export default function ChangePassword({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: 'onBlur',
+    reValidateMode: 'onBlur',
   })
 
   const onSubmit = async (data: ChangePasswordData) => {
     try {
       await onPasswordChange(data)
     } catch (error) {
-      setError('root', { message: 'Ошибка при обновлении пароля' })
+      setError('root', { message: 'Error' })
     }
   }
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label className="block font-medium text-gray-700">Старый пароль</label>
-        <input
-          type="password"
-          className="w-full border p-2 rounded-lg"
-          {...register('oldPassword')}
-        />
-        {errors.oldPassword && (
-          <p className="text-red-500 text-sm">{errors.oldPassword.message}</p>
-        )}
+      {[
+        { name: 'oldPassword', label: 'old password' },
+        { name: 'newPassword', label: 'new password' },
+        { name: 'confirmPassword', label: 'confirm password' },
+      ].map(field => {
+        return (
+          <div className="flex flex-col">
+            <div className="flex justify-between">
+              <label htmlFor={field.name} className='text-xs sm:text-sm'>{field.label}</label>
+              <input
+                {...register(field.name as keyof FormData)}
+                className="w-[60%] border-b-2 border-gray-400 outline-none focus:border-black bg-[#D9D9D9]"
+                type="password"
+                name={field.name}
+              />
+            </div>
+
+            {errors[field.name as keyof FormData] && (
+              <small className="text-red-500 text-[10px] mt-1">{`${
+                errors[field.name as keyof FormData]?.message
+              }`}</small>
+            )}
+          </div>
+        )
+      })}
+
+      <div className="flex justify-center items-center">
+        <button
+          type="submit"
+          className="bg-black text-white text-xs sm:text-sm px-4 py-1 mt-10"
+          disabled={isSubmitting}>
+          update password
+        </button>
       </div>
-
-      <div>
-        <label className="block font-medium text-gray-700">Новый пароль</label>
-        <input
-          type="password"
-          className="w-full border p-2 rounded-lg"
-          {...register('newPassword')}
-        />
-        {errors.newPassword && (
-          <p className="text-red-500 text-sm">{errors.newPassword.message}</p>
-        )}
-      </div>
-
-      <div>
-        <label className="block font-medium text-gray-700">
-          Подтвердите пароль
-        </label>
-        <input
-          type="password"
-          className="w-full border p-2 rounded-lg"
-          {...register('confirmPassword')}
-        />
-        {errors.confirmPassword && (
-          <p className="text-red-500 text-sm">
-            {errors.confirmPassword.message}
-          </p>
-        )}
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400"
-        disabled={isSubmitting}>
-        Обновить пароль
-      </button>
-
-      {errors.root && (
-        <p className="text-red-500 text-center text-sm">
-          {errors.root.message}
-        </p>
-      )}
     </form>
   )
 }

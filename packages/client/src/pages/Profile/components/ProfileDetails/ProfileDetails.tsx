@@ -24,7 +24,7 @@ export default function ProfileDetails({
   const rating = calculatePlayerRating(gamesPlayed, gamesWon)
   return (
     <>
-      <section className="w-full max-w-md mx-auto">
+      <section className="w-full mx-auto">
         <dl className="space-y-4">
           <div className="flex justify-between">
             <dt className="text-[#585656]">username</dt>

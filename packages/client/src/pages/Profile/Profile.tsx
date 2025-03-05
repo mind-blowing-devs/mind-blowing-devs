@@ -5,6 +5,7 @@ import Avatar from './components/Avatar'
 import ProfileDetails from './components/ProfileDetails'
 import ChangeAvatar from './components/ChangeAvatar'
 import ChangePassword from './components/ChangePassword'
+import ProfileActions from './components/ProfileActions'
 
 const mockUserAchievements = {
   gamesPlayed: 43,
@@ -38,8 +39,11 @@ export default function Profile() {
     />
   )
 
+  let title = 'Your Minesweeper Profile'
+
   if (isEditPassword) {
     content = <ChangePassword onPasswordChange={handlePasswordChange} />
+    title = 'Change Password'
   }
 
   useEffect(() => {
@@ -57,7 +61,7 @@ export default function Profile() {
   return (
     <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
       <h1 className="mt-10 sm:text-xl text-center text-[#585656]">
-        Your Minesweeper Profile
+        {title}
       </h1>
 
       <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
@@ -66,32 +70,8 @@ export default function Profile() {
         </div>
         <div className="mt-6 w-full">{content}</div>
       </div>
-      
-      <div className="mt-8 flex flex-col justify-center items-center gap-4 max-w-md mx-auto">
-        {[
-          {
-            text: '[edit avatar]',
-            onClick: () => setSearchParams({ edit: 'avatar' }),
-          },
-          {
-            text: '[change password]',
-            onClick: () => setSearchParams({ edit: 'password' }),
-          },
-          { text: '[log out]', onClick: undefined },
-        ].map(({ text, onClick }, index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={onClick}
-            className={`w-auto inline-block bg-transparent text-xs sm:text-sm ${
-              text === '[log out]'
-                ? 'text-red-600 hover:text-red-400'
-                : 'hover:text-gray-500'
-            }`}>
-            {text}
-          </button>
-        ))}
-      </div>
+
+      <ProfileActions isEditPassword={isEditPassword} setSearchParams={setSearchParams}/>
       {isEditAvatar && (
         <ChangeAvatar
           onChange={handleAvatarChange}
