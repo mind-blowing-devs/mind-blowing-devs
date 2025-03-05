@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { ChangePasswordData, userAPI, type User } from '../../api/userAPI'
-import Avatar from './components/Avatar'
-import ProfileDetails from './components/ProfileDetails'
-import ChangeAvatar from './components/ChangeAvatar'
-import ChangePassword from './components/ChangePassword'
-import ProfileActions from './components/ProfileActions'
+import { type ChangePasswordData, type User, userAPI } from '../../api/userAPI'
+import {
+  Avatar,
+  ProfileActions,
+  ProfileDetails,
+  ChangeAvatar,
+  ChangePassword,
+} from './components'
 
 const mockUserAchievements = {
   gamesPlayed: 43,
@@ -60,9 +62,7 @@ export default function Profile() {
 
   return (
     <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
-      <h1 className="mt-10 sm:text-xl text-center text-[#585656]">
-        {title}
-      </h1>
+      <h1 className="mt-10 sm:text-xl text-center text-[#585656]">{title}</h1>
 
       <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
         <div className="flex flex-col items-center">
@@ -71,7 +71,10 @@ export default function Profile() {
         <div className="mt-6 w-full">{content}</div>
       </div>
 
-      <ProfileActions isEditPassword={isEditPassword} setSearchParams={setSearchParams}/>
+      <ProfileActions
+        isEditPassword={isEditPassword}
+        setSearchParams={setSearchParams}
+      />
       {isEditAvatar && (
         <ChangeAvatar
           onChange={handleAvatarChange}
