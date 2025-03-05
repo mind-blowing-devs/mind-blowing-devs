@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         press: ['"Press Start 2P"', 'cursive'],
+        roboto: ['"Roboto Mono"', 'monospace'],
       },
     },
   },
