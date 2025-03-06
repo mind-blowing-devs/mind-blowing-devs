@@ -36,8 +36,8 @@ const mockData: TopicItemProps[] = [
 
 export default function Forum() {
   return (
-    <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
-      <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
+    <main className="bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
+      <h2 className="font-press w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
         Minesweeper Forum
       </h2>
       <span className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
@@ -52,21 +52,21 @@ export default function Forum() {
       <nav className="flex flex-col items-center gap-[16px] my-5 sm:my-8">
         <Link
           to="/createtopic"
-          className="text-sm hover:text-gray-500 select-none"
+          className="font-press text-sm hover:text-gray-500 select-none"
           aria-label="New topic">
           [new topic]
         </Link>
 
         {/* TODO: fetch fresh data */}
         <button
-          className="text-sm hover:text-gray-500 select-none"
+          className="font-press text-sm hover:text-gray-500 select-none"
           onClick={() => alert('Not implemented')}>
           [refresh]
         </button>
 
         <Link
           to="/game"
-          className="text-sm text-green-700 hover:text-gray-500 select-none"
+          className="font-press text-sm text-green-700 hover:text-gray-500 select-none"
           aria-label="Back to Game">
           [back to game]
         </Link>
