@@ -37,7 +37,11 @@ function SignIn() {
     handleSubmit,
     formState: { isSubmitting, errors },
     reset,
-  } = useForm<TSignInSchema>({ resolver: zodResolver(signInSchema) })
+  } = useForm<TSignInSchema>({
+    resolver: zodResolver(signInSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onSubmit',
+  })
 
   type TSignInSchema = z.infer<typeof signInSchema>
 

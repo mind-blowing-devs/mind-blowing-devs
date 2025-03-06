@@ -79,7 +79,11 @@ function SignUp() {
     handleSubmit,
     formState: { isSubmitting, errors },
     reset,
-  } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) })
+  } = useForm<TSignUpSchema>({
+    resolver: zodResolver(signUpSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onSubmit',
+  })
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data)
