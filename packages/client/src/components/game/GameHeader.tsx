@@ -1,7 +1,5 @@
 import Counter from './Counter'
-import ResetButton from './ResetButton'
-import SettingsButton from './SettingsButton'
-import FullScreenButton from './FullScreenButton'
+import GameButton from './GameButton'
 
 interface IGameHeader {
   minesLeft: number
@@ -23,9 +21,11 @@ export default function GameHeader({
   return (
     <div className="flex justify-between items-center px-4 py-2 border-4 border-t-[#7B7B7B] border-l-[#7B7B7B] border-r-white border-b-white bg-[#BFBFBF] mb-2">
       <Counter value={minesLeft} />
-      <FullScreenButton onClick={onFullScreen} />
-      <ResetButton status={gameStatus} onClick={onReset} />
-      <SettingsButton onClick={onOpenSettings} />
+      <div className="flex items-center gap-8">
+        <GameButton variant="fullscreen" onClick={onFullScreen} />
+        <GameButton variant="reset" onClick={onReset} gameStatus={gameStatus} />
+        <GameButton variant="settings" onClick={onOpenSettings} />
+      </div>
       <Counter value={time} />
     </div>
   )
