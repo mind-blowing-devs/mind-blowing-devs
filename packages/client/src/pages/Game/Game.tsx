@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+
 import GameHeader from '../../components/game/GameHeader'
 import GameCanvas from '../../components/game/GameCanvas'
-import { Link } from 'react-router-dom'
 import SettingsModal from '../../components/game/SettingsModal'
 
 export default function Game() {
@@ -36,12 +37,12 @@ export default function Game() {
 
       <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]">
         <GameHeader
-          minesLeft={43}
-          time={58}
-          onReset={changeRandomStatus}
           gameStatus={gameStatus}
-          onOpenSettings={handleOpenSettings}
+          minesLeft={43}
           onFullScreen={handleFullScreen}
+          onOpenSettings={handleOpenSettings}
+          onReset={changeRandomStatus}
+          time={58}
         />
 
         {/* TEMP: Можно изменять cellSize (размер) и width/height (количество) ячеек, поле будет перестраиваться автоматически */}
