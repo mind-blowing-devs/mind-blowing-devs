@@ -6,7 +6,7 @@ import Error500 from './pages/Error500'
 import Forum from './pages/Forum'
 import ForumTopic from './pages/ForumTopic'
 import Game from './pages/Game'
-import LeaderBoard from './pages/LeaderBoard'
+import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
@@ -31,7 +31,7 @@ function App() {
             'Forum',
             'ForumTopic',
             'Game',
-            'LeaderBoard',
+            'Leaderboard',
             'Profile',
             'SignIn',
             'SignUp',
@@ -49,7 +49,7 @@ function App() {
         <Route path="/forum" element={<Forum />}></Route>
         <Route path="/forumtopic" element={<ForumTopic />}></Route>
         <Route path="/game" element={<Game />}></Route>
-        <Route path="/leaderBoard" element={<LeaderBoard />}></Route>
+        <Route path="/leaderboard" element={<Leaderboard />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/signIn" element={<SignIn />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>
