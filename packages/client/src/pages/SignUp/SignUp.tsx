@@ -79,14 +79,19 @@ function SignUp() {
     handleSubmit,
     formState: { isSubmitting, errors },
     reset,
+    trigger,
   } = useForm<TSignUpSchema>({
     resolver: zodResolver(signUpSchema),
     mode: 'onBlur',
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onBlur',
   })
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data)
+    const isValid = await trigger() // Проверяем инпуты при submit
+    if (!isValid) {
+      return
+    }
 
     await new Promise(resolve => setTimeout(resolve, 1000)) // Имитация запроса
 
@@ -94,13 +99,13 @@ function SignUp() {
   }
 
   return (
-    <main className="font-press w-screen h-screen flex flex-col items-center justify-center bg-[#BFBFBF] gap-10 ">
+    <main className="font-press h-[100%] flex flex-col items-center justify-center bg-[#BFBFBF] gap-10 pt-[5rem] pb-[5rem] w-full">
       <div className="text-gray-600 mb-4 max-w-[30rem] text-center">
         Create your account to start sweeping mines!
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md  relative">
+        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
         <div className="flex  flex-col gap-10">
           {pageInputs.map(inputItem => (
             <AppInput

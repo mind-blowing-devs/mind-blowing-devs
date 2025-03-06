@@ -37,16 +37,21 @@ function SignIn() {
     handleSubmit,
     formState: { isSubmitting, errors },
     reset,
+    trigger,
   } = useForm<TSignInSchema>({
     resolver: zodResolver(signInSchema),
     mode: 'onBlur',
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onBlur',
   })
 
   type TSignInSchema = z.infer<typeof signInSchema>
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data)
+    const isValid = await trigger() // Проверяем инпуты при submit
+    if (!isValid) {
+      return
+    }
 
     await new Promise(resolve => setTimeout(resolve, 3000)) // Имитация запроса
 
@@ -60,7 +65,7 @@ function SignIn() {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md relative">
+        className="flex flex-col gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
         <div className="flex  flex-col gap-10">
           {pageInputs.map(inputItem => (
             <AppInput
