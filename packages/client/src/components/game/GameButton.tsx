@@ -1,25 +1,22 @@
-import { ReactNode } from 'react'
 import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid'
 
-type ButtonVariant = 'reset' | 'settings' | 'fullscreen' | 'custom'
+type ButtonVariant = 'reset' | 'settings' | 'fullscreen'
 type GameStatus = 'playing' | 'won' | 'lost'
 
 interface IGameButton {
   ariaLabel?: string
-  children?: ReactNode
   className?: string
   gameStatus?: GameStatus
   onClick: () => void
-  variant?: ButtonVariant
+  variant: ButtonVariant
 }
 
 function GameButton({
   ariaLabel,
-  children,
   className = '',
   gameStatus = 'playing',
   onClick,
-  variant = 'custom',
+  variant,
 }: IGameButton) {
   // Базовые стили для всех кнопок
   const baseStyles = `
@@ -39,9 +36,8 @@ function GameButton({
   let content
   let buttonAriaLabel = ariaLabel
 
-  // Простые условия для определения содержимого и aria-label
+  // Определяем содержимое и aria-label в зависимости от варианта
   if (variant === 'reset') {
-    // Эмодзи для кнопки сброса
     if (gameStatus === 'playing') content = '🙂'
     else if (gameStatus === 'won') content = '😎'
     else if (gameStatus === 'lost') content = '😵'
@@ -53,10 +49,6 @@ function GameButton({
   } else if (variant === 'fullscreen') {
     content = <ArrowsPointingOutIcon className="w-6 h-6 text-black" />
     buttonAriaLabel = buttonAriaLabel || 'Полноэкранный режим'
-  } else {
-    // Для custom варианта используем переданные children
-    content = children
-    buttonAriaLabel = buttonAriaLabel || 'Кнопка'
   }
 
   return (
