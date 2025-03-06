@@ -66,39 +66,37 @@ export default function ChangePassword({
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      {fileds.map(field => {
-        return (
-          <div key={field.name} className="flex flex-col">
-            <div className="flex justify-between">
-              <label htmlFor={field.name} className="text-xs sm:text-sm">
-                {field.label}
-              </label>
-              <input
-                {...register(field.name as keyof FormData)}
-                className="w-[60%] border-b-2 border-gray-400 outline-none focus:border-black bg-[#D9D9D9]"
-                id={field.name}
-                type="password"
-                name={field.name}
-              />
-            </div>
-
-            {errors[field.name as keyof FormData] && (
-              <p className="text-red-500 text-[10px] mt-1">{`${
-                errors[field.name as keyof FormData]?.message
-              }`}</p>
-            )}
+      {fileds.map(field => (
+        <div key={field.name} className="flex flex-col">
+          <div className="flex justify-between">
+            <label htmlFor={field.name} className="text-xs sm:text-sm">
+              {field.label}
+            </label>
+            <input
+              {...register(field.name as keyof FormData)}
+              className="w-[60%] border-b-2 border-gray-400 outline-none focus:border-black bg-[#D9D9D9]"
+              id={field.name}
+              type="password"
+              name={field.name}
+            />
           </div>
-        )
-      })}
+
+          {errors[field.name as keyof FormData] && (
+            <p className="text-red-500 text-[10px] mt-1">{`${
+              errors[field.name as keyof FormData]?.message
+            }`}</p>
+          )}
+        </div>
+      ))}
 
       {errors.root && (
-        <p className="text-red-500 text-[10px] text-center mt-2">
+        <p className="text-red-500 text-[10px] text-center">
           {errors.root.message}
         </p>
       )}
 
       {successMessage && (
-        <p className="text-green-700 text-[10px] text-center mt-2">
+        <p className="text-green-700 text-[10px] text-center">
           {successMessage}
         </p>
       )}

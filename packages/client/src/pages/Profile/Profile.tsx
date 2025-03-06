@@ -9,6 +9,7 @@ import {
   ChangePassword,
 } from './components'
 
+// Data will receive from leaderboard API
 const mockUserAchievements = {
   gamesPlayed: 43,
   gamesWon: 25,
@@ -50,7 +51,7 @@ export default function Profile() {
   }
 
   // ============
-  // Temp, will be remove after creating auth API and redux store
+  // Will be remove after creating auth API and redux store
   useEffect(() => {
     async function getUser() {
       try {

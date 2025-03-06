@@ -29,12 +29,11 @@ export default function ProfileDetails({
         <dd>{username}</dd>
       </div>
 
-      {/* Data will receive from leaderboard API */}
       <div className="flex justify-between">
         <dt className="text-[#585656]">rating</dt>
         <dd className="flex gap-2">
           {[...Array(5)].map((_, index) => (
-            <Star key={index} filled={index < rating} />
+            <Star key={Math.random()} filled={index < rating} />
           ))}
         </dd>
       </div>

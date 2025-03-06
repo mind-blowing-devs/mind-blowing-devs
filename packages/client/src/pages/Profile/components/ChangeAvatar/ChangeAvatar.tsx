@@ -85,7 +85,7 @@ export default function ChangeAvatar({ onAvatarChange }: ChangeAvatarProps) {
       )}
 
       {errors.root && (
-        <p className="text-red-500 text-[10px] text-center mt-2">
+        <p className="text-xs sm:text-sm text-red-500 text-center">
           {errors.root.message}
         </p>
       )}
