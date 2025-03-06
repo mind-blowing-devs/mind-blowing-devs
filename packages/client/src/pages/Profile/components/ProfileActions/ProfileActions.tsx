@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 type ProfileActionsProps = {
   isEdit: boolean
   setSearchParams: (props: Record<string, string>) => void
-  onLogOut?: () => Promise<void>
+  onLogOut: () => Promise<void>
 }
 
 export default function ProfileActions({
@@ -30,7 +30,7 @@ export default function ProfileActions({
       ]
 
   return (
-    <section className="mt-8 flex flex-col justify-center items-center gap-4 max-w-md mx-auto">
+    <section className="mt-8 flex flex-col justify-center items-center gap-4">
       {actions.map(({ text, onClick, href, className }) =>
         href ? (
           <Link

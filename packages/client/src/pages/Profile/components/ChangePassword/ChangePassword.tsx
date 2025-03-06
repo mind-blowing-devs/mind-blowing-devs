@@ -82,7 +82,7 @@ export default function ChangePassword({
           </div>
 
           {errors[field.name as keyof FormData] && (
-            <p className="text-red-500 text-[10px] mt-1">{`${
+            <p className="text-red-500 text-[10px] mt-2">{`${
               errors[field.name as keyof FormData]?.message
             }`}</p>
           )}
@@ -95,8 +95,8 @@ export default function ChangePassword({
         </p>
       )}
 
-      {successMessage && (
-        <p className="text-green-[#0E7A11] text-[10px] text-center">
+      {successMessage && !isSubmitting && (
+        <p className="text-[#0E7A11] text-[10px] text-center">
           {successMessage}
         </p>
       )}
@@ -106,7 +106,7 @@ export default function ChangePassword({
           type="submit"
           className="bg-black text-white text-xs sm:text-sm px-4 py-1 mt-6 disabled:opacity-50 disabled:cursor-wait"
           disabled={isSubmitting}>
-          update password
+          change password
         </button>
       </div>
     </form>
