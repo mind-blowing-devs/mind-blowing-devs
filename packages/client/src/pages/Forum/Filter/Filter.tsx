@@ -9,14 +9,14 @@ export default function Filter() {
   // not every letter type causes a request
   const handleInputQueryChange = useDebouncedCallback((query: string) => {
     setSearch({
+      ...Object.fromEntries(search.entries()),
       query,
-      sort: search.get('sort') ?? '',
     })
   }, 300)
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSearch({
-      query: search.get('query') ?? '',
+      ...Object.fromEntries(search.entries()),
       sort: e.target.value,
     })
   }
