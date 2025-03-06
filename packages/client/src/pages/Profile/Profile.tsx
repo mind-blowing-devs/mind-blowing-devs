@@ -67,10 +67,9 @@ export default function Profile() {
   return (
     <main className="font-press bg-[#BFBFBF] flex flex-col items-center min-h-screen p-4 sm:p-6">
       <h1 className="mt-2 sm:text-xl text-center text-[#585656]">{heading}</h1>
-
       <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
         <Avatar avatar={user?.avatar ?? null} />
-        <div className="mt-6 w-full">{content}</div>
+        <section className="mt-10 w-full">{content}</section>
       </div>
 
       <ProfileActions

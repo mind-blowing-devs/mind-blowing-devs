@@ -20,6 +20,7 @@ export default function ChangeAvatar({ onAvatarChange }: ChangeAvatarProps) {
     handleSubmit,
     setValue,
     watch,
+    setError,
     clearErrors,
     reset,
     formState: { errors, isSubmitting },
@@ -45,8 +46,8 @@ export default function ChangeAvatar({ onAvatarChange }: ChangeAvatarProps) {
       formData.set('avatar', data.file)
       await onAvatarChange(formData)
       reset()
-    } catch (error) {
-      console.error('Error durring file upload', error)
+    } catch {
+      setError('root', { message: 'something went wrong, try again' })
     }
   }
 
@@ -72,12 +73,20 @@ export default function ChangeAvatar({ onAvatarChange }: ChangeAvatarProps) {
       />
 
       {selectedFile && (
-        <p className="text-xs sm:text-sm text-center truncate">{selectedFile.name}</p>
+        <p className="text-xs sm:text-sm text-center truncate">
+          {selectedFile.name}
+        </p>
       )}
 
       {errors.file && (
         <p className="text-xs sm:text-sm text-red-500 text-center">
           {errors.file.message}
+        </p>
+      )}
+
+      {errors.root && (
+        <p className="text-red-500 text-[10px] text-center mt-2">
+          {errors.root.message}
         </p>
       )}
 

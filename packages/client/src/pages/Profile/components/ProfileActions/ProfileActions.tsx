@@ -30,7 +30,7 @@ export default function ProfileActions({
       ]
 
   return (
-    <div className="mt-8 flex flex-col justify-center items-center gap-4 max-w-md mx-auto">
+    <section className="mt-8 flex flex-col justify-center items-center gap-4 max-w-md mx-auto">
       {actions.map(({ text, onClick, href, className }) =>
         href ? (
           <Link
@@ -51,6 +51,6 @@ export default function ProfileActions({
           </button>
         )
       )}
-    </div>
+    </section>
   )
 }

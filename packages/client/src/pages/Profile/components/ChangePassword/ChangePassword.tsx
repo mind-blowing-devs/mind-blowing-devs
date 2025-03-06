@@ -56,9 +56,8 @@ export default function ChangePassword({
       await onPasswordChange(data)
       reset()
       setSuccessMessage('password was changed')
-    } catch (error) {
+    } catch {
       setError('root', {
-        type: 'manual',
         message: 'something went wrong, try again',
       })
       setSuccessMessage('')
