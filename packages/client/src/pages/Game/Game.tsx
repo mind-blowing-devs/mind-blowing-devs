@@ -3,20 +3,42 @@ import { Link } from 'react-router-dom'
 
 import GameHeader from '../../components/game/GameHeader'
 import GameCanvas from '../../components/game/GameCanvas'
+import ResultModal from '../../components/game/ResultModal'
 import SettingsModal from '../../components/game/SettingsModal'
 
-export default function Game() {
+function Game() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(
     'playing'
   )
+  // Состояния для модальных окон
   const [showSettings, setShowSettings] = useState(false)
+  const [showResult, setShowResult] = useState(true)
 
+  // Открытие модального окна настроек
   const handleOpenSettings = () => {
     setShowSettings(true)
   }
 
+  // Метод для открытия полноэкранного режима (не реализован)
   const handleFullScreen = () => {
     console.log('Полноэкранный режим')
+  }
+
+  // Метод для закрытия модального окна результата и сброса игры
+  const handleCloseResult = () => {
+    setShowResult(false)
+    setGameStatus('playing')
+  }
+
+  // Функция для обработки клика на кнопку сброса
+  const handleResetClick = () => {
+    // Показываем модальное окно в соответствии с текущим статусом игры
+    if (gameStatus === 'won' || gameStatus === 'lost') {
+      setShowResult(true)
+    } else {
+      // Если игра в процессе, просто меняем статус случайным образом для демонстрации
+      changeRandomStatus()
+    }
   }
 
   // TEMP: Функция для случайного изменения статуса игры
@@ -31,7 +53,7 @@ export default function Game() {
     <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center mb-4">
         <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-[#585656]">
-          Oops! Something exploded on the server!
+          Every click counts! Can you beat the minefield?
         </p>
       </div>
 
@@ -41,7 +63,7 @@ export default function Game() {
           minesLeft={43}
           onFullScreen={handleFullScreen}
           onOpenSettings={handleOpenSettings}
-          onReset={changeRandomStatus}
+          onReset={handleResetClick}
           time={58}
         />
 
@@ -56,7 +78,20 @@ export default function Game() {
         [return home]
       </Link>
 
-      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+      {/* Модальное окно настроек */}
+      <SettingsModal
+        onClose={() => setShowSettings(false)}
+        isOpen={showSettings}
+      />
+
+      {/* Модальное окно результата */}
+      <ResultModal
+        onClose={handleCloseResult}
+        isOpen={showResult}
+        result={gameStatus === 'won' ? 'won' : 'lost'}
+      />
     </main>
   )
 }
+
+export default Game
