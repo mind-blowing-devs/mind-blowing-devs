@@ -3,6 +3,7 @@ import GameHeader from '../../components/game/GameHeader'
 import GameCanvas from '../../components/game/GameCanvas'
 import { Link } from 'react-router-dom'
 import SettingsModal from '../../components/game/SettingsModal'
+import FullScreenButton from '../../components/game/FullScreenButton'
 
 export default function Game() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(
@@ -12,7 +13,10 @@ export default function Game() {
 
   const handleOpenSettings = () => {
     setShowSettings(true)
-    console.log('Открыть настройки')
+  }
+
+  const handleFullScreen = () => {
+    console.log('Полноэкранный режим')
   }
 
   // TEMP: Функция для случайного изменения статуса игры
@@ -38,6 +42,7 @@ export default function Game() {
           onReset={changeRandomStatus}
           gameStatus={gameStatus}
           onOpenSettings={handleOpenSettings}
+          onFullScreen={handleFullScreen}
         />
 
         {/* TEMP: Можно изменять cellSize (размер) и width/height (количество) ячеек, поле будет перестраиваться автоматически */}
