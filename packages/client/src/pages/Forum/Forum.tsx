@@ -51,7 +51,7 @@ export default function Forum() {
 
       <nav className="flex flex-col items-center gap-[16px] my-5 sm:my-8">
         <Link
-          to="/topiccreate"
+          to="/createtopic"
           className="text-sm hover:text-gray-500 select-none"
           aria-label="New topic">
           [new topic]
