@@ -96,7 +96,7 @@ export default function ChangePassword({
       )}
 
       {successMessage && (
-        <p className="text-green-700 text-[10px] text-center">
+        <p className="text-green-[#0E7A11] text-[10px] text-center">
           {successMessage}
         </p>
       )}
