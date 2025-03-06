@@ -19,18 +19,18 @@ const AppInput = <T extends object>({
 }: AppInputProps<T>) => {
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between text-[13px] ">
-        <h1 className="min-h-[1.5rem]">{label}</h1>
+      <div className="flex justify-between text-[13px] items-center">
+        <h1 className="w-[11rem] min-h-[1.5rem] leading-tight">{label}</h1>
         <input
           {...register(name as Path<T>)}
-          className="w-[60%] border-b-2 border-gray-400 outline-none focus:border-black bg-[#D9D9D9]"
+          className="w-[60%] border-b-2 border-gray-400 outline-none focus:border-black bg-[#D9D9D9] h-8"
           {...props}
         />
       </div>
       <div
         style={{ display: error ? 'block' : 'none' }}
-        className="max-w-[20rem] text-[13px] max-h-[2rem] absolute right-[-23rem]">
-        <p className="text-red-500">{`${error?.message}`}</p>
+        className="w-[28rem] text-[13px] max-h-[2rem] mt-1">
+        <p className="text-red-500 text-[10px]">{`${error?.message}`}</p>
       </div>
     </div>
   )

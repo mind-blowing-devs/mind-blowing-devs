@@ -1,17 +1,57 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import { AppInput, AppSpinner } from '../../components'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { getValidationRules } from '../../utlis/getValidationRules'
+
+const pageInputs: {
+  label: string
+  name: string
+  type?: string
+  error?: string
+}[] = [
+  {
+    label: 'login',
+    name: 'login',
+  },
+  {
+    label: 'password',
+    type: 'password',
+    name: 'password',
+  },
+]
+
+const signInSchema = z.object(
+  Object.fromEntries(
+    pageInputs.map(({ name }) => {
+      const [regex, message] = getValidationRules(name)
+      return [name, z.string().regex(regex, message)]
+    })
+  )
+)
 
 function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     reset,
-  } = useForm()
+    trigger,
+  } = useForm<TSignInSchema>({
+    resolver: zodResolver(signInSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
+  })
+
+  type TSignInSchema = z.infer<typeof signInSchema>
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data)
+    const isValid = await trigger() // Проверяем инпуты при submit
+    if (!isValid) {
+      return
+    }
 
     await new Promise(resolve => setTimeout(resolve, 3000)) // Имитация запроса
 
@@ -25,16 +65,17 @@ function SignIn() {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md relative">
+        className="flex flex-col gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
         <div className="flex  flex-col gap-10">
-          <AppInput register={register} label="username" name="login" />
-
-          <AppInput
-            register={register}
-            label="password"
-            name="password"
-            type="password"
-          />
+          {pageInputs.map(inputItem => (
+            <AppInput
+              register={register}
+              label={inputItem.label}
+              name={inputItem.name}
+              type={inputItem.type}
+              error={errors[inputItem.name as keyof TSignInSchema]}
+            />
+          ))}
         </div>
 
         {!isSubmitting ? (
