@@ -26,8 +26,8 @@ export default function Game() {
 
       <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]">
         <GameHeader
-          minesLeft={40}
-          time={0}
+          minesLeft={43}
+          time={58}
           onReset={changeRandomStatus}
           gameStatus={gameStatus}
         />
