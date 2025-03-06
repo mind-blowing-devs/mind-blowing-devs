@@ -3,7 +3,6 @@ import GameHeader from '../../components/game/GameHeader'
 import GameCanvas from '../../components/game/GameCanvas'
 import { Link } from 'react-router-dom'
 import SettingsModal from '../../components/game/SettingsModal'
-import FullScreenButton from '../../components/game/FullScreenButton'
 
 export default function Game() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(
