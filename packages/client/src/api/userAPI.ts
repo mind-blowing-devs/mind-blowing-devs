@@ -17,14 +17,10 @@ export type ChangePasswordData = {
 }
 
 class UserAPI extends BaseAPI {
+  // Temp
   async getUser(): Promise<User> {
     const { data } = await this.api.get('/auth/user')
     return data
-  }
-
-  async changeData(data: Partial<User>): Promise<User> {
-    const response = await this.api.put('/user/profile', data)
-    return response.data
   }
 
   async changeAvatar(data: FormData): Promise<User> {
