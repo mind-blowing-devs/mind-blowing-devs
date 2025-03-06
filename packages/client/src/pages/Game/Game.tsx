@@ -2,11 +2,18 @@ import { useState } from 'react'
 import GameHeader from '../../components/game/GameHeader'
 import GameCanvas from '../../components/game/GameCanvas'
 import { Link } from 'react-router-dom'
+import SettingsModal from '../../components/game/SettingsModal'
 
 export default function Game() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(
     'playing'
   )
+  const [showSettings, setShowSettings] = useState(false)
+
+  const handleOpenSettings = () => {
+    setShowSettings(true)
+    console.log('Открыть настройки')
+  }
 
   // TEMP: Функция для случайного изменения статуса игры
   const changeRandomStatus = () => {
@@ -30,6 +37,7 @@ export default function Game() {
           time={58}
           onReset={changeRandomStatus}
           gameStatus={gameStatus}
+          onOpenSettings={handleOpenSettings}
         />
 
         {/* TEMP: Можно изменять cellSize (размер) и width/height (количество) ячеек, поле будет перестраиваться автоматически */}
@@ -42,6 +50,8 @@ export default function Game() {
         aria-label="Back to home page">
         [return home]
       </Link>
+
+      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </main>
   )
 }
