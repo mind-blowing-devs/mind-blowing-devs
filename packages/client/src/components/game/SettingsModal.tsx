@@ -1,8 +1,11 @@
 interface ISettingsModal {
+  isOpen: boolean
   onClose: () => void
 }
 
-function SettingsModal({ onClose }: ISettingsModal) {
+function SettingsModal({ isOpen, onClose }: ISettingsModal) {
+  if (!isOpen) return null
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-[#BFBFBF] p-4 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]">
