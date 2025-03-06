@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -15,7 +16,7 @@ const formSchema = z
   .object({
     oldPassword: passwordSchema,
     newPassword: passwordSchema,
-    confirmPassword: z.string(),
+    confirmPassword: z.string().nonempty({ message: 'this field is required' }),
   })
   .refine(data => data.newPassword === data.confirmPassword, {
     message: "passwords don't match",
@@ -28,13 +29,21 @@ type ChangePasswordProps = {
   onPasswordChange: (data: ChangePasswordData) => Promise<void>
 }
 
+const fileds = [
+  { name: 'oldPassword', label: 'old password' },
+  { name: 'newPassword', label: 'new password' },
+  { name: 'confirmPassword', label: 'confirm password' },
+]
+
 export default function ChangePassword({
   onPasswordChange,
 }: ChangePasswordProps) {
+  const [successMessage, setSuccessMessage] = useState('')
   const {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -45,43 +54,60 @@ export default function ChangePassword({
   const onSubmit = async (data: ChangePasswordData) => {
     try {
       await onPasswordChange(data)
+      reset()
+      setSuccessMessage('password was changed')
     } catch (error) {
-      setError('root', { message: 'Error' })
+      setError('root', {
+        type: 'manual',
+        message: 'something went wrong, try again',
+      })
+      setSuccessMessage('')
     }
   }
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      {[
-        { name: 'oldPassword', label: 'old password' },
-        { name: 'newPassword', label: 'new password' },
-        { name: 'confirmPassword', label: 'confirm password' },
-      ].map(field => {
+      {fileds.map(field => {
         return (
-          <div className="flex flex-col">
+          <div key={field.name} className="flex flex-col">
             <div className="flex justify-between">
-              <label htmlFor={field.name} className='text-xs sm:text-sm'>{field.label}</label>
+              <label htmlFor={field.name} className="text-xs sm:text-sm">
+                {field.label}
+              </label>
               <input
                 {...register(field.name as keyof FormData)}
                 className="w-[60%] border-b-2 border-gray-400 outline-none focus:border-black bg-[#D9D9D9]"
+                id={field.name}
                 type="password"
                 name={field.name}
               />
             </div>
 
             {errors[field.name as keyof FormData] && (
-              <small className="text-red-500 text-[10px] mt-1">{`${
+              <p className="text-red-500 text-[10px] mt-1">{`${
                 errors[field.name as keyof FormData]?.message
-              }`}</small>
+              }`}</p>
             )}
           </div>
         )
       })}
 
+      {errors.root && (
+        <p className="text-red-500 text-[10px] text-center mt-2">
+          {errors.root.message}
+        </p>
+      )}
+
+      {successMessage && (
+        <p className="text-green-700 text-[10px] text-center mt-2">
+          {successMessage}
+        </p>
+      )}
+
       <div className="flex justify-center items-center">
         <button
           type="submit"
-          className="bg-black text-white text-xs sm:text-sm px-4 py-1 mt-10"
+          className="bg-black text-white text-xs sm:text-sm px-4 py-1 mt-6 disabled:opacity-50 disabled:cursor-wait"
           disabled={isSubmitting}>
           update password
         </button>
