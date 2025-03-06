@@ -16,17 +16,15 @@ const mockUserAchievements = {
 }
 
 export default function Profile() {
-  const [user, setUser] = useState<Partial<User>>({})
+  const [user, setUser] = useState<User | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const editParam = searchParams.get('edit')
   const isEditPassword = editParam === 'password'
   const isEditAvatar = editParam === 'avatar'
 
-  const handleAvatarChange = async (file: File) => {
-    const formData = new FormData()
-    formData.set('avatar', file)
-    const user = await userAPI.changeAvatar(formData)
+  const handleAvatarChange = async (data: FormData) => {
+    const user = await userAPI.changeAvatar(data)
     setUser(user)
   }
 
@@ -36,18 +34,23 @@ export default function Profile() {
 
   let content = (
     <ProfileDetails
-      username={user.login ?? ''}
+      username={user?.login ?? ''}
       userAchievements={mockUserAchievements}
     />
   )
 
-  let title = 'Your Minesweeper Profile'
+  let heading = 'Profile'
 
   if (isEditPassword) {
     content = <ChangePassword onPasswordChange={handlePasswordChange} />
-    title = 'Change Password'
+    heading = 'Change Password'
+  } else if (isEditAvatar) {
+    content = <ChangeAvatar onAvatarChange={handleAvatarChange} />
+    heading = 'Change Avatar'
   }
 
+  // ============
+  // Temp, will be remove after creating auth API and redux store
   useEffect(() => {
     async function getUser() {
       try {
@@ -59,28 +62,21 @@ export default function Profile() {
     }
     getUser()
   }, [])
+  // ============
 
   return (
-    <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
-      <h1 className="mt-10 sm:text-xl text-center text-[#585656]">{title}</h1>
+    <main className="font-press bg-[#BFBFBF] flex flex-col items-center min-h-screen p-4 sm:p-6">
+      <h1 className="mt-2 sm:text-xl text-center text-[#585656]">{heading}</h1>
 
       <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 min-h-[50vh] w-full max-w-xl text-xs sm:text-sm md:text-base">
-        <div className="flex flex-col items-center">
-          <Avatar avatar={user.avatar ?? null} />
-        </div>
+        <Avatar avatar={user?.avatar ?? null} />
         <div className="mt-6 w-full">{content}</div>
       </div>
 
       <ProfileActions
-        isEditPassword={isEditPassword}
+        isEdit={isEditPassword || isEditAvatar}
         setSearchParams={setSearchParams}
       />
-      {isEditAvatar && (
-        <ChangeAvatar
-          onChange={handleAvatarChange}
-          onClose={() => setSearchParams()}
-        />
-      )}
     </main>
   )
 }
