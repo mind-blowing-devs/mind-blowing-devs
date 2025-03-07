@@ -8,7 +8,7 @@ interface IGameButton {
   className?: string
   gameStatus?: GameStatus
   onClick: () => void
-  variant: ButtonVariant
+  variant?: ButtonVariant
 }
 
 function GameButton({
@@ -18,12 +18,11 @@ function GameButton({
   onClick,
   variant,
 }: IGameButton) {
-  // Базовые стили для всех кнопок
   const baseStyles = `
     bg-[#BFBFBF] 
     w-[40px] h-[40px] 
     flex items-center justify-center 
-    text-2xl 
+    text-2xl
     hover:bg-[#d4d4d4] 
     border-2 
     border-t-white border-l-white 
@@ -42,13 +41,13 @@ function GameButton({
     else if (gameStatus === 'won') content = '😎'
     else if (gameStatus === 'lost') content = '😵'
 
-    buttonAriaLabel = buttonAriaLabel || 'Сбросить игру'
+    buttonAriaLabel = buttonAriaLabel || 'reset game'
   } else if (variant === 'settings') {
     content = <Cog6ToothIcon className="w-6 h-6 text-black" />
-    buttonAriaLabel = buttonAriaLabel || 'Настройки'
+    buttonAriaLabel = buttonAriaLabel || 'settings'
   } else if (variant === 'fullscreen') {
     content = <ArrowsPointingOutIcon className="w-6 h-6 text-black" />
-    buttonAriaLabel = buttonAriaLabel || 'Полноэкранный режим'
+    buttonAriaLabel = buttonAriaLabel || 'fullscreen mode'
   }
 
   return (
