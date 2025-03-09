@@ -6,6 +6,7 @@ export interface CellData {
   isFlagged: boolean
   surroundingMines: number // Number of mines connected to the cell (3x3 around)
 }
+
 export interface GameState {
   field: CellData[][]
   minesRevealed: number
@@ -32,7 +33,11 @@ const gameState = createSlice({
   reducers: {
     changeStatus: (state, action: PayloadAction<GameState['status']>) => {
       state.status = action.payload
-      if (action.payload !== 'playing' && action.payload !== 'idle') {
+      if (
+        action.payload !== 'playing' &&
+        action.payload !== 'idle' &&
+        state.finishTime === undefined
+      ) {
         state.finishTime = Date.now()
       }
     },
@@ -61,7 +66,8 @@ const gameState = createSlice({
       state.minesLeft = action.payload.minesLeft
       if (
         action.payload.status !== 'playing' &&
-        action.payload.status !== 'idle'
+        action.payload.status !== 'idle' &&
+        state.finishTime === undefined
       ) {
         state.finishTime = Date.now()
       }
