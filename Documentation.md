@@ -138,7 +138,7 @@ interface CellData {
     isRevealed: boolean;
     isMine: boolean;
     isFlagged: boolean;
-    surroundingMines: number; // Number of mines connected to the cell (3x3 around)
+    surroundingMines: number; // Number of mines connected to the emptyCell (3x3 around)
 }
 ```
 

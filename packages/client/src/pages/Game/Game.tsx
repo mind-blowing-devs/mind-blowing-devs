@@ -2,51 +2,62 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import GameHeader from '../../components/game/GameHeader'
-import GameCanvas from '../../components/game/GameCanvas'
 import ResultModal from '../../components/game/ResultModal'
 import SettingsModal from '../../components/game/SettingsModal'
+import GameField from './components/GameField'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+import GameController from '../../controllers/GameController'
+
+type Difficulty = RootState['gameState']['difficulty']
+type Theme = 'classic' | 'dark'
+
+const gameController = new GameController()
 
 function Game() {
-  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(
-    'playing'
-  )
+  const {
+    minesLeft,
+    minesRevealed,
+    status,
+    difficulty,
+    startTime,
+    finishTime,
+  } = useSelector((state: RootState) => state.gameState)
+
   // Состояния для модальных окон
   const [showSettings, setShowSettings] = useState(false)
-  const [showResult, setShowResult] = useState(true)
+  const [showResult, setShowResult] = useState(false)
 
   // Открытие модального окна настроек
   const handleOpenSettings = () => {
     setShowSettings(true)
   }
 
+  const handleSaveSettings = (difficulty: Difficulty, theme: Theme) => {
+    gameController.generateGame(difficulty)
+    // TODO change theme
+    console.log(theme)
+  }
+
   // Метод для открытия полноэкранного режима (не реализован)
   const handleFullScreen = () => {
-    console.log('Полноэкранный режим')
+    alert('Полноэкранный режим')
   }
 
   // Метод для закрытия модального окна результата и сброса игры
   const handleCloseResult = () => {
     setShowResult(false)
-    setGameStatus('playing')
+    gameController.generateGame()
   }
 
   // Функция для обработки клика на кнопку сброса
   const handleResetClick = () => {
     // Показываем модальное окно в соответствии с текущим статусом игры
-    if (gameStatus === 'won' || gameStatus === 'lost') {
+    if (status === 'won' || status === 'lost') {
       setShowResult(true)
     } else {
-      // Если игра в процессе, просто меняем статус случайным образом для демонстрации
-      changeRandomStatus()
+      gameController.generateGame()
     }
-  }
-
-  // TEMP: Функция для случайного изменения статуса игры
-  const changeRandomStatus = () => {
-    const statuses: ('playing' | 'won' | 'lost')[] = ['playing', 'won', 'lost']
-    const randomIndex = Math.floor(Math.random() * statuses.length)
-    const newStatus = statuses[randomIndex]
-    setGameStatus(newStatus)
   }
 
   return (
@@ -59,16 +70,19 @@ function Game() {
 
       <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]">
         <GameHeader
-          gameStatus={gameStatus}
-          minesLeft={43}
+          gameStatus={status}
+          minesLeft={minesLeft}
           onFullScreen={handleFullScreen}
           onOpenSettings={handleOpenSettings}
           onReset={handleResetClick}
-          time={58}
+          startTime={startTime}
         />
 
-        {/* TEMP: Можно изменять cellSize (размер) и width/height (количество) ячеек, поле будет перестраиваться автоматически */}
-        <GameCanvas width={16} height={16} cellSize={32} />
+        <GameField
+          handleClick={gameController.handleCellClick}
+          handleDoubleClick={gameController.handleRightClick}
+          cellSize={32}
+        />
       </div>
 
       <Link
@@ -81,6 +95,7 @@ function Game() {
       {/* Модальное окно настроек */}
       <SettingsModal
         onClose={() => setShowSettings(false)}
+        handleSave={handleSaveSettings}
         isOpen={showSettings}
       />
 
@@ -88,7 +103,12 @@ function Game() {
       <ResultModal
         onClose={handleCloseResult}
         isOpen={showResult}
-        result={gameStatus === 'won' ? 'won' : 'lost'}
+        cellsRevealed={minesRevealed}
+        minesLeft={minesLeft}
+        startTime={startTime}
+        finishTime={finishTime}
+        difficulty={difficulty}
+        result={status === 'won' ? 'won' : 'lost'}
       />
     </main>
   )
