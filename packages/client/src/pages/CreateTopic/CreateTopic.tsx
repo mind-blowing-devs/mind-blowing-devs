@@ -14,7 +14,7 @@ export default function CreateTopic() {
         Discuss strategies, share tips, and connect with other players!
       </span>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] lg:h-[524px] md:h-[424px] h-[364px] text-xs md:text-base sm:text-sm overflow-y-auto">
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] text-xs md:text-base sm:text-sm overflow-y-auto">
         <h3 className="font-roboto font-semibold w-full my-[2px] sm:my-[4px] lg:my-[12px] text-lg lg:text-xl sm:text-lg text-black sm:text-center text-left">
           Create New Topic
         </h3>
@@ -22,7 +22,7 @@ export default function CreateTopic() {
           Share your thoughts, ask questions or start a discussion!
         </span>
 
-        <form className="w-full flex flex-col items-start">
+        <form className="w-full flex flex-col items-start mb-[10px]">
           <TitleInput />
           <CategoryInput />
           <DescriptionInput />
@@ -40,14 +40,14 @@ export default function CreateTopic() {
         <Link
           to="/forum"
           className="font-press text-sm hover:text-gray-500 select-none"
-          aria-label="New topic">
+          aria-label="Back to Forum">
           [cancel]
         </Link>
 
         <Link
           to="/forum"
           className="font-press text-sm text-green-700 hover:text-gray-500 select-none"
-          aria-label="Back to Game">
+          aria-label="Back to Forum">
           [back to forum]
         </Link>
       </nav>

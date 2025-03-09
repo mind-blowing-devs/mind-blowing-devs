@@ -44,7 +44,7 @@ export default function Forum() {
         Discuss strategies, share tips, and connect with other players!
       </span>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] lg:h-[524px] md:h-[424px] h-[364px] text-xs md:text-base sm:text-sm overflow-y-auto">
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] pb-[35px] text-xs md:text-base sm:text-sm overflow-y-auto">
         <Filter />
         <TopicsList topics={mockData} />
       </div>
