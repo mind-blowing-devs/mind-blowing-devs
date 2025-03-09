@@ -22,7 +22,7 @@ export default class GameController {
     if (difficulty !== undefined && storeDifficulty !== difficulty) {
       store.dispatch(updateDifficulty(difficulty))
     }
-    switch (storeDifficulty) {
+    switch (difficulty) {
       case 'beginner':
         rows = cols = 15
         mines = 14
