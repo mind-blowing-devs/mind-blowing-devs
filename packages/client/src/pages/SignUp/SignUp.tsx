@@ -1,16 +1,28 @@
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { AppInput, AppSpinner } from '../../components'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getValidationRules } from '../../utlis/getValidationRules'
+import { useAuth } from '../../hooks/useAuth'
+import { useState } from 'react'
+import { AxiosError } from 'axios'
 
-const pageInputs: {
+type PageInput = {
+  name:
+    | 'login'
+    | 'password'
+    | 'first_name'
+    | 'second_name'
+    | 'email'
+    | 'password_again'
+    | 'phone'
   label: string
-  name: string
   type?: string
   error?: string
-}[] = [
+}
+
+const pageInputs: PageInput[] = [
   {
     label: 'first name',
     name: 'first_name',
@@ -45,26 +57,26 @@ const pageInputs: {
   },
 ]
 
+const keyValuePairs = pageInputs.map(({ name }) => {
+  if (name === 'password_again') {
+    return [
+      name,
+      z
+        .string()
+        .min(1, 'Для регистрации необходимо обязательно подтвердить пароль'),
+    ] as const
+  }
+
+  const [regex, message] = getValidationRules(name)
+  return [name, z.string().regex(regex, message)] as const
+})
+
 const signUpSchema = z
   .object(
-    Object.fromEntries(
-      pageInputs.map(({ name }) => {
-        if (name === 'password_again') {
-          return [
-            name,
-            z
-              .string()
-              .min(
-                1,
-                'Для регистрации необходимо обязательно подтвердить пароль'
-              ),
-          ]
-        }
-
-        const [regex, message] = getValidationRules(name)
-        return [name, z.string().regex(regex, message)]
-      })
-    )
+    keyValuePairs.reduce((acc, [key, value]) => {
+      acc[key] = value
+      return acc
+    }, {} as Record<(typeof pageInputs)[number]['name'], z.ZodString>)
   )
   .refine(data => data.password === data.password_again, {
     message: 'Для регистрации необходимо ввести совпадающие пароли',
@@ -78,24 +90,29 @@ function SignUp() {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-    reset,
     trigger,
   } = useForm<TSignUpSchema>({
     resolver: zodResolver(signUpSchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
   })
+  const { signUp } = useAuth()
+  const [errorHint, setErrorHint] = useState('')
 
-  const onSubmit = async (data: FieldValues) => {
-    console.log(data)
+  const onSubmit = async (data: TSignUpSchema) => {
     const isValid = await trigger() // Проверяем инпуты при submit
     if (!isValid) {
       return
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Имитация запроса
-
-    reset() // Очистка инпутов
+    try {
+      await signUp(data)
+    } catch (error: unknown) {
+      const reason = (
+        (error as AxiosError)?.response?.data as { reason: string }
+      )?.reason
+      setErrorHint(reason || 'Oops. Something went wrong. Try again later.')
+    }
   }
 
   return (
@@ -105,7 +122,7 @@ function SignUp() {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
+        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md max-w-[50rem]">
         <div className="flex  flex-col gap-10">
           {pageInputs.map(inputItem => (
             <AppInput
@@ -130,6 +147,10 @@ function SignUp() {
           <div className="flex justify-center">
             <AppSpinner color={'#000'} />
           </div>
+        )}
+
+        {errorHint && (
+          <p className="text-center text-[12px] text-red-500">{errorHint}</p>
         )}
       </form>
 
