@@ -37,8 +37,10 @@ function App() {
             'Profile',
             'SignIn',
             'SignUp',
+            '500',
+            '404'
           ].map(page => (
-            <li>
+            <li key={page}>
               <Link to={page}>{page}</Link>
             </li>
           ))}
