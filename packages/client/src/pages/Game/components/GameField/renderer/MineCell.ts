@@ -1,28 +1,34 @@
+import { ScalableRect } from '../../../../../utils/ScalableRect'
+
 export default function MineCell(
   x: number,
   y: number,
   cellSize: number,
   ctx: CanvasRenderingContext2D
 ) {
+  const rect = new ScalableRect(x, y, cellSize, ctx)
   // Background
-  ctx.drawRect(x, y, cellSize, cellSize, cellSize, '#FC0D1B')
+  rect.fill('#FC0D1B') // red
+  rect.draw(0, 0, cellSize, cellSize)
 
   // Mine
-  ctx.drawRect(x + 15, y + 5, 2, 22, cellSize, 'black')
-  ctx.drawRect(x + 5, y + 15, 22, 2, cellSize, 'black')
+  rect.fill('black')
+  rect.draw(15, 5, 2, 22)
+  rect.draw(5, 15, 22, 2)
 
-  ctx.drawRect(x + 11, y + 8, 10, 16, cellSize, 'black')
-  ctx.drawRect(x + 8, y + 11, 16, 10, cellSize, 'black')
+  rect.draw(11, 8, 10, 16)
+  rect.draw(8, 11, 16, 10)
 
   // Mine fragments
   // Top
-  ctx.drawRect(x + 7, y + 7, 2, 2, cellSize, 'black')
-  ctx.drawRect(x + 23, y + 7, 2, 2, cellSize, 'black')
+  rect.draw(7, 7, 2, 2)
+  rect.draw(23, 7, 2, 2)
 
   // Bottom
-  ctx.drawRect(x + 7, y + 23, 2, 2, cellSize, 'black')
-  ctx.drawRect(x + 23, y + 23, 2, 2, cellSize, 'black')
+  rect.draw(7, 23, 2, 2)
+  rect.draw(23, 23, 2, 2)
 
   // Mine glare
-  ctx.drawRect(x + 12, y + 12, 3, 3, cellSize, 'white')
+  rect.fill('white')
+  rect.draw(12, 12, 3, 3)
 }

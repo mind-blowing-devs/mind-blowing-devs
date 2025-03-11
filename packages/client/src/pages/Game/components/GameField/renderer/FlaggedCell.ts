@@ -1,4 +1,5 @@
 import IdleCell from './IdleCell'
+import { ScalableRect } from '../../../../../utils/ScalableRect'
 
 export default function FlaggedCell(
   x: number,
@@ -8,15 +9,19 @@ export default function FlaggedCell(
 ) {
   IdleCell(x, y, cellSize, ctx)
 
+  const rect = new ScalableRect(x, y, cellSize, ctx)
+
   // Flag
-  ctx.drawRect(x + 14, y + 7, 4, 8, cellSize, '#FC0D1B')
-  ctx.drawRect(x + 12, y + 8, 2, 6, cellSize, '#FC0D1B')
-  ctx.drawRect(x + 10, y + 10, 2, 2, cellSize, '#FC0D1B')
+  rect.fill('#FC0D1B') // red
+  rect.draw(14, 7, 4, 8)
+  rect.draw(12, 8, 2, 6)
+  rect.draw(10, 10, 2, 2)
 
   // Flagpole
-  ctx.drawRect(x + 15, y + 15, 3, 8, cellSize, 'black')
+  rect.fill('black')
+  rect.draw(15, 15, 3, 8)
 
   // Base
-  ctx.drawRect(x + 8, y + 22, 16, 4, cellSize, 'black')
-  ctx.drawRect(x + 10, y + 20, 12, 3, cellSize, 'black')
+  rect.draw(8, 22, 16, 4)
+  rect.draw(10, 20, 12, 3)
 }
