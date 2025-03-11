@@ -24,16 +24,19 @@ export default class GameController {
     }
     switch (difficulty ?? storeDifficulty) {
       case 'beginner':
-        rows = cols = 15
+        rows = 15
+        cols = 15
         mines = 14
         break
       case 'expert':
-        rows = cols = 40
+        rows = 40
+        cols = 40
         mines = 230
         break
       case 'intermediate':
       default:
-        rows = cols = 25
+        rows = 25
+        cols = 25
         mines = 75
         break
     }

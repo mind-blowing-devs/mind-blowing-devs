@@ -1,3 +1,5 @@
+import { FC } from 'react'
+
 interface IResultModal {
   isOpen: boolean
   onClose: () => void
@@ -22,7 +24,7 @@ function formatTimeDifference(startTime: number, finishTime: number): string {
   return `${formattedMinutes}.${formattedSeconds}`
 }
 
-function ResultModal({
+const ResultModal: FC<IResultModal> = ({
   isOpen,
   onClose,
   result,
@@ -31,7 +33,7 @@ function ResultModal({
   difficulty,
   startTime,
   finishTime,
-}: IResultModal) {
+}) => {
   if (!isOpen) return null
 
   const isWin = result === 'won'

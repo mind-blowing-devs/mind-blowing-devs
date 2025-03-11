@@ -1,6 +1,6 @@
 import Counter from './Counter'
 import GameButton from './GameButton'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, FC } from 'react'
 
 interface IGameHeader {
   minesLeft: number
@@ -11,14 +11,14 @@ interface IGameHeader {
   gameStatus: 'playing' | 'won' | 'lost' | 'idle'
 }
 
-export default function GameHeader({
+const GameHeader: FC<IGameHeader> = ({
   minesLeft,
   startTime,
   onReset,
   gameStatus,
   onOpenSettings,
   onFullScreen,
-}: IGameHeader) {
+}: IGameHeader) => {
   const calculateElapsedTime = () => Math.floor((Date.now() - startTime) / 1000)
 
   const [gameTimer, setGameTimer] = useState(calculateElapsedTime())
@@ -50,3 +50,5 @@ export default function GameHeader({
     </div>
   )
 }
+
+export default GameHeader

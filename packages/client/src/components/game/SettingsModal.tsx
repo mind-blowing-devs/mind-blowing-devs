@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, FC } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 
@@ -11,7 +11,7 @@ interface ISettingsModal {
   handleSave: (difficulty: Difficulty, theme: Theme) => void
 }
 
-function SettingsModal({ isOpen, onClose, handleSave }: ISettingsModal) {
+const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
   if (!isOpen) return null
 
   const initialDifficulty = useSelector(

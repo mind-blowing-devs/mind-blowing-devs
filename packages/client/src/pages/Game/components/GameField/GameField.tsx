@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, FC } from 'react'
 import renderer from './renderer'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../../store/store'
@@ -26,11 +26,11 @@ function getRenderObjectTypeByCell(cell: CellData): string {
   return `Empty${cell.surroundingMines}Cell`
 }
 
-export default function GameField({
+const GameField: FC<IGameCanvas> = ({
   cellSize,
   handleClick,
   handleDoubleClick,
-}: IGameCanvas) {
+}) => {
   const { field, status } = useSelector((state: RootState) => state.gameState)
   const width = field[0]?.length ?? 0
   const height = field.length
@@ -82,3 +82,5 @@ export default function GameField({
     </div>
   )
 }
+
+export default GameField

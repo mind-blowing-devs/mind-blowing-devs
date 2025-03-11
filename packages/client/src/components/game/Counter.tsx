@@ -1,10 +1,11 @@
+import { FC } from 'react'
 import DigitDisplay from './DigitDisplay'
 
 interface ICounter {
   value: number
 }
 
-export default function Counter({ value }: ICounter) {
+const Counter: FC<ICounter> = ({ value }) => {
   // Форматируем число до 3 цифр с ведущими нулями
   const formattedValue = value.toString().padStart(3, '0')
 
@@ -16,3 +17,5 @@ export default function Counter({ value }: ICounter) {
     </div>
   )
 }
+
+export default Counter
