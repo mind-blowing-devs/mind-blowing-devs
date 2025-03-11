@@ -1,11 +1,10 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import { AppSpinner } from '../../components'
+import { AppSpinner } from '..'
 
 export default () => {
   const { isLogged, loading } = useAuth()
   const location = useLocation()
-  console.log('protectedRoutes call ', isLogged)
 
   if (loading) {
     return (

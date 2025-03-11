@@ -12,7 +12,8 @@ import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import { Routes, Route, Link } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
-import ProtectedRoutes from './components/ProtectedRoutes'
+import NotAuthedProtectedRoutes from './components/NotAuthedProtectedRoutes'
+import AuthedProtectedRoutes from './components/AuthedProtectedRoutes'
 
 function App() {
   useEffect(() => {
@@ -53,7 +54,7 @@ function App() {
               <Main />
             </ProtectedRoute>
           }></Route> */}
-          <Route element={<ProtectedRoutes />}>
+          <Route element={<NotAuthedProtectedRoutes />}>
             <Route index element={<Main />}></Route>
             <Route path="/forum" element={<Forum />}></Route>
             <Route path="/forumtopic" element={<ForumTopic />}></Route>
@@ -61,10 +62,12 @@ function App() {
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
           </Route>
-          <Route path="/signin" element={<SignIn />}></Route>
+          <Route element={<AuthedProtectedRoutes />}>
+            <Route path="/signUp" element={<SignUp />}></Route>
+            <Route path="/signin" element={<SignIn />}></Route>
+          </Route>
           <Route path="*" element={<Error404 />}></Route>
           <Route path="/500" element={<Error500 />}></Route>
-          <Route path="/signUp" element={<SignUp />}></Route>
         </Routes>
       </AuthProvider>
     </div>
