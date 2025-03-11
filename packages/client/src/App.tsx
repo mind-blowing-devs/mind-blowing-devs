@@ -10,6 +10,7 @@ import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import CreateTopic from './pages/CreateTopic'
 import { Routes, Route, Link } from 'react-router-dom'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           {[
             'Forum',
             'ForumTopic',
+            'CreateTopic',
             'Game',
             'Leaderboard',
             'Profile',
@@ -50,6 +52,7 @@ function App() {
         <Route path="/500" element={<Error500 />}></Route>
         <Route path="/forum" element={<Forum />}></Route>
         <Route path="/forumtopic" element={<ForumTopic />}></Route>
+        <Route path="/createtopic" element={<CreateTopic />}></Route>
         <Route path="/game" element={<Game />}></Route>
         <Route path="/leaderboard" element={<Leaderboard />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
