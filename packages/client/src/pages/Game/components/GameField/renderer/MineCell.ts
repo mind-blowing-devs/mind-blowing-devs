@@ -9,7 +9,7 @@ export default function MineCell(
   const rect = new ScalableRect(x, y, cellSize, ctx)
   // Background
   rect.fill('#FC0D1B') // red
-  rect.draw(0, 0, cellSize, cellSize)
+  rect.draw(0, 0, cellSize, cellSize, 1)
 
   // Mine
   rect.fill('black')

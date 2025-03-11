@@ -20,12 +20,18 @@ export class ScalableRect {
     this.ctx.fillStyle = color
   }
 
-  draw(offsetX: number, offsetY: number, width: number, height: number) {
+  draw(
+    offsetX: number,
+    offsetY: number,
+    width: number,
+    height: number,
+    customScale?: number
+  ) {
     this.ctx.fillRect(
-      this.x + offsetX * this.scale,
-      this.y + offsetY * this.scale,
-      width * this.scale,
-      height * this.scale
+      this.x + offsetX * (customScale || this.scale),
+      this.y + offsetY * (customScale || this.scale),
+      width * (customScale || this.scale),
+      height * (customScale || this.scale)
     )
   }
 }
