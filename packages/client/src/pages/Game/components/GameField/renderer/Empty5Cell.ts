@@ -9,6 +9,6 @@ export default function Empty5Cell(
   EmptyCell(x, y, cellSize, ctx)
 
   const halfCellSize = cellSize / 2
-  ctx.fillStyle = 'Black'
+  ctx.fillStyle = '#852123'
   ctx.fillText('5', x + halfCellSize, y + halfCellSize)
 }

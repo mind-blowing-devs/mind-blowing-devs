@@ -8,19 +8,15 @@ export default function FlaggedCell(
 ) {
   IdleCell(x, y, cellSize, ctx)
 
-  // mine
-  const flag = new Path2D()
-  const topCenterX = x + cellSize / 2
-  const topCenterY = y + (cellSize / 100) * 20
-  flag.moveTo(topCenterX, topCenterY)
-  flag.lineTo(topCenterX, y + cellSize / 2)
+  // Flag
+  ctx.drawRect(x + 14, y + 7, 4, 8, cellSize, '#FC0D1B')
+  ctx.drawRect(x + 12, y + 8, 2, 6, cellSize, '#FC0D1B')
+  ctx.drawRect(x + 10, y + 10, 2, 2, cellSize, '#FC0D1B')
 
-  const height = y + cellSize / 2 - topCenterY
-  const flagLeftX = x + (cellSize / 100) * 20
-  const flagCenterY = topCenterY + height / 2
-  flag.lineTo(flagLeftX, flagCenterY) // sharpLeft
-  flag.lineTo(topCenterX, topCenterY)
+  // Flagpole
+  ctx.drawRect(x + 15, y + 15, 3, 8, cellSize, 'black')
 
-  ctx.fillStyle = '#FC0D1B'
-  ctx.fill(flag)
+  // Base
+  ctx.drawRect(x + 8, y + 22, 16, 4, cellSize, 'black')
+  ctx.drawRect(x + 10, y + 20, 12, 3, cellSize, 'black')
 }

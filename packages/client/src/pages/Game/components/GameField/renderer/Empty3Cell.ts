@@ -9,6 +9,6 @@ export default function Empty3Cell(
   EmptyCell(x, y, cellSize, ctx)
 
   const halfCellSize = cellSize / 2
-  ctx.fillStyle = 'Black'
+  ctx.fillStyle = '#FC0D1B'
   ctx.fillText('3', x + halfCellSize, y + halfCellSize)
 }
