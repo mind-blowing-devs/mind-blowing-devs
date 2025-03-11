@@ -1,22 +1,24 @@
+import { FC } from 'react'
+
 interface IDigitDisplay {
   digit: string
 }
 
-export default function DigitDisplay({ digit }: IDigitDisplay) {
-  // Определяем, какие сегменты должны быть активны для каждой цифры
-  const segments = {
-    '0': [true, true, true, false, true, true, true],
-    '1': [false, false, true, false, false, true, false],
-    '2': [true, false, true, true, true, false, true],
-    '3': [true, false, true, true, false, true, true],
-    '4': [false, true, true, true, false, true, false],
-    '5': [true, true, false, true, false, true, true],
-    '6': [true, true, false, true, true, true, true],
-    '7': [true, false, true, false, false, true, false],
-    '8': [true, true, true, true, true, true, true],
-    '9': [true, true, true, true, false, true, true],
-  }
+// Определяем, какие сегменты должны быть активны для каждой цифры
+const segments = {
+  '0': [true, true, true, false, true, true, true],
+  '1': [false, false, true, false, false, true, false],
+  '2': [true, false, true, true, true, false, true],
+  '3': [true, false, true, true, false, true, true],
+  '4': [false, true, true, true, false, true, false],
+  '5': [true, true, false, true, false, true, true],
+  '6': [true, true, false, true, true, true, true],
+  '7': [true, false, true, false, false, true, false],
+  '8': [true, true, true, true, true, true, true],
+  '9': [true, true, true, true, false, true, true],
+}
 
+const DigitDisplay: FC<IDigitDisplay> = ({ digit }) => {
   const activeSegments =
     segments[digit as keyof typeof segments] || segments['0']
 
@@ -84,3 +86,5 @@ export default function DigitDisplay({ digit }: IDigitDisplay) {
     </svg>
   )
 }
+
+export default DigitDisplay

@@ -10,6 +10,7 @@ import Leaderboard from './pages/Leaderboard'
 import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import CreateTopic from './pages/CreateTopic'
 import { Routes, Route, Link } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import NotAuthedProtectedRoutes from './components/NotAuthedProtectedRoutes'
@@ -33,6 +34,7 @@ function App() {
           {[
             'Forum',
             'ForumTopic',
+            'CreateTopic',
             'Game',
             'Leaderboard',
             'Profile',

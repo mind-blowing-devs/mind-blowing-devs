@@ -1,3 +1,5 @@
+import { FC } from 'react'
+
 interface IGameCanvas {
   width: number
   height: number
@@ -5,7 +7,7 @@ interface IGameCanvas {
 }
 
 // MOCK: Компонент для создания сетки ячеек
-export default function GameCanvas({ width, height, cellSize }: IGameCanvas) {
+const GameCanvas: FC<IGameCanvas> = ({ width, height, cellSize }) => {
   const renderCells = () => {
     const cells = []
 
@@ -42,3 +44,5 @@ export default function GameCanvas({ width, height, cellSize }: IGameCanvas) {
     </div>
   )
 }
+
+export default GameCanvas

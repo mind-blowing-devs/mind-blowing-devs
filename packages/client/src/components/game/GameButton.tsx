@@ -1,7 +1,8 @@
+import { FC } from 'react'
 import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid'
 
 type ButtonVariant = 'reset' | 'settings' | 'fullscreen'
-type GameStatus = 'playing' | 'won' | 'lost'
+type GameStatus = 'playing' | 'won' | 'lost' | 'idle'
 
 interface IGameButton {
   ariaLabel?: string
@@ -11,13 +12,13 @@ interface IGameButton {
   variant?: ButtonVariant
 }
 
-function GameButton({
+const GameButton: FC<IGameButton> = ({
   ariaLabel,
   className = '',
-  gameStatus = 'playing',
+  gameStatus = 'idle',
   onClick,
   variant,
-}: IGameButton) {
+}) => {
   const baseStyles = `
     bg-[#BFBFBF] 
     w-[40px] h-[40px] 
@@ -40,6 +41,7 @@ function GameButton({
     if (gameStatus === 'playing') content = '🙂'
     else if (gameStatus === 'won') content = '😎'
     else if (gameStatus === 'lost') content = '😵'
+    else if (gameStatus === 'idle') content = '▶'
 
     buttonAriaLabel = buttonAriaLabel || 'reset game'
   } else if (variant === 'settings') {
