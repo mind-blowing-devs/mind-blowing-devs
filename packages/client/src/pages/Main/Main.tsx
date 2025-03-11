@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import MenuButton from './components/MenuButton'
 import mineIcon from './images/mine-icon.png'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function Main() {
+  const { logout } = useAuth()
   return (
     <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
       <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-[#585656]">
@@ -24,13 +26,12 @@ export default function Main() {
         <MenuButton to="/forum" text="forum" label="Open forum" />
       </div>
 
-      {/* TODO: log out */}
-      <Link
-        to="/signIn"
+      <button
+        onClick={logout}
         className="text-sm my-5 sm:my-8 hover:text-gray-500 select-none"
         aria-label="Log out">
         [log out]
-      </Link>
+      </button>
     </main>
   )
 }

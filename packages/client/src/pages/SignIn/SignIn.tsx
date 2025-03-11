@@ -1,16 +1,21 @@
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { AppInput, AppSpinner } from '../../components'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getValidationRules } from '../../utlis/getValidationRules'
+import { useAuth } from '../../hooks/useAuth'
+import { AxiosError } from 'axios'
+import { useState } from 'react'
 
-const pageInputs: {
+type PageInput = {
+  name: 'login' | 'password'
   label: string
-  name: string
   type?: string
   error?: string
-}[] = [
+}
+
+const pageInputs: PageInput[] = [
   {
     label: 'login',
     name: 'login',
@@ -22,13 +27,16 @@ const pageInputs: {
   },
 ]
 
+const keyValuePairs = pageInputs.map(({ name }) => {
+  const [regex, message] = getValidationRules(name)
+  return [name, z.string().regex(regex, message)] as const
+})
+
 const signInSchema = z.object(
-  Object.fromEntries(
-    pageInputs.map(({ name }) => {
-      const [regex, message] = getValidationRules(name)
-      return [name, z.string().regex(regex, message)]
-    })
-  )
+  keyValuePairs.reduce((acc, [key, value]) => {
+    acc[key] = value
+    return acc
+  }, {} as Record<(typeof pageInputs)[number]['name'], z.ZodString>)
 )
 
 function SignIn() {
@@ -36,26 +44,32 @@ function SignIn() {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-    reset,
     trigger,
   } = useForm<TSignInSchema>({
     resolver: zodResolver(signInSchema),
     mode: 'onBlur',
     reValidateMode: 'onBlur',
   })
+  const { login } = useAuth()
+  const location = useLocation()
+  const [errorHint, setErrorHint] = useState('')
 
   type TSignInSchema = z.infer<typeof signInSchema>
 
-  const onSubmit = async (data: FieldValues) => {
-    console.log(data)
+  const onSubmit = async (data: TSignInSchema) => {
     const isValid = await trigger() // Проверяем инпуты при submit
     if (!isValid) {
       return
     }
 
-    await new Promise(resolve => setTimeout(resolve, 3000)) // Имитация запроса
-
-    reset() // Очистка инпутов
+    try {
+      await login(data, location.state?.from?.pathname)
+    } catch (error: unknown) {
+      const reason = (
+        (error as AxiosError)?.response?.data as { reason: string }
+      )?.reason
+      setErrorHint(reason || 'Oops. Something went wrong. Try again later.')
+    }
   }
 
   return (
@@ -65,7 +79,7 @@ function SignIn() {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md">
+        className="flex flex-col gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md max-w-[50rem]">
         <div className="flex  flex-col gap-10">
           {pageInputs.map(inputItem => (
             <AppInput
@@ -90,6 +104,10 @@ function SignIn() {
           <div className="flex justify-center">
             <AppSpinner color={'#000'} />
           </div>
+        )}
+
+        {errorHint && (
+          <p className="text-center text-[12px] text-red-500">{errorHint}</p>
         )}
       </form>
 
