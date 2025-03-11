@@ -1,0 +1,6 @@
+export { Avatar } from './Avatar'
+export { ChangeAvatar } from './ChangeAvatar'
+export { ChangePassword } from './ChangePassword'
+export { ProfileActions } from './ProfileActions'
+export { ProfileDetails } from './ProfileDetails'
+export { Star } from './Star'
