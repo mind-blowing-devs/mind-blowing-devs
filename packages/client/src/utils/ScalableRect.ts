@@ -28,10 +28,10 @@ export class ScalableRect {
     customScale?: number
   ) {
     this.ctx.fillRect(
-      this.x + offsetX * (customScale || this.scale),
-      this.y + offsetY * (customScale || this.scale),
-      width * (customScale || this.scale),
-      height * (customScale || this.scale)
+      this.x + offsetX * (customScale ?? this.scale),
+      this.y + offsetY * (customScale ?? this.scale),
+      width * (customScale ?? this.scale),
+      height * (customScale ?? this.scale)
     )
   }
 }
