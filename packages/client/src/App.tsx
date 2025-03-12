@@ -28,7 +28,7 @@ function App() {
     fetchServerData()
   }, [])
   return (
-    <div className="App">
+    <div className="App font-press bg-body-color">
       <nav>
         <ul className="px-6 absolute">
           {[

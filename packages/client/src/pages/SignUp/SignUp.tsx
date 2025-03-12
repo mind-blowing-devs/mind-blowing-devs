@@ -116,8 +116,8 @@ function SignUp() {
   }
 
   return (
-    <main className="font-press h-[100%] flex flex-col items-center justify-center bg-[#BFBFBF] gap-10 pt-[5rem] pb-[5rem] w-full">
-      <div className="text-gray-600 mb-4 max-w-[30rem] text-center">
+    <main className="h-[100%] flex flex-col items-center justify-center gap-10 pt-[5rem] pb-[5rem] w-full">
+      <div className="text-font-color mb-4 max-w-[30rem] text-center">
         Create your account to start sweeping mines!
       </div>
       <form

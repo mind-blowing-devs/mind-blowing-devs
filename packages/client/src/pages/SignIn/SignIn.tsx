@@ -73,8 +73,8 @@ function SignIn() {
   }
 
   return (
-    <main className="font-press w-screen h-screen flex flex-col items-center justify-center bg-[#BFBFBF] gap-10">
-      <div className="text-gray-600 mb-4 max-w-[30rem] text-center">
+    <main className="w-screen h-screen flex flex-col items-center justify-center gap-10">
+      <div className="text-font-color mb-4 max-w-[30rem] text-center">
         Log in to start your minefield adventure!
       </div>
       <form
