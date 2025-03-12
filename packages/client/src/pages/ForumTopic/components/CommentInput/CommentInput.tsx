@@ -5,7 +5,7 @@ export default function CommentInput() {
         Your Reply
       </label>
       <textarea
-        className="w-full h-auto lg:min-h-[130px] min-h-[80px] max-h-[192px] border-2 border-[#818181] bg-[#D9D9D9] outline-none p-[16px]"
+        className="font-roboto w-full h-auto lg:min-h-[130px] min-h-[80px] max-h-[192px] border-2 border-[#818181] bg-[#D9D9D9] outline-none p-[16px]"
         placeholder="Write your reply..."
         id="comment"
       />

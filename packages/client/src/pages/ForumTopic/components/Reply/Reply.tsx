@@ -13,7 +13,7 @@ export default function Reply({ nickname, text, timestamp }: IReply) {
         <span className="underline decoration-solid">{nickname}</span> •{' '}
         {timestamp}
       </div>
-      <span>{text}</span>
+      <span className='font-roboto'>{text}</span>
     </div>
   )
 }

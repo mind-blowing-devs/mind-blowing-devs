@@ -29,7 +29,7 @@ function App() {
   }, [])
   return (
     <div className="App font-press bg-body-color">
-      <nav>
+      <nav className='font-roboto'>
         <ul className="px-6 absolute">
           {[
             'Forum',
@@ -60,6 +60,7 @@ function App() {
             <Route index element={<Main />}></Route>
             <Route path="/forum" element={<Forum />}></Route>
             <Route path="/forumtopic" element={<ForumTopic />}></Route>
+            <Route path='/createtopic' element={<CreateTopic/>}></Route>
             <Route path="/game" element={<Game />}></Route>
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
             <Route path="/profile" element={<Profile />}></Route>

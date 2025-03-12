@@ -111,15 +111,15 @@ function SignIn() {
         )}
       </form>
 
-      <div className="mt-4 flex flex-col gap-2 text-gray-600">
+      <div className="text-font-color mt-4 flex flex-col gap-2">
         <div className="flex text-[13px] gap-2">
           <p>New Player?</p>
-          <Link to="/signUp" className="text-black hover:text-gray-500">
+          <Link to="/signUp" className="text-black hover:opacity-50">
             [Sign Up]
           </Link>
         </div>
 
-        <button className="text-[12px] hover:text-gray-500">
+        <button className="text-[12px] hover:opacity-50">
           Forgot your password?
         </button>
       </div>
