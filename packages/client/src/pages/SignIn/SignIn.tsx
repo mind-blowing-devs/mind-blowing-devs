@@ -73,8 +73,8 @@ function SignIn() {
   }
 
   return (
-    <main className="font-press w-screen h-screen flex flex-col items-center justify-center bg-[#BFBFBF] gap-10">
-      <div className="text-gray-600 mb-4 max-w-[30rem] text-center">
+    <main className="w-screen h-screen flex flex-col items-center justify-center gap-10">
+      <div className="text-font-color mb-4 max-w-[30rem] text-center">
         Log in to start your minefield adventure!
       </div>
       <form
@@ -111,15 +111,15 @@ function SignIn() {
         )}
       </form>
 
-      <div className="mt-4 flex flex-col gap-2 text-gray-600">
+      <div className="text-font-color mt-4 flex flex-col gap-2">
         <div className="flex text-[13px] gap-2">
           <p>New Player?</p>
-          <Link to="/signUp" className="text-black hover:text-gray-500">
+          <Link to="/signUp" className="text-black hover:opacity-50">
             [Sign Up]
           </Link>
         </div>
 
-        <button className="text-[12px] hover:text-gray-500">
+        <button className="text-[12px] hover:opacity-50">
           Forgot your password?
         </button>
       </div>

@@ -6,7 +6,7 @@ import CategoryInput from './components/CategoryInput'
 
 export default function CreateTopic() {
   return (
-    <main className="bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
+    <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
       <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
         Minesweeper Forum
       </h2>

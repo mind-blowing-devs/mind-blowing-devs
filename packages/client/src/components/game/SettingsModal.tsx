@@ -1,9 +1,8 @@
 import { useState, FC } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store/store'
+import { RootState, useAppDispatch, useAppSelector } from '../../store/store'
+import { setTheme, type Theme } from '../../store/themeSlice'
 
 type Difficulty = RootState['gameState']['difficulty']
-type Theme = 'classic' | 'dark'
 
 interface ISettingsModal {
   isOpen: boolean
@@ -14,13 +13,11 @@ interface ISettingsModal {
 const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
   if (!isOpen) return null
 
-  const initialDifficulty = useSelector(
-    (state: RootState) => state.gameState.difficulty
-  )
-  // TODO get initial theme state
+  const initialDifficulty = useAppSelector(state => state.gameState.difficulty)
 
+  const dispatch = useAppDispatch()
+  const { theme } = useAppSelector(state => state.theme)
   const [difficulty, setDifficulty] = useState<Difficulty>(initialDifficulty)
-  const [theme, setTheme] = useState<Theme>('classic')
 
   const handleLocalSave = () => {
     handleSave(difficulty, theme)
@@ -59,7 +56,7 @@ const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
             <div className="relative flex-1">
               <select
                 className="w-full appearance-none bg-[#BFBFBF] px-5 py-1 pr-8 border-2 border-t-[#7B7B7B] border-l-[#7B7B7B] border-r-white border-b-white focus:outline-none"
-                onChange={e => setTheme(e.target.value as Theme)}
+                onChange={e => dispatch(setTheme(e.target.value as Theme))}
                 value={theme}>
                 <option>classic</option>
                 <option>dark</option>

@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 
 export default function Error404() {
   return (
-    <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
-      <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-[#585656]">
+    <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+      <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-font-color">
         Oops! You hit a mine!
       </p>
       <div className="border-4 border-[#818181] bg-[#D9D9D9] flex justify-center items-center relative w-full max-w-xl h-[50vh]">

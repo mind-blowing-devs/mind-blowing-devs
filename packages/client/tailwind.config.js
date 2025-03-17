@@ -7,6 +7,10 @@ export default {
         press: ['"Press Start 2P"', 'cursive'],
         roboto: ['"Roboto Mono"', 'monospace'],
       },
+      colors: {
+        "body-color": "var(--body-color)",
+        "font-color": "var(--font-color)",
+      }
     },
   },
   plugins: [],

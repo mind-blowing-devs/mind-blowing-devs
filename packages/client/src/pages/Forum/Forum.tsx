@@ -36,8 +36,8 @@ const mockData: TopicItemProps[] = [
 
 export default function Forum() {
   return (
-    <main className="bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
-      <h2 className="font-press w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
+    <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
+      <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
         Minesweeper Forum
       </h2>
       <span className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">

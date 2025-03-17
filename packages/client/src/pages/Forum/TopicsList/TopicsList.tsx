@@ -18,7 +18,7 @@ export default function TopicsList({ topics }: TopicsListProps) {
   return (
     <table className="w-full font-press">
       <thead>
-        <tr>
+        <tr className='font-roboto font-bold'>
           <td>Topic</td>
           <td>Author</td>
           <td>Replies</td>

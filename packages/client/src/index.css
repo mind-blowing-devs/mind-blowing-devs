@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --body-color: #bfbfbf;
+  --font-color: #585656;
+}
+
+html[data-theme='dark'] {
+  --body-color: #585656;
+  --font-color: #bfbfbf;
+}

@@ -7,7 +7,7 @@ export default function CategoryInput() {
       <span>
         [
         <select
-          className="bg-transparent outline-none w-[120px]"
+          className="font-roboto bg-transparent outline-none w-[120px]"
           id="topicCategory">
           <option value="any">Any Category</option>
           <option value="strategies">Strategies</option>

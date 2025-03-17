@@ -35,8 +35,7 @@ function Game() {
 
   const handleSaveSettings = (difficulty: Difficulty, theme: Theme) => {
     gameController.generateGame(difficulty)
-    // TODO change theme
-    console.log(theme)
+    localStorage.setItem('theme', theme)
   }
 
   // Метод для открытия полноэкранного режима (не реализован)
@@ -61,9 +60,9 @@ function Game() {
   }
 
   return (
-    <main className="font-press bg-[#BFBFBF] flex flex-col items-center justify-center min-h-screen p-4">
+    <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center mb-4">
-        <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-[#585656]">
+        <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-font-color">
           Every click counts! Can you beat the minefield?
         </p>
       </div>

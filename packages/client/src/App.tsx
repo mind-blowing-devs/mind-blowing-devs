@@ -30,8 +30,8 @@ function App() {
   }, [])
   const navigate = useNavigate()
   return (
-    <div className="App">
-      <nav>
+    <div className="App font-press bg-body-color">
+      <nav className="font-roboto">
         <ul className="px-6 absolute">
           {[
             'Forum',
