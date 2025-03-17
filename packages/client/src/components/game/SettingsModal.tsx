@@ -11,13 +11,13 @@ interface ISettingsModal {
 }
 
 const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
-  if (!isOpen) return null
-
   const initialDifficulty = useAppSelector(state => state.gameState.difficulty)
 
   const dispatch = useAppDispatch()
   const { theme } = useAppSelector(state => state.theme)
   const [difficulty, setDifficulty] = useState<Difficulty>(initialDifficulty)
+
+  if (!isOpen) return null
 
   const handleLocalSave = () => {
     handleSave(difficulty, theme)
