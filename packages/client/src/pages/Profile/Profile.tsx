@@ -8,7 +8,7 @@ import {
   ChangePassword,
 } from './components'
 import { useAppSelector, useAppDispatch } from '../../store/store'
-import { setUser} from '../../store/userSlice'
+import { changeAvatar } from '../../store/userSlice'
 import { useAuth } from '../../hooks/useAuth'
 
 // Data will receive from leaderboard API
@@ -29,8 +29,7 @@ export default function Profile() {
   const isEditAvatar = editParam === 'avatar'
 
   const handleAvatarChange = async (data: FormData) => {
-    const user = await userAPI.changeAvatar(data)
-    dispatch(setUser(user))
+    await dispatch(changeAvatar(data)).unwrap()
   }
 
   const handlePasswordChange = async (data: ChangePasswordData) => {
