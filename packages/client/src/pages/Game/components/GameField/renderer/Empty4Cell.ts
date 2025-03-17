@@ -9,6 +9,6 @@ export default function Empty4Cell(
   EmptyCell(x, y, cellSize, ctx)
 
   const halfCellSize = cellSize / 2
-  ctx.fillStyle = 'Black'
+  ctx.fillStyle = '#020B79'
   ctx.fillText('4', x + halfCellSize, y + halfCellSize)
 }
