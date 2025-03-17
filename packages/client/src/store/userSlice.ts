@@ -1,10 +1,5 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  type PayloadAction,
-} from '@reduxjs/toolkit'
-import { userAPI, type User } from '../api/userAPI'
-
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { User } from '../api/userAPI'
 
 type UserState = {
   user: User | null
@@ -14,18 +9,6 @@ const initialState: UserState = {
   user: null,
 }
 
-export const changeAvatar = createAsyncThunk(
-  'user/changeAvatar',
-  async (data: FormData, { rejectWithValue }) => {
-    try {
-      const user = await userAPI.changeAvatar(data)
-      return user
-    } catch (error) {
-      return rejectWithValue('Error durring avatar change')
-    }
-  }
-)
-
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -34,10 +17,6 @@ const userSlice = createSlice({
       state.user = action.payload
     },
   },
-  extraReducers: builder =>
-    builder.addCase(changeAvatar.fulfilled, (state, action) => {
-      state.user = action.payload
-    }),
 })
 
 export const { setUser } = userSlice.actions
