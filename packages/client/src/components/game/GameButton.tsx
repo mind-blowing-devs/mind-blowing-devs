@@ -35,17 +35,25 @@ const GameButton: FC<IGameButton> = ({
   const sizeStyles =
     variant === 'default' ? 'px-4 py-2' : 'w-[40px] h-[40px] text-2xl'
 
+  const getEmojiContent = (gameStatus: GameStatus) => {
+    const emojis = {
+      playing: '🙂',
+      won: '😎',
+      lost: '😵',
+      idle: '▶',
+    }
+    // Дискуссионный момент. Изначально привязался к смайликам, но у них специфическое поведение в браузере.
+    // Чтобы отцентрировать их, пришлось использовать -mt-1
+    return <span className="block -mt-1">{emojis[gameStatus]}</span>
+  }
+
   // Определяем содержимое кнопки
   let content
   let buttonAriaLabel = ariaLabel
 
   // Определяем содержимое и aria-label в зависимости от варианта
   if (variant === 'reset') {
-    if (gameStatus === 'playing') content = '🙂'
-    else if (gameStatus === 'won') content = '😎'
-    else if (gameStatus === 'lost') content = '😵'
-    else if (gameStatus === 'idle') content = '▶'
-
+    content = getEmojiContent(gameStatus)
     buttonAriaLabel = buttonAriaLabel || 'reset game'
   } else if (variant === 'settings') {
     content = <Cog6ToothIcon className="w-6 h-6 text-black" />
