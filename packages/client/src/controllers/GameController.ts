@@ -75,7 +75,6 @@ export default class GameController {
     }
     event.preventDefault()
 
-    console.log(event.key)
     switch (event.key) {
       case 'S':
       case 's':
