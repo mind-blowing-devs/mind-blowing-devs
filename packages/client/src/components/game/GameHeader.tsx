@@ -33,7 +33,7 @@ const GameHeader: FC<IGameHeader> = ({
         setGameTimer(calculateElapsedTime())
       }, 1000) as unknown as number
     } else {
-      // Для других статусов устанавливаем таймер === 0 или текущее значение
+      // Для других статусов устанавливаем таймер равным 0 или текущему значению
       setGameTimer(startTime > 0 ? calculateElapsedTime() : 0)
     }
 
