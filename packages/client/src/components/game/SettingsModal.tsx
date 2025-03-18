@@ -1,6 +1,7 @@
 import { useState, FC } from 'react'
 import { RootState, useAppDispatch, useAppSelector } from '../../store/store'
 import { setTheme, type Theme } from '../../store/themeSlice'
+import GameButton from './GameButton'
 
 type Difficulty = RootState['gameState']['difficulty']
 
@@ -69,16 +70,12 @@ const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button
-            className="bg-[#BFBFBF] px-4 py-2 border-2 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] active:border-t-[#7B7B7B] active:border-l-[#7B7B7B] active:border-r-white active:border-b-white"
-            onClick={handleLocalSave}>
+          <GameButton variant="default" onClick={handleLocalSave}>
             save
-          </button>
-          <button
-            onClick={onClose}
-            className="bg-[#BFBFBF] px-4 py-2 border-2 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] active:border-t-[#7B7B7B] active:border-l-[#7B7B7B] active:border-r-white active:border-b-white">
+          </GameButton>
+          <GameButton variant="default" onClick={onClose}>
             close
-          </button>
+          </GameButton>
         </div>
       </div>
     </div>

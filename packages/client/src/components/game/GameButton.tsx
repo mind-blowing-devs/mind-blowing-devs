@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid'
 
-type ButtonVariant = 'reset' | 'settings' | 'fullscreen'
+type ButtonVariant = 'reset' | 'settings' | 'fullscreen' | 'default'
 type GameStatus = 'playing' | 'won' | 'lost' | 'idle'
 
 interface IGameButton {
@@ -10,6 +10,7 @@ interface IGameButton {
   gameStatus?: GameStatus
   onClick: () => void
   variant?: ButtonVariant
+  children?: React.ReactNode
 }
 
 const GameButton: FC<IGameButton> = ({
@@ -18,12 +19,11 @@ const GameButton: FC<IGameButton> = ({
   gameStatus = 'idle',
   onClick,
   variant,
+  children,
 }) => {
   const baseStyles = `
     bg-[#BFBFBF] 
-    w-[40px] h-[40px] 
-    flex items-center justify-center 
-    text-2xl
+    flex items-center justify-center  
     hover:bg-[#d4d4d4] 
     border-2 
     border-t-white border-l-white 
@@ -31,6 +31,9 @@ const GameButton: FC<IGameButton> = ({
     active:border-t-[#7B7B7B] active:border-l-[#7B7B7B] 
     active:border-r-white active:border-b-white
   `
+
+  const sizeStyles =
+    variant === 'default' ? 'px-4 py-2' : 'w-[40px] h-[40px] text-2xl'
 
   // Определяем содержимое кнопки
   let content
@@ -50,12 +53,15 @@ const GameButton: FC<IGameButton> = ({
   } else if (variant === 'fullscreen') {
     content = <ArrowsPointingOutIcon className="w-6 h-6 text-black" />
     buttonAriaLabel = buttonAriaLabel || 'fullscreen mode'
+  } else if (variant === 'default') {
+    content = children
+    buttonAriaLabel = buttonAriaLabel || 'button'
   }
 
   return (
     <button
       onClick={onClick}
-      className={`${baseStyles} ${className}`}
+      className={`${baseStyles} ${sizeStyles} ${className}`}
       aria-label={buttonAriaLabel}>
       {content}
     </button>
