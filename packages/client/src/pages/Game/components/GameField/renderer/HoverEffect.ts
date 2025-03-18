@@ -5,10 +5,8 @@ export default function HoverEffect(
   ctx: CanvasRenderingContext2D
 ) {
   // background
-  const bkg = new Path2D()
-  bkg.rect(x, y, cellSize, cellSize)
   ctx.fillStyle = 'rgba(223, 193, 0, 20%)'
-  ctx.fill(bkg)
+  ctx.fillRect(x, y, cellSize, cellSize)
 
   // border
   const border = new Path2D()

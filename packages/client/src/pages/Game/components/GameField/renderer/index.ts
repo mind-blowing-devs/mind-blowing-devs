@@ -29,9 +29,9 @@ export default function initializeRenderer(
     object: string,
     x: number,
     y: number,
-    clearPrevious = true
+    clearCellBeforeRender = true
   ) {
-    if (clearPrevious) {
+    if (clearCellBeforeRender) {
       clearCell(x, y)
     }
 
