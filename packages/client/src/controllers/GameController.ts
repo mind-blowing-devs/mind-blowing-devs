@@ -133,11 +133,7 @@ export default class GameController {
     store.dispatch(updateField(this.gameEngine.restartGame()))
   }
 
-  private _getCellCoordinates(
-    event:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.MouseEvent<HTMLCanvasElement, MouseEvent>
-  ) {
+  private _getCellCoordinates(event: React.MouseEvent<HTMLCanvasElement>) {
     const rect = event.currentTarget.getBoundingClientRect()
     const canvasWidth = event.currentTarget.width
     const canvasHeight = event.currentTarget.height
