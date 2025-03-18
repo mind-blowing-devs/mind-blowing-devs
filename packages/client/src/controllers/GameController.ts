@@ -69,7 +69,7 @@ export default class GameController {
   }
 
   restartGame(): void {
-    // При рестарте создаем игру заново, что сбросит firstMoveMade и startTime
+    // При рестарте создаем игру заново, сбрасываем firstMoveMade и startTime
     this.generateGame(store.getState().gameState.difficulty)
   }
 
