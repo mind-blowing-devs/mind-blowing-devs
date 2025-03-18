@@ -3,6 +3,8 @@ import LeaderboardComponent, {
   LeaderboardData,
 } from '../../pages/Leaderboard/LeaderboardComponent'
 
+import GameButton from './GameButton'
+
 interface IResultModal {
   isOpen: boolean
   onClose: () => void
@@ -14,7 +16,7 @@ interface IResultModal {
   result: 'won' | 'lost'
 }
 
-// Моки
+// Мок-данные
 const mockUserData: LeaderboardData = {
   rank: 5,
   name: 'antony',
@@ -62,32 +64,28 @@ const ResultModal: FC<IResultModal> = ({
   const isWin = result === 'won'
   const timePlayed = formatTimeDifference(startTime, finishTime ?? Date.now())
 
+  // Функция для отрисовки отдельного таба
+  const renderTab = (tab: Tab, label: string) => {
+    return (
+      <GameButton
+        variant="default"
+        className={`flex-1 text-center border-b-0 ${
+          activeTab === tab ? 'bg-[#d4d4d4]' : 'bg-[#BFBFBF]'
+        }`}
+        onClick={() => setActiveTab(tab)}>
+        {label}
+      </GameButton>
+    )
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-[#BFBFBF] p-6 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] max-w-md w-full">
-        {/* Табы для навигации */}
         <div className="flex mb-4 border-b border-[#7B7B7B] w-full">
-          <button
-            className={`px-4 py-2 flex-1 text-center ${
-              activeTab === 'result'
-                ? 'bg-[#d4d4d4] border-2 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]'
-                : 'bg-[#BFBFBF]'
-            }`}
-            onClick={() => setActiveTab('result')}>
-            Result
-          </button>
-          <button
-            className={`px-4 py-2 flex-1 text-center ${
-              activeTab === 'leaderboard'
-                ? 'bg-[#d4d4d4] border-2 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]'
-                : 'bg-[#BFBFBF]'
-            }`}
-            onClick={() => setActiveTab('leaderboard')}>
-            Leaderboard
-          </button>
+          {renderTab('result', 'result')}
+          {renderTab('leaderboard', 'leaderboard')}
         </div>
 
-        {/* Содержимое вкладки Result */}
         {activeTab === 'result' && (
           <>
             {isWin ? (
@@ -109,7 +107,6 @@ const ResultModal: FC<IResultModal> = ({
           </>
         )}
 
-        {/* Содержимое вкладки Leaderboard */}
         {activeTab === 'leaderboard' && (
           <LeaderboardComponent
             userData={mockUserData}
@@ -118,13 +115,10 @@ const ResultModal: FC<IResultModal> = ({
           />
         )}
 
-        {/* Кнопки действий */}
         <div className="flex justify-end mt-6 gap-2">
-          <button
-            onClick={onClose}
-            className="bg-[#BFBFBF] px-4 py-2 border-2 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] active:border-t-[#7B7B7B] active:border-l-[#7B7B7B] active:border-r-white active:border-b-white">
-            Close
-          </button>
+          <GameButton onClick={onClose} variant="default">
+            close
+          </GameButton>
         </div>
       </div>
     </div>

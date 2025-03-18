@@ -9,7 +9,7 @@ interface IGameButton {
   className?: string
   gameStatus?: GameStatus
   onClick: () => void
-  variant?: ButtonVariant
+  variant: ButtonVariant
   children?: React.ReactNode
 }
 
