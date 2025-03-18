@@ -25,7 +25,7 @@ const initialState: GameState = {
   status: 'idle',
   startTime: 0,
   finishTime: undefined,
-  difficulty: 'intermediate',
+  difficulty: 'beginner',
   firstMoveMade: false,
 }
 
