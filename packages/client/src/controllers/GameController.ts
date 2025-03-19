@@ -1,5 +1,11 @@
 import store, { RootState } from '../store/store'
-import { createGame, updateField, updateDifficulty } from '../store/gameState'
+import {
+  createGame,
+  updateField,
+  updateDifficulty,
+  updateHover,
+  setStartTime,
+} from '../store/gameState'
 import GameEngine from './GameEngine'
 import React from 'react'
 
@@ -9,12 +15,11 @@ export default class GameController {
   gameEngine: GameEngine
 
   constructor() {
-    this.handleCellClick = this.handleCellClick.bind(this)
-    this.handleRightClick = this.handleRightClick.bind(this)
     this.gameEngine = new GameEngine(0, 0, 0)
 
     this.generateGame()
   }
+
   generateGame(difficulty?: Difficulty) {
     let rows, cols, mines
 
@@ -45,19 +50,95 @@ export default class GameController {
     store.dispatch(createGame(this.gameEngine.getState()))
   }
 
-  handleCellClick(event: React.MouseEvent<HTMLCanvasElement>) {
+  handleCellClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const { row, col } = this._getCellCoordinates(event)
+    const gameState = store.getState().gameState
+
+    // Если это первый ход, устанавливаем время начала
+    if (!gameState.firstMoveMade) {
+      store.dispatch(setStartTime(Date.now()))
+    }
+
     store.dispatch(updateField(this.gameEngine.revealCell(row, col)))
   }
 
-  handleRightClick(event: React.MouseEvent<HTMLCanvasElement>) {
+  handleRightClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     event.preventDefault()
     const { row, col } = this._getCellCoordinates(event)
     store.dispatch(updateField(this.gameEngine.toggleFlag(row, col)))
   }
 
+  handleKeyDown = (event: React.KeyboardEvent<HTMLCanvasElement>) => {
+    const shiftHover = (direction: 'down' | 'up' | 'right' | 'left') => {
+      const newGameState = this.gameEngine.shiftHoverCell(direction)
+      store.dispatch(updateHover(newGameState.hoveredCell))
+    }
+    const toggleFlag = (row: number, col: number) => {
+      const newGameState = this.gameEngine.toggleFlag(row, col)
+      store.dispatch(updateField(newGameState))
+    }
+    const revealCell = (row: number, col: number) => {
+      const newGameState = this.gameEngine.revealCell(row, col)
+      store.dispatch(updateField(newGameState))
+    }
+    event.preventDefault()
+
+    switch (event.key) {
+      case 'S':
+      case 's':
+      case 'ArrowDown':
+        shiftHover('down')
+        break
+      case 'W':
+      case 'w':
+      case 'ArrowUp':
+        shiftHover('up')
+        break
+      case 'A':
+      case 'a':
+      case 'ArrowLeft':
+        shiftHover('left')
+        break
+      case 'D':
+      case 'd':
+      case 'ArrowRight':
+        shiftHover('right')
+        break
+      case 'F':
+      case 'f': {
+        const hoveredCell = store.getState().gameState.hoveredCell
+        if (!hoveredCell) {
+          return
+        }
+        toggleFlag(hoveredCell.y, hoveredCell.x)
+        break
+      }
+      case 'Enter':
+      case 'X':
+      case 'x': {
+        const hoveredCell = store.getState().gameState.hoveredCell
+        if (!hoveredCell) {
+          return
+        }
+        revealCell(hoveredCell.y, hoveredCell.x)
+        break
+      }
+      default:
+        return
+    }
+  }
+
+  handleMouseMove = (
+    event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
+  ) => {
+    const { row, col } = this._getCellCoordinates(event)
+    const newGameState = this.gameEngine.setHoverCell(row, col)
+    store.dispatch(updateHover(newGameState.hoveredCell))
+  }
+
   restartGame(): void {
-    store.dispatch(updateField(this.gameEngine.restartGame()))
+    // При рестарте создаем игру заново, сбрасываем firstMoveMade и startTime
+    this.generateGame(store.getState().gameState.difficulty)
   }
 
   private _getCellCoordinates(event: React.MouseEvent<HTMLCanvasElement>) {

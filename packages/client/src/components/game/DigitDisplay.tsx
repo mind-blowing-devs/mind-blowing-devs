@@ -4,23 +4,23 @@ interface IDigitDisplay {
   digit: string
 }
 
-// Определяем, какие сегменты должны быть активны для каждой цифры
-const segments = {
-  '0': [true, true, true, false, true, true, true],
-  '1': [false, false, true, false, false, true, false],
-  '2': [true, false, true, true, true, false, true],
-  '3': [true, false, true, true, false, true, true],
-  '4': [false, true, true, true, false, true, false],
-  '5': [true, true, false, true, false, true, true],
-  '6': [true, true, false, true, true, true, true],
-  '7': [true, false, true, false, false, true, false],
-  '8': [true, true, true, true, true, true, true],
-  '9': [true, true, true, true, false, true, true],
-}
+// Матрица сегментов для цифр 0-9
+const segments = [
+  [true, true, true, false, true, true, true], // 0
+  [false, false, true, false, false, true, false], // 1
+  [true, false, true, true, true, false, true], // 2
+  [true, false, true, true, false, true, true], // 3
+  [false, true, true, true, false, true, false], // 4
+  [true, true, false, true, false, true, true], // 5
+  [true, true, false, true, true, true, true], // 6
+  [true, false, true, false, false, true, false], // 7
+  [true, true, true, true, true, true, true], // 8
+  [true, true, true, true, false, true, true], // 9
+]
 
 const DigitDisplay: FC<IDigitDisplay> = ({ digit }) => {
-  const activeSegments =
-    segments[digit as keyof typeof segments] || segments['0']
+  const digitIndex = parseInt(digit, 10)
+  const activeSegments = segments[digitIndex] || segments[0]
 
   return (
     <svg width="14" height="23" viewBox="0 0 14 23">

@@ -7,20 +7,23 @@ import {
 import gameState from './gameState'
 import themeReducer from './themeSlice'
 import fullScreenReducer from './fullscreenSlice'
+import userReducer from './userSlice'
+
 
 const store = configureStore({
   reducer: {
     gameState: gameState,
     theme: themeReducer,
     fullScreen: fullScreenReducer,
+    user: userReducer
   },
 })
 
 export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+type AppDispatch = typeof store.dispatch
 
 // Typed hooks
-export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 export default store

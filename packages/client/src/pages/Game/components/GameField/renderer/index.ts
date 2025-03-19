@@ -11,6 +11,7 @@ import Empty6Cell from './Empty6Cell'
 import Empty7Cell from './Empty7Cell'
 import Empty8Cell from './Empty8Cell'
 import FlaggedCell from './FlaggedCell'
+import HoverEffect from './HoverEffect'
 
 export default function initializeRenderer(
   ctx: CanvasRenderingContext2D,
@@ -24,9 +25,20 @@ export default function initializeRenderer(
     ctx.clearRect(x, y, cellSize, cellSize)
   }
 
-  return function renderCell(object: string, x: number, y: number) {
-    clearCell(x, y)
+  return function renderCell(
+    object: string,
+    x: number,
+    y: number,
+    clearCellBeforeRender = true
+  ) {
+    if (clearCellBeforeRender) {
+      clearCell(x, y)
+    }
+
     switch (object) {
+      case 'HoverEffect':
+        HoverEffect(x, y, cellSize, ctx)
+        break
       case 'UndefinedCell':
         // used when game wasn't initialized
         UndefinedCell(x, y, cellSize, ctx)
@@ -68,7 +80,7 @@ export default function initializeRenderer(
         Empty8Cell(x, y, cellSize, ctx)
         break
       default:
-      // throw new Error('Render object not implemented');
+        throw new Error('Render object not implemented')
     }
   }
 }
