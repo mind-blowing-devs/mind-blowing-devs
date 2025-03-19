@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid'
 
-type ButtonVariant = 'reset' | 'settings' | 'fullscreen'
+type ButtonVariant = 'reset' | 'settings' | 'fullscreen' | 'default'
 type GameStatus = 'playing' | 'won' | 'lost' | 'idle'
 
 interface IGameButton {
@@ -9,7 +9,8 @@ interface IGameButton {
   className?: string
   gameStatus?: GameStatus
   onClick: () => void
-  variant?: ButtonVariant
+  variant: ButtonVariant
+  children?: React.ReactNode
 }
 
 const GameButton: FC<IGameButton> = ({
@@ -18,12 +19,11 @@ const GameButton: FC<IGameButton> = ({
   gameStatus = 'idle',
   onClick,
   variant,
+  children,
 }) => {
   const baseStyles = `
     bg-[#BFBFBF] 
-    w-[40px] h-[40px] 
-    flex items-center justify-center 
-    text-2xl
+    flex items-center justify-center  
     hover:bg-[#d4d4d4] 
     border-2 
     border-t-white border-l-white 
@@ -32,17 +32,28 @@ const GameButton: FC<IGameButton> = ({
     active:border-r-white active:border-b-white
   `
 
+  const sizeStyles =
+    variant === 'default' ? 'px-4 py-2' : 'w-[40px] h-[40px] text-2xl'
+
+  const getEmojiContent = (gameStatus: GameStatus) => {
+    const emojis = {
+      playing: '🙂',
+      won: '😎',
+      lost: '😵',
+      idle: '▶',
+    }
+    // Дискуссионный момент. Изначально привязался к смайликам, но у них специфическое поведение в браузере.
+    // Чтобы отцентрировать их, пришлось использовать -mt-1
+    return <span className="block -mt-1">{emojis[gameStatus]}</span>
+  }
+
   // Определяем содержимое кнопки
   let content
   let buttonAriaLabel = ariaLabel
 
   // Определяем содержимое и aria-label в зависимости от варианта
   if (variant === 'reset') {
-    if (gameStatus === 'playing') content = '🙂'
-    else if (gameStatus === 'won') content = '😎'
-    else if (gameStatus === 'lost') content = '😵'
-    else if (gameStatus === 'idle') content = '▶'
-
+    content = getEmojiContent(gameStatus)
     buttonAriaLabel = buttonAriaLabel || 'reset game'
   } else if (variant === 'settings') {
     content = <Cog6ToothIcon className="w-6 h-6 text-black" />
@@ -50,12 +61,15 @@ const GameButton: FC<IGameButton> = ({
   } else if (variant === 'fullscreen') {
     content = <ArrowsPointingOutIcon className="w-6 h-6 text-black" />
     buttonAriaLabel = buttonAriaLabel || 'fullscreen mode'
+  } else if (variant === 'default') {
+    content = children
+    buttonAriaLabel = buttonAriaLabel || 'button'
   }
 
   return (
     <button
       onClick={onClick}
-      className={`${baseStyles} ${className}`}
+      className={`${baseStyles} ${sizeStyles} ${className}`}
       aria-label={buttonAriaLabel}>
       {content}
     </button>

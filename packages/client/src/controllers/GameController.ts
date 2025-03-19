@@ -4,6 +4,7 @@ import {
   updateField,
   updateDifficulty,
   updateHover,
+  setStartTime,
 } from '../store/gameState'
 import GameEngine from './GameEngine'
 import React from 'react'
@@ -51,6 +52,13 @@ export default class GameController {
 
   handleCellClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const { row, col } = this._getCellCoordinates(event)
+    const gameState = store.getState().gameState
+
+    // Если это первый ход, устанавливаем время начала
+    if (!gameState.firstMoveMade) {
+      store.dispatch(setStartTime(Date.now()))
+    }
+
     store.dispatch(updateField(this.gameEngine.revealCell(row, col)))
   }
 
@@ -129,7 +137,8 @@ export default class GameController {
   }
 
   restartGame(): void {
-    store.dispatch(updateField(this.gameEngine.restartGame()))
+    // При рестарте создаем игру заново, сбрасываем firstMoveMade и startTime
+    this.generateGame(store.getState().gameState.difficulty)
   }
 
   private _getCellCoordinates(event: React.MouseEvent<HTMLCanvasElement>) {
