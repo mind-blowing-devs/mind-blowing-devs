@@ -4,6 +4,9 @@ type AvatarProps = {
   avatar: string | null
 }
 
+const RESOURCES_URL = 'https://ya-praktikum.tech/api/v2/resources/'
+const DEFAULT_AVATAR_URL = '/default-avatar.png'
+
 export default memo(function Avatar({ avatar }: AvatarProps) {
   return (
     <div className="flex justify-center">
@@ -11,8 +14,8 @@ export default memo(function Avatar({ avatar }: AvatarProps) {
         <img
           src={
             avatar
-              ? `https://ya-praktikum.tech/api/v2/resources/${avatar}`
-              : '/default-avatar.png'
+              ? RESOURCES_URL + avatar
+              : DEFAULT_AVATAR_URL
           }
           alt="Player's avatar"
           className="w-full h-full object-cover"

@@ -17,12 +17,6 @@ export type ChangePasswordData = {
 }
 
 class UserAPI extends BaseAPI {
-  // Temp
-  async getUser(): Promise<User> {
-    const { data } = await this.api.get('/auth/user')
-    return data
-  }
-
   async changeAvatar(data: FormData): Promise<User> {
     const response = await this.api.put('/user/profile/avatar', data, {
       headers: { 'Content-Type': 'multipart/form-data' },
