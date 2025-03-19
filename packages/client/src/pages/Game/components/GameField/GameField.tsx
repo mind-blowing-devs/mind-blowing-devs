@@ -10,6 +10,10 @@ interface IGameCanvas {
   cellSize: number
   handleClick: (event: React.MouseEvent<HTMLCanvasElement>) => void
   handleDoubleClick: (event: React.MouseEvent<HTMLCanvasElement>) => void
+  handleKeyDown: (event: React.KeyboardEvent<HTMLCanvasElement>) => void
+  handleMouseMove: (
+    event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
+  ) => void
 }
 
 function getRenderObjectTypeByCell(cell: CellData): string {
@@ -30,8 +34,12 @@ const GameField: FC<IGameCanvas> = ({
   cellSize,
   handleClick,
   handleDoubleClick,
+  handleKeyDown,
+  handleMouseMove,
 }) => {
-  const { field, status } = useSelector((state: RootState) => state.gameState)
+  const { field, status, hoveredCell } = useSelector(
+    (state: RootState) => state.gameState
+  )
   const width = field[0]?.length ?? 0
   const height = field.length
   const canvasWidth = width * cellSize
@@ -53,6 +61,16 @@ const GameField: FC<IGameCanvas> = ({
           )
         }
       }
+
+      // render hover effect
+      if (hoveredCell) {
+        render(
+          'HoverEffect',
+          hoveredCell.x * cellSize,
+          hoveredCell.y * cellSize,
+          false
+        )
+      }
     }
     if (!canvasRef) {
       throw new Error('Failed to access the Canvas HTML node')
@@ -64,20 +82,24 @@ const GameField: FC<IGameCanvas> = ({
 
     const render = renderer(ctx, canvasWidth, canvasHeight, cellSize)
     renderField()
+    canvasRef.current?.focus()
 
     return () => {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
     }
-  }, [width, height, cellSize, field, status])
+  }, [width, height, cellSize, field, status, hoveredCell])
 
   return (
-    <div className="border-4 border-t-[#7B7B7B] border-l-[#7B7B7B] border-r-white border-b-white bg-[#BFBFBF]">
+    <div className="border-4 border-t-[#7B7B7B] border-l-[#7B7B7B] border-r-white border-b-white bg-[#BFBFBF] cursor-pointer">
       <canvas
-        className="bg-[#BFBFBF]"
+        className="bg-[#BFBFBF] outline-none"
         width={canvasWidth}
         height={canvasHeight}
         onClick={handleClick}
         onContextMenu={handleDoubleClick}
+        onKeyDown={handleKeyDown}
+        onMouseMove={handleMouseMove}
+        tabIndex={0}
         ref={canvasRef}></canvas>
     </div>
   )

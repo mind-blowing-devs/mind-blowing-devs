@@ -4,12 +4,9 @@ export default function IdleCell(
   cellSize: number,
   ctx: CanvasRenderingContext2D
 ) {
-  const cell = new Path2D()
-
   // background
-  cell.rect(x, y, cellSize, cellSize)
   ctx.fillStyle = '#BFBFBF'
-  ctx.fill(cell)
+  ctx.rect(x, y, cellSize, cellSize)
 
   // white border
   const wBorder = new Path2D()

@@ -80,6 +80,8 @@ function Game() {
         <GameField
           handleClick={gameController.handleCellClick}
           handleDoubleClick={gameController.handleRightClick}
+          handleKeyDown={gameController.handleKeyDown}
+          handleMouseMove={gameController.handleMouseMove}
           cellSize={32}
         />
       </div>

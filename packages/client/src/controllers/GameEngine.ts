@@ -7,8 +7,9 @@ type GameField = GameState['field']
 type GameStatus = GameState['status']
 type CurrentGameState = Pick<
   GameState,
-  'status' | 'field' | 'minesRevealed' | 'minesLeft'
+  'status' | 'field' | 'minesRevealed' | 'minesLeft' | 'hoveredCell'
 >
+type HoveredCell = GameState['hoveredCell']
 
 export default class GameEngine {
   private _field: GameField = []
@@ -18,6 +19,7 @@ export default class GameEngine {
   minesTotal: number
   rows: number
   columns: number
+  hoveredCell: HoveredCell
 
   constructor(rows: number, cols: number, mines: number) {
     const field: GameField = []
@@ -96,6 +98,7 @@ export default class GameEngine {
     this.minesRevealed = 0
     this.minesLeft = mines
     this.status = 'playing'
+    this.hoveredCell = null
   }
 
   get field() {
@@ -124,6 +127,7 @@ export default class GameEngine {
 
       if (fieldClone[row][col].isMine) {
         this.status = 'lost'
+        this.hoveredCell = null
       }
 
       // If there are no surrounding mines, continue revealing adjacent cells
@@ -161,6 +165,61 @@ export default class GameEngine {
     return this.getState()
   }
 
+  setHoverCell(row: number, col: number): CurrentGameState {
+    if (this.isGameFrozen) return this.getState()
+
+    const isBeyondField =
+      col < 0 || col > this.rows - 1 || row < 0 || row > this.columns - 1
+    if (isBeyondField) {
+      // leave the state unchanged since the cell is out of reach
+      return this.getState()
+    }
+
+    this.hoveredCell = {
+      x: col,
+      y: row,
+    }
+    return this.getState()
+  }
+
+  shiftHoverCell(
+    direction: 'down' | 'up' | 'right' | 'left'
+  ): CurrentGameState {
+    if (this.isGameFrozen) return this.getState()
+    // getting the current hover state
+    let { x, y } = this.hoveredCell ?? { x: 0, y: 0 }
+
+    const shifts = [
+      [0, 1],
+      [0, -1],
+      [-1, 0],
+      [1, 0],
+    ]
+    let shiftCase = -1
+    switch (direction) {
+      case 'down':
+        shiftCase = 0
+        break
+      case 'up':
+        shiftCase = 1
+        break
+      case 'left':
+        shiftCase = 2
+        break
+      case 'right':
+        shiftCase = 3
+        break
+      default:
+        return this.getState()
+    }
+
+    // apply shifts
+    x += shifts[shiftCase][0]
+    y += shifts[shiftCase][1]
+
+    return this.setHoverCell(y, x)
+  }
+
   isGameOver(): boolean {
     return this.status === 'lost'
   }
@@ -171,6 +230,7 @@ export default class GameEngine {
       status: this.status,
       minesRevealed: this.minesRevealed,
       minesLeft: this.minesLeft,
+      hoveredCell: this.hoveredCell,
     }
   }
 
@@ -185,6 +245,7 @@ export default class GameEngine {
       }
     }
     this.field = fieldClone
+    this.hoveredCell = null
 
     return this.getState()
   }
@@ -211,6 +272,7 @@ export default class GameEngine {
         this.field[row].find(i => i.isMine && i.isRevealed) !== undefined
       if (mineExposed) {
         this.status = 'lost'
+        this.hoveredCell = null
         return
       }
     }
@@ -222,6 +284,7 @@ export default class GameEngine {
     }
     // all mines have been revealed
     this.status = 'won'
+    this.hoveredCell = null
   }
 
   private get isGameFrozen(): boolean {
