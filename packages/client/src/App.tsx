@@ -16,17 +16,37 @@ import { AuthProvider } from './hooks/useAuth'
 import NotAuthedProtectedRoutes from './components/NotAuthedProtectedRoutes'
 import AuthedProtectedRoutes from './components/AuthedProtectedRoutes'
 import ErrorBoundary from './components/ErrorBoundary'
+import { useAppDispatch } from './store/store'
+import { setIsFullScreen, toggleFullScreen } from './store/fullscreenSlice'
 
 function App() {
-  useEffect(() => {
-    const fetchServerData = async () => {
-      const url = `http://localhost:${__SERVER_PORT__}`
-      const response = await fetch(url)
-      const data = await response.json()
-      console.log(data)
-    }
+  const dispatch = useAppDispatch()
 
-    fetchServerData()
+  useEffect(() => {
+    // const fetchServerData = async () => {
+    //   const url = `http://localhost:${__SERVER_PORT__}`
+    //   const response = await fetch(url)
+    //   const data = await response.json()
+    //   console.log(data)
+    // }
+
+    // fetchServerData()
+
+    const fullscreenchangeHandler = () =>
+      dispatch(setIsFullScreen(Boolean(document.fullscreenElement)))
+    const f11KeyDownHandler = (event: KeyboardEvent) => {
+      if (event.key === 'F11') {
+        event.preventDefault()
+        dispatch(toggleFullScreen())
+      }
+    }
+    document.addEventListener('fullscreenchange', fullscreenchangeHandler)
+    document.addEventListener('keydown', f11KeyDownHandler)
+
+    return () => {
+      document.removeEventListener('fullscreenchange', fullscreenchangeHandler)
+      document.removeEventListener('keydown', f11KeyDownHandler)
+    }
   }, [])
   const navigate = useNavigate()
   return (
@@ -57,6 +77,7 @@ function App() {
             <Route element={<NotAuthedProtectedRoutes />}>
               <Route index element={<Main />}></Route>
               <Route path="/forum" element={<Forum />}></Route>
+              <Route path="/CreateTopic" element={<CreateTopic />}></Route>
               <Route path="/forumtopic" element={<ForumTopic />}></Route>
               <Route path="/game" element={<Game />}></Route>
               <Route path="/leaderboard" element={<Leaderboard />}></Route>
