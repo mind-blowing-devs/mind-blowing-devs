@@ -15,6 +15,7 @@ export interface GameState {
   startTime: number
   finishTime: number | undefined
   difficulty: 'beginner' | 'intermediate' | 'expert'
+  firstMoveMade: boolean
 }
 
 const initialState: GameState = {
@@ -22,9 +23,10 @@ const initialState: GameState = {
   minesRevealed: 0,
   minesLeft: 0,
   status: 'idle',
-  startTime: Date.now(),
+  startTime: 0,
   finishTime: undefined,
-  difficulty: 'intermediate',
+  difficulty: 'beginner',
+  firstMoveMade: false,
 }
 
 const gameState = createSlice({
@@ -50,8 +52,9 @@ const gameState = createSlice({
       state.minesLeft = action.payload.minesLeft
       state.minesRevealed = 0
       state.status = 'playing'
-      state.startTime = Date.now()
+      state.startTime = 0
       state.finishTime = undefined
+      state.firstMoveMade = false
     },
 
     updateField: (
@@ -80,9 +83,19 @@ const gameState = createSlice({
       state.status = 'idle'
       state.difficulty = action.payload
     },
+
+    setStartTime: (state, action: PayloadAction<number>) => {
+      state.startTime = action.payload
+      state.firstMoveMade = true
+    },
   },
 })
 
-export const { changeStatus, createGame, updateField, updateDifficulty } =
-  gameState.actions
+export const {
+  changeStatus,
+  createGame,
+  updateField,
+  updateDifficulty,
+  setStartTime,
+} = gameState.actions
 export default gameState.reducer

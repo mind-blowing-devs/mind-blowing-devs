@@ -19,16 +19,22 @@ const GameHeader: FC<IGameHeader> = ({
   onOpenSettings,
   onFullScreen,
 }: IGameHeader) => {
-  const calculateElapsedTime = () => Math.floor((Date.now() - startTime) / 1000)
+  const calculateElapsedTime = () =>
+    startTime > 0 ? Math.floor((Date.now() - startTime) / 1000) : 0
 
   const [gameTimer, setGameTimer] = useState(calculateElapsedTime())
 
   useEffect(() => {
     let id: number | undefined
-    if (gameStatus === 'playing') {
+
+    // Запускаем таймер только если игра активна и startTime > 0
+    if (gameStatus === 'playing' && startTime > 0) {
       id = setInterval(() => {
         setGameTimer(calculateElapsedTime())
       }, 1000) as unknown as number
+    } else {
+      // Для других статусов устанавливаем таймер равным 0 или текущему значению
+      setGameTimer(startTime > 0 ? calculateElapsedTime() : 0)
     }
 
     return () => {
@@ -36,7 +42,7 @@ const GameHeader: FC<IGameHeader> = ({
         clearInterval(id)
       }
     }
-  }, [gameStatus])
+  }, [gameStatus, startTime])
 
   return (
     <div className="flex justify-between items-center px-4 py-2 border-4 border-t-[#7B7B7B] border-l-[#7B7B7B] border-r-white border-b-white bg-[#BFBFBF] mb-2">
