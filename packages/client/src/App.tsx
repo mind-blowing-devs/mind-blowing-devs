@@ -23,15 +23,6 @@ function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // const fetchServerData = async () => {
-    //   const url = `http://localhost:${__SERVER_PORT__}`
-    //   const response = await fetch(url)
-    //   const data = await response.json()
-    //   console.log(data)
-    // }
-
-    // fetchServerData()
-
     const fullscreenchangeHandler = () =>
       dispatch(setIsFullScreen(Boolean(document.fullscreenElement)))
     const f11KeyDownHandler = (event: KeyboardEvent) => {
