@@ -8,6 +8,8 @@ import GameField from './components/GameField'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import GameController from '../../controllers/GameController'
+import { useAppDispatch } from '../../store/store'
+import { toggleFullScreen } from '../../store/fullscreenSlice'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -24,6 +26,8 @@ function Game() {
     finishTime,
   } = useSelector((state: RootState) => state.gameState)
 
+  const dispatch = useAppDispatch()
+
   // Состояния для модальных окон
   const [showSettings, setShowSettings] = useState(false)
   const [showResult, setShowResult] = useState(false)
@@ -38,9 +42,9 @@ function Game() {
     localStorage.setItem('theme', theme)
   }
 
-  // Метод для открытия полноэкранного режима (не реализован)
+  // Метод для открытия полноэкранного режима
   const handleFullScreen = () => {
-    alert('Полноэкранный режим')
+    dispatch(toggleFullScreen())
   }
 
   // Метод для закрытия модального окна результата и сброса игры

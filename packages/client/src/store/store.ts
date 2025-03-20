@@ -6,13 +6,16 @@ import {
 } from 'react-redux'
 import gameState from './gameState'
 import themeReducer from './themeSlice'
+import fullScreenReducer from './fullscreenSlice'
 import userReducer from './userSlice'
+
 
 const store = configureStore({
   reducer: {
     gameState: gameState,
     theme: themeReducer,
-    user: userReducer,
+    fullScreen: fullScreenReducer,
+    user: userReducer
   },
 })
 

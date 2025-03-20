@@ -1,3 +1,1 @@
-import CreateTopic from './CreateTopic'
-
-export default CreateTopic
+export { default } from './CreateTopic'

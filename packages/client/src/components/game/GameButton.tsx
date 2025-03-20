@@ -1,7 +1,18 @@
 import { FC } from 'react'
-import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/solid'
+import {
+  Cog6ToothIcon,
+  ArrowsPointingOutIcon,
+  ArrowsPointingInIcon,
+} from '@heroicons/react/24/solid'
 
-type ButtonVariant = 'reset' | 'settings' | 'fullscreen' | 'default'
+
+type ButtonVariant =
+  | 'reset'
+  | 'settings'
+  | 'enableFullscreen'
+  | 'disableFullScreen'
+  | 'default'
+
 type GameStatus = 'playing' | 'won' | 'lost' | 'idle'
 
 interface IGameButton {
@@ -58,9 +69,12 @@ const GameButton: FC<IGameButton> = ({
   } else if (variant === 'settings') {
     content = <Cog6ToothIcon className="w-6 h-6 text-black" />
     buttonAriaLabel = buttonAriaLabel || 'settings'
-  } else if (variant === 'fullscreen') {
+  } else if (variant === 'enableFullscreen') {
     content = <ArrowsPointingOutIcon className="w-6 h-6 text-black" />
-    buttonAriaLabel = buttonAriaLabel || 'fullscreen mode'
+    buttonAriaLabel = buttonAriaLabel || 'turn fullscreen mode on'
+  } else if (variant === 'disableFullScreen') {
+    content = <ArrowsPointingInIcon className="w-6 h-6 text-black" />
+    buttonAriaLabel = buttonAriaLabel || 'turn fullscreen mode off'
   } else if (variant === 'default') {
     content = children
     buttonAriaLabel = buttonAriaLabel || 'button'
