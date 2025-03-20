@@ -8,6 +8,8 @@ import {
 } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authAPI, UserSignInData, UserSignUpData } from '../api/authAPI'
+import { useAppDispatch } from '../store/store'
+import { setUser } from '../store/userSlice'
 
 type AuthContextType = {
   isLogged: boolean
@@ -29,11 +31,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogged, setIsLogged] = useState(false)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  const getUser = async () => {
+    const user = await authAPI.checkIfAuthed()
+    dispatch(setUser(user))
+  }
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        await authAPI.checkIfAuthed()
+        await getUser()
         setIsLogged(true)
       } catch (error) {
         setIsLogged(false)
@@ -47,12 +55,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (data: UserSignInData, origin: string) => {
     await authAPI.signIn(data)
+    await getUser()
     setIsLogged(true)
     navigate(origin || '/', { replace: true })
   }
 
   const signUp = async (data: UserSignUpData) => {
     await authAPI.signUp(data)
+    await getUser()
     setIsLogged(true)
     navigate('/', { replace: true })
   }
@@ -60,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     try {
       await authAPI.logOut()
+      dispatch(setUser(null))
       setIsLogged(false)
       navigate('/', { replace: true })
     } catch (error) {

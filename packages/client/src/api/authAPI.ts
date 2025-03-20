@@ -1,4 +1,5 @@
 import { BaseAPI } from './baseAPI'
+import type { User } from './userAPI'
 
 export type UserSignUpData = {
   first_name: string
@@ -28,8 +29,9 @@ class AuthAPI extends BaseAPI {
     await this.api.post('/auth/logout')
   }
 
-  async checkIfAuthed(): Promise<void> {
-    await this.api.get('/auth/user')
+  async checkIfAuthed(): Promise<User> {
+    const { data } = await this.api.get('/auth/user')
+    return data
   }
 }
 

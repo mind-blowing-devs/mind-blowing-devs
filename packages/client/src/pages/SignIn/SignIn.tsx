@@ -83,6 +83,7 @@ function SignIn() {
         <div className="flex  flex-col gap-10">
           {pageInputs.map(inputItem => (
             <AppInput
+              key={inputItem.name}
               register={register}
               label={inputItem.label}
               name={inputItem.name}

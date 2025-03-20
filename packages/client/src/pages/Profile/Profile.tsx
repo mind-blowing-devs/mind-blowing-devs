@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { type ChangePasswordData, type User, userAPI } from '../../api/userAPI'
+import { type ChangePasswordData, userAPI } from '../../api/userAPI'
 import {
   Avatar,
   ProfileActions,
@@ -8,6 +7,9 @@ import {
   ChangeAvatar,
   ChangePassword,
 } from './components'
+import { useAppSelector, useAppDispatch } from '../../store/store'
+import { changeAvatar } from '../../store/userSlice'
+import { useAuth } from '../../hooks/useAuth'
 
 // Data will receive from leaderboard API
 const mockUserAchievements = {
@@ -17,25 +19,21 @@ const mockUserAchievements = {
 }
 
 export default function Profile() {
-  const [user, setUser] = useState<User | null>(null)
+  const dispatch = useAppDispatch()
+  const { logout } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
+  const { user } = useAppSelector(state => state.user)
 
   const editParam = searchParams.get('edit')
   const isEditPassword = editParam === 'password'
   const isEditAvatar = editParam === 'avatar'
 
   const handleAvatarChange = async (data: FormData) => {
-    const user = await userAPI.changeAvatar(data)
-    setUser(user)
+    await dispatch(changeAvatar(data)).unwrap()
   }
 
   const handlePasswordChange = async (data: ChangePasswordData) => {
     await userAPI.changePassword(data)
-  }
-
-  const handleLogOut = async () => {
-    // await authAPI.logout()
-    alert('logged out')
   }
 
   let content = (
@@ -55,21 +53,6 @@ export default function Profile() {
     heading = 'Change Avatar'
   }
 
-  // ============
-  // Will be remove after creating auth API and redux store
-  useEffect(() => {
-    async function getUser() {
-      try {
-        const user = await userAPI.getUser()
-        setUser(user)
-      } catch {
-        console.error('Ошибка при запросе пользователя')
-      }
-    }
-    getUser()
-  }, [])
-  // ============
-
   return (
     <main className="flex flex-col items-center min-h-screen p-4 sm:p-6">
       <h1 className="mt-2 sm:text-xl text-font-color">{heading}</h1>
@@ -81,7 +64,7 @@ export default function Profile() {
       <ProfileActions
         isEdit={isEditPassword || isEditAvatar}
         setSearchParams={setSearchParams}
-        onLogOut={handleLogOut}
+        onLogOut={logout}
       />
     </main>
   )
