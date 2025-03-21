@@ -1,17 +1,21 @@
-import { render, fireEvent, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { render, fireEvent } from '@testing-library/react'
+import { screen } from '@testing-library/dom'
+import { UseFormRegisterReturn } from 'react-hook-form'
 import { AppInput } from '../AppInput'
 
 describe('AppInput', () => {
   let mockRegister: jest.Mock
 
   beforeEach(() => {
-    mockRegister = jest.fn(name => ({
-      name,
-      onChange: jest.fn(),
-      onBlur: jest.fn(),
-      ref: jest.fn(),
-    }))
+    mockRegister = jest.fn(
+      (): UseFormRegisterReturn => ({
+        name: 'first_name',
+        onChange: jest.fn(),
+        onBlur: jest.fn(),
+        ref: jest.fn(),
+      })
+    )
   })
 
   afterEach(() => {
