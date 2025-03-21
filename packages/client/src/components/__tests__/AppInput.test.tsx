@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom'
-import { render, fireEvent } from '@testing-library/react'
-import { screen } from '@testing-library/dom'
+import { render, fireEvent, screen } from '@testing-library/react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { AppInput } from '../AppInput'
 
