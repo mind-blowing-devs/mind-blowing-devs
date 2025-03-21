@@ -1,4 +1,5 @@
 import GameController from '../GameController'
+import React from 'react'
 
 // intermediate difficulty creates field 25*25
 const difficulty = 'intermediate'
