@@ -3,8 +3,40 @@ import { Link } from 'react-router-dom'
 import TitleInput from './components/TitleInput'
 import DescriptionInput from './components/DescriptionInput'
 import CategoryInput from './components/CategoryInput'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const schema = z.object({
+  topicTitle: z
+    .string()
+    .min(1, 'Topic Title is required')
+    .max(125, 'Topic Title must be 125 characters or less'),
+  topicCategory: z.string().optional(),
+  topicDescription: z
+    .string()
+    .min(1, 'Topic Description is required')
+    .max(600, 'Topic Description must be 600 characters or less'),
+})
+
+export type CreateTopicFormValues = z.infer<typeof schema>
 
 export default function CreateTopic() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(schema),
+  })
+
+  const onSubmit = (data: CreateTopicFormValues) => {
+    console.log('Form Data:', data)
+    alert('Not implemented')
+    reset()
+  }
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
       <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
@@ -22,10 +54,15 @@ export default function CreateTopic() {
           Share your thoughts, ask questions or start a discussion!
         </span>
 
-        <form className="w-full flex flex-col items-start mb-[10px]">
-          <TitleInput />
-          <CategoryInput />
-          <DescriptionInput />
+        <form
+          className="w-full flex flex-col items-start mb-[10px]"
+          onSubmit={handleSubmit(onSubmit)}>
+          <TitleInput register={register} error={errors.topicTitle} />
+          <CategoryInput register={register} />
+          <DescriptionInput
+            register={register}
+            error={errors.topicDescription}
+          />
         </form>
       </div>
 
@@ -33,7 +70,7 @@ export default function CreateTopic() {
         {/* TODO: fetch fresh data */}
         <button
           className="font-press text-sm hover:text-gray-500 select-none"
-          onClick={() => alert('Not implemented')}>
+          onClick={handleSubmit(onSubmit)}>
           [create topic]
         </button>
 

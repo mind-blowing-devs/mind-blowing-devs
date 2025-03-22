@@ -1,4 +1,11 @@
-export default function CategoryInput() {
+import { UseFormRegister } from 'react-hook-form'
+import { CreateTopicFormValues } from '../../CreateTopic'
+
+export default function CategoryInput({
+  register,
+}: {
+  register: UseFormRegister<CreateTopicFormValues>
+}) {
   return (
     <div className="flex flex-col w-full gap-[12px] py-[15px]">
       <label className="font-roboto font-semibold" htmlFor="topicCategory">
@@ -8,7 +15,8 @@ export default function CategoryInput() {
         [
         <select
           className="font-roboto bg-transparent outline-none w-[120px]"
-          id="topicCategory">
+          id="topicCategory"
+          {...register('topicCategory')}>
           <option value="any">Any Category</option>
           <option value="strategies">Strategies</option>
           <option value="leaderboard">Leaderboard</option>
