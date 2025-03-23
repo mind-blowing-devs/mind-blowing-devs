@@ -288,6 +288,6 @@ export default class GameEngine {
   }
 
   private get isGameFrozen(): boolean {
-    return this.status === 'lost' || this.status === 'idle'
+    return this.status !== 'playing'
   }
 }
