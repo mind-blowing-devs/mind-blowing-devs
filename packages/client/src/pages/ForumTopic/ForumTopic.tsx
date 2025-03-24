@@ -2,8 +2,32 @@ import { Link } from 'react-router-dom'
 import React from 'react'
 import CommentInput from './components/CommentInput'
 import Reply from './components/Reply'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const schema = z.object({
+  comment: z.string().min(1, 'Reply is required'),
+})
+
+type FormValues = z.infer<typeof schema>
 
 export default function ForumTopic() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  })
+
+  const onSubmit = (data: FormValues) => {
+    console.log('Form data:', data)
+    alert('Not implemented')
+    reset()
+  }
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
       <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
@@ -45,9 +69,13 @@ export default function ForumTopic() {
           </button>
         </section>
 
-        <form className="w-full flex flex-col items-start">
-          <CommentInput />
-          <button className="font-roboto font-normal sm:text-base text-sm hover:text-gray-500 self-end">
+        <form
+          className="w-full flex flex-col items-start"
+          onSubmit={handleSubmit(onSubmit)}>
+          <CommentInput register={register} error={errors.comment} />
+          <button
+            type="submit"
+            className="font-roboto font-normal sm:text-base text-sm hover:text-gray-500 self-end">
             [submit reply]
           </button>
         </form>
