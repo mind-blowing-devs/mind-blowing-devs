@@ -10,7 +10,7 @@ export default function Main() {
         Welcome to Minesweeper Adventure!
       </h1>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full max-w-xl lg:h-[624px] md:h-[524px] h-[464px] text-xs md:text-base sm:text-sm">
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full max-w-xl h-96 text-xs md:text-base sm:text-sm">
         <Logo />
         <MenuButton to="/game" text="play now" label="Start a game" />
         <MenuButton to="/leaderboard" text="leaderboard" label="Leaderboard" />
