@@ -1,3 +1,1 @@
-import TitleInput from './TitleInput'
-
-export default TitleInput
+export { default as TitleInput } from './TitleInput'

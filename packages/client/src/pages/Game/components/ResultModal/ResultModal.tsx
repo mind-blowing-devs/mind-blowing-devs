@@ -1,9 +1,10 @@
 import { FC, useState } from 'react'
-import LeaderboardComponent, {
-  LeaderboardData,
-} from '../../../../components/LeaderboardComponent/LeaderboardComponent'
+import {
+  LeaderboardComponent,
+  type LeaderboardData,
+} from '../../../../components'
 
-import GameButton from '../GameButton/GameButton'
+import { GameButton } from '../GameButton'
 
 interface IResultModal {
   isOpen: boolean

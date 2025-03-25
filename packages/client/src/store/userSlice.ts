@@ -3,7 +3,7 @@ import {
   createSlice,
   type PayloadAction,
 } from '@reduxjs/toolkit'
-import { userAPI, type User } from '../api/userAPI'
+import { userAPI, type User } from '../api'
 
 type UserState = {
   user: User | null

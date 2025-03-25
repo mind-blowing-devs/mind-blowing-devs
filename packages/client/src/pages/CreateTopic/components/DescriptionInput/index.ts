@@ -1,3 +1,1 @@
-import DescriptionInput from './DescriptionInput'
-
-export default DescriptionInput
+export { default as DescriptionInput } from './DescriptionInput'

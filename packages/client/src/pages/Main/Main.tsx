@@ -1,4 +1,4 @@
-import { MenuButton } from './components/MenuButton'
+import { MenuButton } from './components'
 import { Logo } from '../../components'
 import { useAuth } from '../../hooks'
 

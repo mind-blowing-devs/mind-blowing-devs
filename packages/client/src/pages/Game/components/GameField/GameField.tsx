@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, FC } from 'react'
 import renderer from './renderer'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../../store/store'
+import { useAppSelector } from '../../../../store'
 import { CellData } from '../../../../store/gameState'
 
 interface IGameCanvas {
@@ -37,8 +36,8 @@ const GameField: FC<IGameCanvas> = ({
   handleKeyDown,
   handleMouseMove,
 }) => {
-  const { field, status, hoveredCell } = useSelector(
-    (state: RootState) => state.gameState
+  const { field, status, hoveredCell } = useAppSelector(
+    state => state.gameState
   )
   const width = field[0]?.length ?? 0
   const height = field.length

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
-import TitleInput from './components/TitleInput'
-import DescriptionInput from './components/DescriptionInput'
-import CategoryInput from './components/CategoryInput'
+import { TitleInput, DescriptionInput, CategoryInput } from './components'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'

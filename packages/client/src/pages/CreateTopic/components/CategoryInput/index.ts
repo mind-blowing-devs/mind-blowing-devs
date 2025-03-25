@@ -1,3 +1,1 @@
-import CategoryInput from './CategoryInput'
-
-export default CategoryInput
+export { default as CategoryInput } from './CategoryInput'

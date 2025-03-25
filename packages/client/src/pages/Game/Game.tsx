@@ -9,7 +9,7 @@ import {
 } from '../../store'
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
-import GameController from '../../controllers/GameController'
+import { GameController } from '../../controllers'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
