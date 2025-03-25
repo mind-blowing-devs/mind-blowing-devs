@@ -1,9 +1,9 @@
-import axios from "axios"
+import axios from 'axios'
 
-export class BaseAPI {
+export abstract class BaseAPI {
   protected api = axios.create({
-    baseURL:  'https://ya-praktikum.tech/api/v2',
+    baseURL: 'https://ya-praktikum.tech/api/v2',
     headers: { 'Content-Type': 'application/json' },
-    withCredentials: true
+    withCredentials: true,
   })
 }

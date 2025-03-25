@@ -1,23 +1,27 @@
 import { useEffect } from 'react'
-import './App.css'
-import Main from './pages/Main'
-import Error404 from './pages/Error404'
-import Error500 from './pages/Error500'
-import Forum from './pages/Forum'
-import ForumTopic from './pages/ForumTopic'
-import Game from './pages/Game'
-import Leaderboard from './pages/Leaderboard'
-import Profile from './pages/Profile'
-import SignIn from './pages/SignIn'
-import SignUp from './pages/SignUp'
-import CreateTopic from './pages/CreateTopic'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import { AuthProvider } from './hooks/useAuth'
-import NotAuthedProtectedRoutes from './components/NotAuthedProtectedRoutes'
-import AuthedProtectedRoutes from './components/AuthedProtectedRoutes'
-import ErrorBoundary from './components/ErrorBoundary'
-import { useAppDispatch } from './store/store'
-import { setIsFullScreen, toggleFullScreen } from './store/fullscreenSlice'
+import { AuthProvider } from './hooks'
+import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
+
+import {
+  SignUp,
+  SignIn,
+  Main,
+  Profile,
+  Forum,
+  ForumTopic,
+  CreateTopic,
+  Game,
+  Leaderboard,
+  Error404,
+  Error500,
+} from './pages'
+
+import {
+  NotAuthedProtectedRoutes,
+  AuthedProtectedRoutes,
+  ErrorBoundary,
+} from './components'
 
 function App() {
   const dispatch = useAppDispatch()

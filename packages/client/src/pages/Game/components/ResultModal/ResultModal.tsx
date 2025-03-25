@@ -1,9 +1,9 @@
 import { FC, useState } from 'react'
 import LeaderboardComponent, {
   LeaderboardData,
-} from '../../pages/Leaderboard/LeaderboardComponent'
+} from '../../../../components/LeaderboardComponent/LeaderboardComponent'
 
-import GameButton from './GameButton'
+import GameButton from '../GameButton/GameButton'
 
 interface IResultModal {
   isOpen: boolean

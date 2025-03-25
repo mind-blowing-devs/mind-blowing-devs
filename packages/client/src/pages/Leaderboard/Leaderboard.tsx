@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
-import LeaderboardComponent, { LeaderboardData } from './LeaderboardComponent'
+import LeaderboardComponent, {
+  LeaderboardData,
+} from '../../components/LeaderboardComponent/LeaderboardComponent'
 
 // Мок-данные
 const mockUserData: LeaderboardData = {

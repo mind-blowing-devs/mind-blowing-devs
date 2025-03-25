@@ -1,7 +1,7 @@
-import Counter from './Counter'
-import GameButton from './GameButton'
+import { Counter } from '../Counter'
+import { GameButton } from '../GameButton'
 import { useEffect, useState, useMemo, FC } from 'react'
-import { useAppSelector } from '../../store/store'
+import { useAppSelector } from '../../../../store'
 
 interface IGameHeader {
   minesLeft: number

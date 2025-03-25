@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+*::selection {
+  background-color: white;
+}
+
 :root {
   --body-color: #bfbfbf;
   --font-color: #585656;

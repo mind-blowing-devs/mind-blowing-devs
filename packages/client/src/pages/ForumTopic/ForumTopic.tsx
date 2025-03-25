@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
-import React from 'react'
-import CommentInput from './components/CommentInput'
-import Reply from './components/Reply'
+import { CommentInput, Reply } from './components'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -30,27 +28,27 @@ export default function ForumTopic() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
-      <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
+      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
         Minesweeper Forum
-      </h2>
-      <span className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
+      </h1>
+      <h2 className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
-      </span>
+      </h2>
 
       <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] text-xs md:text-base sm:text-sm overflow-y-auto">
         <h3 className="font-roboto font-semibold w-full my-[2px] sm:my-[4px] lg:my-[12px] text-lg lg:text-xl sm:text-lg text-black sm:text-center text-left">
           Бум или Бах?
         </h3>
-        <span className="font-roboto w-full font-sm lg:text-base sm:text-sm sm:mb-[20px] mb-[8px] text-black sm:text-center text-left">
+        <h4 className="font-roboto w-full font-sm lg:text-base sm:text-sm sm:mb-[20px] mb-[8px] text-black sm:text-center text-left">
           Posted by: MineMaster • 2 days ago • Views: 142
-        </span>
-        <span className="font-roboto">
+        </h4>
+        <p className="font-roboto">
           Всем привет, сапёры! Давно хотел спросить у сообщества: как вы
           реагируете, когда случайно подрываетесь на мине? Кричите "Бум"? Или
           "Бах"? А может у вас есть своё негодование? Лично я всегда говорю
           "Бах!" и бросаю мышку (не рекомендую). Жена уже привыкла к моим
           внезапным возгласам во время игры :) А как у вас?
-        </span>
+        </p>
 
         <section className="w-full">
           <h3 className="font-roboto font-semibold my-[30px]">Replies (2)</h3>

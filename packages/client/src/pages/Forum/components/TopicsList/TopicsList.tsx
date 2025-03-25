@@ -1,5 +1,5 @@
-import TopicItem from './TopicItem'
-import type { TopicItemProps } from './TopicItem'
+import TopicItem from '../TopicItem/TopicItem'
+import type { TopicItemProps } from '../TopicItem/TopicItem'
 import { useSearchParams } from 'react-router-dom'
 
 interface TopicsListProps {
@@ -18,7 +18,7 @@ export default function TopicsList({ topics }: TopicsListProps) {
   return (
     <table className="w-full font-press">
       <thead>
-        <tr className='font-roboto font-bold'>
+        <tr className="font-roboto font-bold">
           <td>Topic</td>
           <td>Author</td>
           <td>Replies</td>
@@ -28,6 +28,7 @@ export default function TopicsList({ topics }: TopicsListProps) {
       <tbody>
         {filteredTopics.map(topic => (
           <TopicItem
+            key={topic.id}
             id={topic.id}
             name={topic.name}
             author={topic.author}

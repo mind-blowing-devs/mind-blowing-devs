@@ -3,8 +3,8 @@ import { AppInput, AppSpinner } from '../../components'
 import { Link, useLocation } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getValidationRules } from '../../utlis/getValidationRules'
-import { useAuth } from '../../hooks/useAuth'
+import { getValidationRules } from '../../utils'
+import { useAuth } from '../../hooks'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 
@@ -74,9 +74,9 @@ function SignIn() {
 
   return (
     <main className="w-screen h-screen flex flex-col items-center justify-center gap-10">
-      <div className="text-font-color mb-4 max-w-[30rem] text-center">
+      <h1 className="text-font-color mb-4 max-w-[30rem] text-center">
         Log in to start your minefield adventure!
-      </div>
+      </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md max-w-[50rem]">
@@ -119,10 +119,6 @@ function SignIn() {
             [Sign Up]
           </Link>
         </div>
-
-        <button className="text-[12px] hover:opacity-50">
-          Forgot your password?
-        </button>
       </div>
     </main>
   )

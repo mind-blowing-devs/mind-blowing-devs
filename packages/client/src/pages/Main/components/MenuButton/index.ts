@@ -1,3 +1,1 @@
-import MenuButton from './MenuButton'
-
-export default MenuButton
+export { default as MenuButton } from './MenuButton'

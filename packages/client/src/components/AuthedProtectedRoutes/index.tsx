@@ -1,1 +1,1 @@
-export { default } from './AuthedProtectedRoutes'
+export { default as AuthedProtectedRoutes } from './AuthedProtectedRoutes'

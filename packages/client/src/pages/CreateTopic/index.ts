@@ -1,1 +1,1 @@
-export { default } from './CreateTopic'
+export { default as CreateTopic } from './CreateTopic'

@@ -16,7 +16,7 @@ const GameCanvas: FC<IGameCanvas> = ({ width, height, cellSize }) => {
         cells.push(
           <div
             key={`${x}-${y}`}
-            className="bg-[#BFBFBF] border-t border-l border-white border-r border-b border-[#7B7B7B]"
+            className="bg-[#BFBFBF] border-t border-l border-r border-b border-[#7B7B7B]"
             style={{
               width: cellSize,
               height: cellSize,

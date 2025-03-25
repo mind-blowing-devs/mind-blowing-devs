@@ -1,1 +1,1 @@
-export { default } from './NotAuthedProtectedRoutes'
+export { default as NotAuthedProtectedRoutes } from './NotAuthedProtectedRoutes'

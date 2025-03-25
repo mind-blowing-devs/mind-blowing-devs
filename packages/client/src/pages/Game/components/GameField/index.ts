@@ -1,3 +1,1 @@
-import GameField from './GameField'
-
-export default GameField
+export { default as GameField } from './GameField'
