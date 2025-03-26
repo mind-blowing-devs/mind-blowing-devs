@@ -1,5 +1,5 @@
-import { UseFormRegister } from 'react-hook-form'
-import { CreateTopicFormValues } from '../../CreateTopic'
+import type { UseFormRegister } from 'react-hook-form'
+import type { CreateTopicFormValues } from '../../CreateTopic'
 
 export default function CategoryInput({
   register,

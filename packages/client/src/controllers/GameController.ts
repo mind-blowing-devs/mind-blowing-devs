@@ -1,11 +1,12 @@
-import store, { RootState } from '../store/store'
+import store from '../store/store'
 import {
+  RootState,
   createGame,
   updateField,
   updateDifficulty,
   updateHover,
   setStartTime,
-} from '../store/gameState'
+} from '../store'
 import GameEngine from './GameEngine'
 import React from 'react'
 

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { AppInput, AppSpinner } from '../../components'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getValidationRules } from '../../utlis/getValidationRules'
-import { useAuth } from '../../hooks/useAuth'
+import { getValidationRules } from '../../utils'
+import { useAuth } from '../../hooks'
 import { useState } from 'react'
 import { AxiosError } from 'axios'
 
@@ -59,12 +59,7 @@ const pageInputs: PageInput[] = [
 
 const keyValuePairs = pageInputs.map(({ name }) => {
   if (name === 'password_again') {
-    return [
-      name,
-      z
-        .string()
-        .min(1, 'Для регистрации необходимо обязательно подтвердить пароль'),
-    ] as const
+    return [name, z.string().min(1, 'you must confirm your password')] as const
   }
 
   const [regex, message] = getValidationRules(name)
@@ -79,7 +74,7 @@ const signUpSchema = z
     }, {} as Record<(typeof pageInputs)[number]['name'], z.ZodString>)
   )
   .refine(data => data.password === data.password_again, {
-    message: 'Для регистрации необходимо ввести совпадающие пароли',
+    message: 'you must enter matching passwords',
     path: ['password_again'],
   })
 
@@ -117,9 +112,9 @@ function SignUp() {
 
   return (
     <main className="h-[100%] flex flex-col items-center justify-center gap-10 pt-[5rem] pb-[5rem] w-full">
-      <div className="text-font-color mb-4 max-w-[30rem] text-center">
+      <h1 className="text-font-color mb-4 max-w-[30rem] text-center">
         Create your account to start sweeping mines!
-      </div>
+      </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md max-w-[50rem]">
@@ -162,10 +157,6 @@ function SignUp() {
             [Sign In]
           </Link>
         </div>
-
-        <button className="text-[12px] hover:opacity-50">
-          Forgot your password?
-        </button>
       </div>
     </main>
   )

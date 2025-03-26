@@ -1,4 +1,2 @@
-import Reply, { IReply } from './Reply'
-
-export default Reply
-export type { IReply }
+export { default as Reply } from './Reply'
+export type { IReply } from './Reply'

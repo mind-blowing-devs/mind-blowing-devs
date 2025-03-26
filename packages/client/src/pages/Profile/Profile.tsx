@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
-import { type ChangePasswordData, userAPI } from '../../api/userAPI'
+import { type ChangePasswordData, userAPI } from '../../api'
 import {
   Avatar,
   ProfileActions,
@@ -7,9 +7,8 @@ import {
   ChangeAvatar,
   ChangePassword,
 } from './components'
-import { useAppSelector, useAppDispatch } from '../../store/store'
-import { changeAvatar } from '../../store/userSlice'
-import { useAuth } from '../../hooks/useAuth'
+import { useAppSelector, useAppDispatch, changeAvatar } from '../../store'
+import { useAuth } from '../../hooks'
 
 // Data will receive from leaderboard API
 const mockUserAchievements = {

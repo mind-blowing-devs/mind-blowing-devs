@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
-import TopicsList from './TopicsList'
-import Filter from './Filter'
-import type { TopicItemProps } from './TopicsList'
+import { Filter, TopicsList, type TopicItemProps } from './components'
 
 const mockData: TopicItemProps[] = [
   {
@@ -37,12 +35,12 @@ const mockData: TopicItemProps[] = [
 export default function Forum() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
-      <h2 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
+      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
         Minesweeper Forum
-      </h2>
-      <span className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
+      </h1>
+      <h2 className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
-      </span>
+      </h2>
 
       <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] pb-[35px] text-xs md:text-base sm:text-sm overflow-y-auto">
         <Filter />

@@ -1,6 +1,6 @@
-import MenuButton from './components/MenuButton'
-import mineIcon from './images/mine-icon.png'
-import { useAuth } from '../../hooks/useAuth'
+import { MenuButton } from './components'
+import { Logo } from '../../components'
+import { useAuth } from '../../hooks'
 
 export default function Main() {
   const { logout } = useAuth()
@@ -10,15 +10,8 @@ export default function Main() {
         Welcome to Minesweeper Adventure!
       </h1>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full max-w-xl lg:h-[624px] md:h-[524px] h-[464px] text-xs md:text-base sm:text-sm">
-        <img
-          className="absolute top-[-115px] sm:left-[-88px] left-[-30px] select-none"
-          src={mineIcon}
-          width={176}
-          height={230}
-          alt="Mine Icon"
-        />
-
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full max-w-xl h-96 text-xs md:text-base sm:text-sm">
+        <Logo />
         <MenuButton to="/game" text="play now" label="Start a game" />
         <MenuButton to="/leaderboard" text="leaderboard" label="Leaderboard" />
         <MenuButton to="/profile" text="profile" label="Show my profile" />

@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import GameHeader from '../../components/game/GameHeader'
-import ResultModal from '../../components/game/ResultModal'
-import SettingsModal from '../../components/game/SettingsModal'
-import GameField from './components/GameField'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store/store'
-import GameController from '../../controllers/GameController'
-import { useAppDispatch } from '../../store/store'
-import { toggleFullScreen } from '../../store/fullscreenSlice'
+import {
+  RootState,
+  useAppSelector,
+  useAppDispatch,
+  toggleFullScreen,
+} from '../../store'
+
+import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
+import { GameController } from '../../controllers'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -24,7 +24,7 @@ function Game() {
     difficulty,
     startTime,
     finishTime,
-  } = useSelector((state: RootState) => state.gameState)
+  } = useAppSelector(state => state.gameState)
 
   const dispatch = useAppDispatch()
 
@@ -66,9 +66,9 @@ function Game() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center mb-4">
-        <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-font-color">
+        <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-font-color">
           Every click counts! Can you beat the minefield?
-        </p>
+        </h1>
       </div>
 
       <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]">

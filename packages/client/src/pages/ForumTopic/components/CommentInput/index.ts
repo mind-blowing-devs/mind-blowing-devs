@@ -1,3 +1,1 @@
-import CommentInput from './CommentInput'
-
-export default CommentInput
+export { default as CommentInput } from './CommentInput'

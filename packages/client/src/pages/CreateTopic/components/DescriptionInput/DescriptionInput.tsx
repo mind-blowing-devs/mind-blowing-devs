@@ -1,5 +1,5 @@
-import { FieldError, UseFormRegister } from 'react-hook-form'
-import { CreateTopicFormValues } from '../../CreateTopic'
+import type { FieldError, UseFormRegister } from 'react-hook-form'
+import type { CreateTopicFormValues } from '../../CreateTopic'
 
 type InputProps = {
   register: UseFormRegister<CreateTopicFormValues>

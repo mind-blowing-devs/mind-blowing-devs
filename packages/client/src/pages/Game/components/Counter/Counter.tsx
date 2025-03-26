@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import DigitDisplay from './DigitDisplay'
+import { DigitDisplay } from '../DigitDisplay'
 
 interface ICounter {
   value: number

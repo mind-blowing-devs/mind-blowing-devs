@@ -1,8 +1,15 @@
 import { useState, FC } from 'react'
-import { RootState, useAppDispatch, useAppSelector } from '../../store/store'
-import { setTheme, type Theme } from '../../store/themeSlice'
-import GameButton from './GameButton'
-import SettingsSelect from './SettingsSelect'
+import {
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+  setTheme,
+  type Theme,
+} from '../../../../store'
+
+import { GameButton } from '../GameButton'
+import { SettingsSelect } from '../SettingsSelect'
+
 type Difficulty = RootState['gameState']['difficulty']
 
 interface ISettingsModal {
