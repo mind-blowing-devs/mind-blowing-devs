@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Main from './pages/Main'
 import Error404 from './pages/Error404'
@@ -58,31 +58,53 @@ function App() {
     }
   }
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen)
+  }
+
   startServiceWorker()
 
   const navigate = useNavigate()
   return (
     <div className="App font-press bg-body-color">
-      <nav className="font-roboto">
-        <ul className="px-6 absolute">
-          {[
-            'Forum',
-            'ForumTopic',
-            'CreateTopic',
-            'Game',
-            'Leaderboard',
-            'Profile',
-            'SignIn',
-            'SignUp',
-            '500',
-            '404',
-          ].map(page => (
-            <li key={page}>
-              <Link to={page}>{page}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <header
+        className="relative w-full"
+        onMouseEnter={() => setIsDropdownOpen(true)}
+        onMouseLeave={() => setIsDropdownOpen(false)}>
+        <button
+          className="w-full sm:w-auto px-6 py-2 bg-black text-white"
+          onClick={toggleDropdown}>
+          Navigation (For devs)
+        </button>
+        <nav
+          className={`absolute left-0 top-full w-full sm:max-w-[13rem] bg-white shadow-md transition-all duration-300 z-10 rounded ${
+            isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          }`}>
+          <div>
+            {[
+              'Forum',
+              'ForumTopic',
+              'CreateTopic',
+              'Game',
+              'Leaderboard',
+              'Profile',
+              'SignIn',
+              'SignUp',
+              '500',
+              '404',
+            ].map(page => (
+              <Link
+                key={page}
+                to={page.toLowerCase()}
+                className="block px-5 py-2 text-black hover:bg-gray-200"
+                onClick={() => setIsDropdownOpen(false)}>
+                {page}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      </header>
       <ErrorBoundary navigate={navigate}>
         <AuthProvider>
           <Routes>
