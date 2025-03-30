@@ -73,7 +73,7 @@ function App() {
   return (
     <div className="App font-press bg-body-color">
       <header
-        className="relative w-full"
+        className="relative w-full hidden xl:block"
         onMouseEnter={() => setIsDropdownOpen(true)}
         onMouseLeave={() => setIsDropdownOpen(false)}>
         <button
