@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^4.1.2",
     "@reduxjs/toolkit": "^2.6.0",
+    "@use-gesture/react": "^10.3.1",
     "axios": "^1.7.9",
     "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
