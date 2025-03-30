@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -6,10 +6,12 @@ import {
   useAppSelector,
   useAppDispatch,
   toggleFullScreen,
+  setIsCanvasDraggable,
 } from '../../store'
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
+import useScreenSize from '../../hooks/useScreenSize'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -27,6 +29,11 @@ function Game() {
   } = useAppSelector(state => state.gameState)
 
   const dispatch = useAppDispatch()
+  const screenSize = useScreenSize()
+
+  useEffect(() => {
+    dispatch(setIsCanvasDraggable(screenSize.width < 1280))
+  }, [screenSize])
 
   // Состояния для модальных окон
   const [showSettings, setShowSettings] = useState(false)
@@ -64,14 +71,14 @@ function Game() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="text-center mb-4">
-        <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-font-color">
+    <main className="flex flex-col items-center justify-center min-h-screen lg:p-4">
+      <div className="text-center pb-4 hidden lg:block">
+        <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] lg:mb-[72px] sm:text-xl text-center text-font-color">
           Every click counts! Can you beat the minefield?
         </h1>
       </div>
 
-      <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B]">
+      <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] w-full xl:w-auto h-screen lg:h-[80vh] xl:h-auto flex flex-col">
         <GameHeader
           gameStatus={status}
           minesLeft={minesLeft}
@@ -82,17 +89,16 @@ function Game() {
         />
 
         <GameField
-          handleClick={gameController.handleCellClick}
-          handleDoubleClick={gameController.handleRightClick}
+          handleCellClick={gameController.handleCellClick}
+          handleContextMenu={gameController.handleContextMenu}
           handleKeyDown={gameController.handleKeyDown}
-          handleMouseMove={gameController.handleMouseMove}
-          cellSize={32}
+          handlePointerMove={gameController.handlePointerMove}
         />
       </div>
 
       <Link
         to="/"
-        className="mt-8 hover:text-gray-500 text-xs sm:text-sm"
+        className="mt-8 hover:text-gray-500 text-xs sm:text-sm hidden lg:block"
         aria-label="Back to home page">
         [return home]
       </Link>

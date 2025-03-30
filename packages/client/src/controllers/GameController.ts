@@ -12,6 +12,12 @@ import React from 'react'
 
 type Difficulty = RootState['gameState']['difficulty']
 
+export interface CanvasExtendedPointerEvent
+  extends React.PointerEvent<HTMLCanvasElement> {
+  translatePos: { x: number; y: number }
+  scale: number
+}
+
 export default class GameController {
   gameEngine: GameEngine
 
@@ -51,8 +57,9 @@ export default class GameController {
     store.dispatch(createGame(this.gameEngine.getState()))
   }
 
-  handleCellClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const { row, col } = this._getCellCoordinates(event)
+  handleCellClick = (event: CanvasExtendedPointerEvent) => {
+    const { row, col, outOfMineField } = this._getCellCoordinates(event)
+    if (outOfMineField) return
     const gameState = store.getState().gameState
 
     // Если это первый ход, устанавливаем время начала
@@ -63,9 +70,9 @@ export default class GameController {
     store.dispatch(updateField(this.gameEngine.revealCell(row, col)))
   }
 
-  handleRightClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    event.preventDefault()
-    const { row, col } = this._getCellCoordinates(event)
+  handleContextMenu = (event: CanvasExtendedPointerEvent) => {
+    const { row, col, outOfMineField } = this._getCellCoordinates(event)
+    if (outOfMineField) return
     store.dispatch(updateField(this.gameEngine.toggleFlag(row, col)))
   }
 
@@ -129,10 +136,9 @@ export default class GameController {
     }
   }
 
-  handleMouseMove = (
-    event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
-  ) => {
-    const { row, col } = this._getCellCoordinates(event)
+  handlePointerMove = (event: CanvasExtendedPointerEvent) => {
+    const { row, col, outOfMineField } = this._getCellCoordinates(event)
+    if (outOfMineField) return
     const newGameState = this.gameEngine.setHoverCell(row, col)
     store.dispatch(updateHover(newGameState.hoveredCell))
   }
@@ -142,14 +148,25 @@ export default class GameController {
     this.generateGame(store.getState().gameState.difficulty)
   }
 
-  private _getCellCoordinates(event: React.MouseEvent<HTMLCanvasElement>) {
+  private _getCellCoordinates(event: CanvasExtendedPointerEvent) {
     const rect = event.currentTarget.getBoundingClientRect()
-    const canvasWidth = event.currentTarget.width
-    const canvasHeight = event.currentTarget.height
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
+    const { isCanvasDraggable, cellSize } = store.getState().gameState
     const rows = this.gameEngine.rows
     const cols = this.gameEngine.columns
+    const { translatePos, scale } = event
+
+    let canvasWidth, canvasHeight, x, y
+    if (isCanvasDraggable) {
+      canvasWidth = cellSize * scale * cols
+      canvasHeight = cellSize * scale * rows
+      x = event.clientX - translatePos.x * scale - rect.left
+      y = event.clientY - translatePos.y * scale - rect.top
+    } else {
+      canvasWidth = cellSize * cols
+      canvasHeight = cellSize * rows
+      x = event.clientX - rect.left
+      y = event.clientY - rect.top
+    }
 
     // Calculate the width and height of each cell
     const cellWidth = canvasWidth / cols
@@ -158,7 +175,8 @@ export default class GameController {
     // Calculate the column and row index from the click position
     const col = Math.floor(x / cellWidth)
     const row = Math.floor(y / cellHeight)
+    const outOfMineField = col < 0 || col > cols || row < 0 || row > rows
 
-    return { row, col }
+    return { row, col, outOfMineField }
   }
 }
