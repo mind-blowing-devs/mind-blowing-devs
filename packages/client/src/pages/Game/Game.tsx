@@ -71,7 +71,7 @@ function Game() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen lg:p-4">
+    <main className="flex flex-col items-center justify-center lg:min-h-screen lg:p-4 select-none">
       <div className="text-center pb-4 hidden lg:block">
         <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] lg:mb-[72px] sm:text-xl text-center text-font-color">
           Every click counts! Can you beat the minefield?
