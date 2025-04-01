@@ -200,6 +200,12 @@ const GameField: FC<IGameCanvas> = ({
   }
 
   function handlePointerMoveInner(event: CanvasExtendedPointerEvent) {
+    if (
+      Math.abs(event.clientX - startDragOffset.current.x - translatePos.x) < 2 &&
+      Math.abs(event.clientY - startDragOffset.current.y - translatePos.y) < 2
+    )
+    return;
+
     if (isFieldResizingRef.current) return
 
     if (isPointerDownRef.current) {
@@ -210,7 +216,7 @@ const GameField: FC<IGameCanvas> = ({
       })
     } else if (
       !isFieldDragging.current &&
-      Date.now() - pointerUpTimeRef.current > 100
+      (Date.now() - pointerUpTimeRef.current) > 100
     ) {
       event.scale = scale
       event.translatePos = translatePos
@@ -229,7 +235,7 @@ const GameField: FC<IGameCanvas> = ({
     if (
       !isFieldResizingRef.current &&
       !isFieldDragging.current &&
-      Date.now() - pointerUpTimeRef.current > 100
+      (Date.now() - pointerUpTimeRef.current) > 100
     ) {
       event.scale = scale
       event.translatePos = translatePos
@@ -242,7 +248,7 @@ const GameField: FC<IGameCanvas> = ({
       if (event.pointerType === 'touch') {
         if (
           pointerDownTimeStampRef.current !== 0 &&
-          Date.now() - pointerDownTimeStampRef.current > 250
+          (Date.now() - pointerDownTimeStampRef.current) > 250
         ) {
           handleContextMenu(event)
         } else {
