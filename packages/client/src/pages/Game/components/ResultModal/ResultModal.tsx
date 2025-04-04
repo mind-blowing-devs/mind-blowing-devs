@@ -1,8 +1,5 @@
 import { FC, useState } from 'react'
-import {
-  LeaderboardComponent,
-  type LeaderboardData,
-} from '../../../../components'
+import { LeaderboardTable } from '../../../../components'
 
 import { GameButton } from '../GameButton'
 
@@ -16,22 +13,6 @@ interface IResultModal {
   finishTime: number | undefined
   result: 'won' | 'lost'
 }
-
-// Мок-данные
-const mockUserData: LeaderboardData = {
-  rank: 5,
-  name: 'antony',
-  time: 730,
-}
-
-const mockDataList: LeaderboardData[] = [
-  { rank: 1, name: 'duck', time: 115 },
-  { rank: 2, name: 'olya', time: 122 },
-  { rank: 3, name: 'bombfinder', time: 132 },
-  { rank: 4, name: 'misha', time: 190 },
-  { rank: 5, name: 'antony', time: 730 },
-  { rank: 6, name: 'sasha', time: 790 },
-]
 
 function formatTimeDifference(startTime: number, finishTime: number): string {
   const differenceInSeconds = Math.floor((finishTime - startTime) / 1000) // Convert difference to seconds
@@ -108,13 +89,7 @@ const ResultModal: FC<IResultModal> = ({
           </>
         )}
 
-        {activeTab === 'leaderboard' && (
-          <LeaderboardComponent
-            userData={mockUserData}
-            dataList={mockDataList}
-            isEmbedded={true}
-          />
-        )}
+        {activeTab === 'leaderboard' && <LeaderboardTable isEmbedded={true} />}
 
         <div className="flex justify-end mt-6 gap-2">
           <GameButton onClick={onClose} variant="default">
