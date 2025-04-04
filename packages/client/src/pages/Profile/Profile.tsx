@@ -10,18 +10,11 @@ import {
 import { useAppSelector, useAppDispatch, changeAvatar } from '../../store'
 import { useAuth } from '../../hooks'
 
-// Data will receive from leaderboard API
-const mockUserAchievements = {
-  gamesPlayed: 43,
-  gamesWon: 25,
-  bestTime: '1.25',
-}
-
 export default function Profile() {
   const dispatch = useAppDispatch()
   const { logout } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { user } = useAppSelector(state => state.user)
+  const { user, achievements } = useAppSelector(state => state.user)
 
   const editParam = searchParams.get('edit')
   const isEditPassword = editParam === 'password'
@@ -38,7 +31,7 @@ export default function Profile() {
   let content = (
     <ProfileDetails
       username={user?.login ?? ''}
-      userAchievements={mockUserAchievements}
+      userAchievements={achievements}
     />
   )
 

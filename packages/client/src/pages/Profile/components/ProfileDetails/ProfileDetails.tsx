@@ -1,26 +1,29 @@
+import type { UserAchievements } from '../../../../store'
 import { Star } from '../Star'
+import { BestTime } from '../BestTime'
 
 type ProfileDetailsProps = {
   username: string
-  userAchievements: { gamesPlayed: number; gamesWon: number; bestTime: string }
+  userAchievements: UserAchievements
 }
 
 function calculatePlayerRating(gamesPlayed: number, gamesWon: number): number {
-  if (gamesPlayed === 0) {
+  if (gamesPlayed <= 0 || gamesWon < 0 || gamesWon > gamesPlayed) {
     return 0
   }
 
-  const adjustedGamesPlayed = gamesPlayed + 10
-  const rating = (5 * gamesWon) / adjustedGamesPlayed
+  const winRate = gamesWon / gamesPlayed
+  const rating = winRate * 5
 
-  return Math.min(5, Math.max(0, Math.ceil(rating)))
+  return Math.round(Math.min(5, Math.max(0, rating)))
 }
 
 export default function ProfileDetails({
   username,
   userAchievements,
 }: ProfileDetailsProps) {
-  const { gamesPlayed, gamesWon, bestTime } = userAchievements
+  const { gamesPlayed, gamesWon, beginnerTime, intermediateTime, expertTime } =
+    userAchievements
   const rating = calculatePlayerRating(gamesPlayed, gamesWon)
   return (
     <dl className="space-y-4">
@@ -46,8 +49,16 @@ export default function ProfileDetails({
         <dd>{gamesWon}</dd>
       </div>
       <div className="flex justify-between">
-        <dt className="text-[#585656]">best time</dt>
-        <dd className="text-[#0E7A11]">{bestTime}</dd>
+        <dt className="text-[#585656]">beginner time</dt>
+        <BestTime time={beginnerTime} />
+      </div>
+      <div className="flex justify-between">
+        <dt className="text-[#585656]">intermediate time</dt>
+        <BestTime time={intermediateTime} />
+      </div>
+      <div className="flex justify-between">
+        <dt className="text-[#585656]">expert time</dt>
+        <BestTime time={expertTime} />
       </div>
     </dl>
   )
