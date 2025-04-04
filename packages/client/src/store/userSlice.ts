@@ -5,12 +5,27 @@ import {
 } from '@reduxjs/toolkit'
 import { userAPI, type User } from '../api'
 
+export type UserAchievements = {
+  gamesPlayed: number
+  gamesWon: number
+  beginnerTime?: number
+  intermediateTime?: number
+  expertTime?: number
+}
+
 type UserState = {
   user: User | null
+  achievements: UserAchievements
+}
+
+const defaultAchievements: UserAchievements = {
+  gamesPlayed: 0,
+  gamesWon: 0,
 }
 
 const initialState: UserState = {
   user: null,
+  achievements: defaultAchievements,
 }
 
 export const changeAvatar = createAsyncThunk(
@@ -29,8 +44,48 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload
+    setUser: (state, { payload }: PayloadAction<User | null>) => {
+      state.user = payload
+
+      if (!payload) {
+        return
+      }
+
+      const { login } = payload
+      const stored = localStorage.getItem(login)
+
+      if (stored) {
+        state.achievements = JSON.parse(stored)
+      } else {
+        localStorage.setItem(login, JSON.stringify(defaultAchievements))
+      }
+    },
+
+    updateAchievements(
+      state,
+      action: PayloadAction<{
+        ratingFieldName: keyof UserAchievements
+        currentResult: number
+      }>
+    ) {
+      const { ratingFieldName, currentResult } = action.payload
+      state.achievements[ratingFieldName] = currentResult
+      state.achievements.gamesPlayed++
+      state.achievements.gamesWon++
+
+      const login = state.user?.login
+      if (login) {
+        localStorage.setItem(login, JSON.stringify(state.achievements))
+      }
+    },
+
+    increasePlayedGamesCount(state) {
+      state.achievements.gamesPlayed++
+
+      const login = state.user?.login
+      if (login) {
+        localStorage.setItem(login, JSON.stringify(state.achievements))
+      }
     },
   },
   extraReducers: builder =>
@@ -39,5 +94,6 @@ const userSlice = createSlice({
     }),
 })
 
-export const { setUser } = userSlice.actions
+export const { setUser, updateAchievements, increasePlayedGamesCount } =
+  userSlice.actions
 export default userSlice.reducer
