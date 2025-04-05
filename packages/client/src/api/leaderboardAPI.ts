@@ -25,7 +25,7 @@ export function getRatingFieldName(level: Difficulty): string {
 
 class LeaderboardAPI extends BaseAPI {
   async addUserToLeaderboard(gameData: GameData, field: string): Promise<void> {
-    return await this.api.post('/leaderboard', {
+    await this.api.post('/leaderboard', {
       data: gameData,
       ratingFieldName: field,
       teamName: TEAM_NAME,
