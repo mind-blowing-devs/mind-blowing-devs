@@ -81,11 +81,19 @@ function Game() {
       return
     }
 
+    dispatch(updateAchievements({ ratingFieldName, currentResult }))
+
     try {
+      if (!navigator.onLine) {
+        throw new Error('offline')
+      }
       await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
-      dispatch(updateAchievements({ ratingFieldName, currentResult }))
     } catch (error) {
-      console.error(error)
+      console.warn('Storing unsynced leaderboard result')
+      localStorage.setItem(
+        'pendingLeaderboard',
+        JSON.stringify({ data, ratingFieldName })
+      )
     }
   }
 
