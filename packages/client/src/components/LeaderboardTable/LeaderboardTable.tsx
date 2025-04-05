@@ -28,7 +28,7 @@ export default function LeaderboardTable({
 
   const ratingFieldName = getRatingFieldName(level ?? difficulty)
 
-  const userBestTime = achievements[ratingFieldName]
+  const userBestTime = achievements.gameData[ratingFieldName]
 
   // Классы для адаптации под встраиваемый режим
   const tableClasses = isEmbedded

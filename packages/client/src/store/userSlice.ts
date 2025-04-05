@@ -6,9 +6,9 @@ import {
 import { userAPI, type User } from '../api'
 
 export type UserAchievements = {
-  [key: string]: number
   gamesPlayed: number
   gamesWon: number
+  gameData: Record<string, number>
 }
 
 type UserState = {
@@ -19,6 +19,7 @@ type UserState = {
 const defaultAchievements: UserAchievements = {
   gamesPlayed: 0,
   gamesWon: 0,
+  gameData: {},
 }
 
 const initialState: UserState = {
@@ -67,7 +68,7 @@ const userSlice = createSlice({
       }>
     ) {
       const { ratingFieldName, currentResult } = action.payload
-      state.achievements[ratingFieldName] = currentResult
+      state.achievements.gameData[ratingFieldName] = currentResult
       state.achievements.gamesPlayed++
       state.achievements.gamesWon++
 

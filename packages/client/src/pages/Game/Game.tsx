@@ -73,7 +73,7 @@ function Game() {
     ratingFieldName: string
   ) => {
     const currentResult = Number(data[ratingFieldName])
-    const previousResult = achievements[ratingFieldName]
+    const previousResult = achievements.gameData[ratingFieldName]
 
     const isNewRecord = !previousResult || currentResult > previousResult
 
@@ -100,7 +100,7 @@ function Game() {
 
       const resultData: GameData = {
         playerLogin: user.login,
-        ...achievements,
+        ...achievements.gameData,
         [ratingFieldName]: timeInSeconds,
       }
 
