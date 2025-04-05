@@ -1,4 +1,8 @@
-export function formatTime(timestamp: number): string {
+export function formatTime(timestamp: number | undefined): string {
+  if (timestamp === undefined) {
+    return '-'
+  }
+
   timestamp = Math.abs(timestamp)
   const minutes = Math.floor(timestamp / 60)
   const seconds = timestamp % 60

@@ -60,9 +60,7 @@ export default function LeaderboardTable({
       <div className="space-y-2 mb-2 text-[#585656]">
         <div className="flex gap-4">
           <span>Your best time:</span>
-          <span>
-            {userBestTime !== undefined ? formatTime(userBestTime) : '-'}
-          </span>
+          <span>{formatTime(userBestTime)}</span>
         </div>
       </div>
 
@@ -78,22 +76,19 @@ export default function LeaderboardTable({
             </tr>
           </thead>
           <tbody>
-            {table.map(({ data }, index) => {
-              const time = data[ratingFieldName]
-              const formatedTime =
-                time !== undefined ? formatTime(Number(time)) : '-'
-              return (
-                <tr
-                  key={data.playerLogin}
-                  className={`text-center ${
-                    user?.login === data.playerLogin ? 'text-[#0E7A11]' : ''
-                  }`}>
-                  <td className="p-1">{index + 1}</td>
-                  <td className="p-1">{data?.playerLogin}</td>
-                  <td className="p-1">{formatedTime}</td>
-                </tr>
-              )
-            })}
+            {table.map(({ data }, index) => (
+              <tr
+                key={data.playerLogin}
+                className={`text-center ${
+                  user?.login === data.playerLogin ? 'text-[#0E7A11]' : ''
+                }`}>
+                <td className="p-1">{index + 1}</td>
+                <td className="p-1">{data?.playerLogin}</td>
+                <td className="p-1">
+                  {formatTime(Number(data[ratingFieldName]))}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       ) : (
