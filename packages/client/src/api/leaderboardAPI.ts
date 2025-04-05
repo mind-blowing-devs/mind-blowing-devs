@@ -33,9 +33,10 @@ class LeaderboardAPI extends BaseAPI {
   }
 
   async getLeaderboard(
-    data: Partial<GetLeaderboardData>
+    data: Partial<GetLeaderboardData>,
+    signal?: AbortSignal
   ): Promise<LeaderboardData> {
-    const result = await this.api.post('/leaderboard/all', data)
+    const result = await this.api.post('/leaderboard/all', data, { signal })
     return result.data
   }
 }

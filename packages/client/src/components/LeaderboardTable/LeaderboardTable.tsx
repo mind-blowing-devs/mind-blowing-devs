@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { formatTime } from '../../utils'
 import {
@@ -35,24 +36,37 @@ export default function LeaderboardTable({
     ? 'mt-2 w-full border-collapse border border-gray-300 text-sm'
     : 'mt-4 w-full border-collapse border border-gray-300'
 
-  const getLeaderboard = async (data: Partial<GetLeaderboardData>) => {
-    try {
-      setIsLoadingTable(true)
-      const leaderboard = await leaderboardAPI.getLeaderboard(data)
-      setTable(leaderboard)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoadingTable(false)
-    }
-  }
-
   useEffect(() => {
+    const controller = new AbortController()
+
+    const getLeaderboard = async (data: Partial<GetLeaderboardData>) => {
+      try {
+        setIsLoadingTable(true)
+        const leaderboard = await leaderboardAPI.getLeaderboard(
+          data,
+          controller.signal
+        )
+        setTable(leaderboard)
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          console.warn(
+            'Leaderboard request canceled (possible React StrictMode double effect)'
+          )
+        } else {
+          console.error('Failed to fetch leaderboard:', error)
+        }
+      } finally {
+        setIsLoadingTable(false)
+      }
+    }
+
     getLeaderboard({
       ratingFieldName,
       cursor: 0,
       limit: 10,
     })
+
+    return () => controller.abort()
   }, [level])
 
   return (
