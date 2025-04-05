@@ -1,6 +1,7 @@
 import type { UserAchievements } from '../../../../store'
 import { Star } from '../Star'
 import { BestTime } from '../BestTime'
+import { getRatingFieldName } from '../../../../api'
 
 type ProfileDetailsProps = {
   username: string
@@ -22,8 +23,7 @@ export default function ProfileDetails({
   username,
   userAchievements,
 }: ProfileDetailsProps) {
-  const { gamesPlayed, gamesWon, beginnerTime, intermediateTime, expertTime } =
-    userAchievements
+  const { gamesPlayed, gamesWon } = userAchievements
   const rating = calculatePlayerRating(gamesPlayed, gamesWon)
   return (
     <dl className="space-y-4">
@@ -50,15 +50,15 @@ export default function ProfileDetails({
       </div>
       <div className="flex justify-between">
         <dt className="text-[#585656]">beginner time</dt>
-        <BestTime time={beginnerTime} />
+        <BestTime time={userAchievements[getRatingFieldName('beginner')]} />
       </div>
       <div className="flex justify-between">
         <dt className="text-[#585656]">intermediate time</dt>
-        <BestTime time={intermediateTime} />
+        <BestTime time={userAchievements[getRatingFieldName('intermediate')]} />
       </div>
       <div className="flex justify-between">
         <dt className="text-[#585656]">expert time</dt>
-        <BestTime time={expertTime} />
+        <BestTime time={userAchievements[getRatingFieldName('expert')]} />
       </div>
     </dl>
   )

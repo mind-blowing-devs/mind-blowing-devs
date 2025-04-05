@@ -6,11 +6,9 @@ import {
 import { userAPI, type User } from '../api'
 
 export type UserAchievements = {
+  [key: string]: number
   gamesPlayed: number
   gamesWon: number
-  beginnerTime?: number
-  intermediateTime?: number
-  expertTime?: number
 }
 
 type UserState = {
@@ -64,7 +62,7 @@ const userSlice = createSlice({
     updateAchievements(
       state,
       action: PayloadAction<{
-        ratingFieldName: keyof UserAchievements
+        ratingFieldName: string
         currentResult: number
       }>
     ) {

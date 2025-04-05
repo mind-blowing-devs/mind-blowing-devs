@@ -10,7 +10,7 @@ export default function Leaderboard() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
       <h1 className="mt-10 sm:text-xl text-center text-font-color">
-        Top Minesweeper Players
+        Top 10 Minesweeper Players
       </h1>
       <h2 className="mt-2 sm:text-xl text-center text-font-color">
         {level} level

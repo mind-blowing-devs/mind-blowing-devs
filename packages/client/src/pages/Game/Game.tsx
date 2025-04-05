@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -6,10 +6,13 @@ import {
   useAppSelector,
   useAppDispatch,
   toggleFullScreen,
+  updateAchievements,
+  increasePlayedGamesCount,
 } from '../../store'
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
+import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -25,6 +28,8 @@ function Game() {
     startTime,
     finishTime,
   } = useAppSelector(state => state.gameState)
+
+  const { user, achievements } = useAppSelector(state => state.user)
 
   const dispatch = useAppDispatch()
 
@@ -62,6 +67,50 @@ function Game() {
       gameController.generateGame()
     }
   }
+
+  const sendResultToLeaderboard = async (
+    data: GameData,
+    ratingFieldName: string
+  ) => {
+    const currentResult = Number(data[ratingFieldName])
+    const previousResult = achievements[ratingFieldName]
+
+    const isNewRecord = !previousResult || currentResult > previousResult
+
+    if (!isNewRecord) {
+      return
+    }
+
+    try {
+      await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
+      dispatch(updateAchievements({ ratingFieldName, currentResult }))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (status === 'won' && user?.login) {
+      const ratingFieldName = getRatingFieldName(difficulty)
+
+      // Use a negative value because the API treats higher values as better results,
+      // but we want lower times to be considered better
+      const finish = finishTime as number
+      const timeInSeconds = Math.floor((finish - startTime) / 1000) * -1
+
+      const resultData: GameData = {
+        playerLogin: user.login,
+        ...achievements,
+        [ratingFieldName]: timeInSeconds,
+      }
+
+      sendResultToLeaderboard(resultData, ratingFieldName)
+    }
+
+    if (status === 'lost') {
+      dispatch(increasePlayedGamesCount())
+    }
+  }, [status])
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
