@@ -50,15 +50,21 @@ export default function ProfileDetails({
       </div>
       <div className="flex justify-between">
         <dt className="text-[#585656]">beginner time</dt>
-        <BestTime time={userAchievements[getRatingFieldName('beginner')]} />
+        <BestTime
+          time={userAchievements.gameData[getRatingFieldName('beginner')]}
+        />
       </div>
       <div className="flex justify-between">
         <dt className="text-[#585656]">intermediate time</dt>
-        <BestTime time={userAchievements[getRatingFieldName('intermediate')]} />
+        <BestTime
+          time={userAchievements.gameData[getRatingFieldName('intermediate')]}
+        />
       </div>
       <div className="flex justify-between">
         <dt className="text-[#585656]">expert time</dt>
-        <BestTime time={userAchievements[getRatingFieldName('expert')]} />
+        <BestTime
+          time={userAchievements.gameData[getRatingFieldName('expert')]}
+        />
       </div>
     </dl>
   )

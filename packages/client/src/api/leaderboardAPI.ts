@@ -16,9 +16,9 @@ export type GetLeaderboardData = {
   limit: number
 }
 
-export const TEAM_NAME = 'myTeam2'
+export const TEAM_NAME = 'mbd'
 
-// Creating unique field
+// Creating unique field for team
 export function getRatingFieldName(level: Difficulty): string {
   return TEAM_NAME + level
 }

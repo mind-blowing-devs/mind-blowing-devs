@@ -13,6 +13,7 @@ import {
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
 import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
+import { PENDING_LEADERBOARD_FIELD_NAME } from '../../hooks'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -68,14 +69,15 @@ function Game() {
     }
   }
 
-  const sendResultToLeaderboard = async (
+  const submitLeaderboardResult = async (
     data: GameData,
     ratingFieldName: string
   ) => {
     const currentResult = Number(data[ratingFieldName])
     const previousResult = achievements.gameData[ratingFieldName]
 
-    const isNewRecord = !previousResult || currentResult > previousResult
+    const isNewRecord =
+      typeof previousResult !== 'number' || currentResult > previousResult
 
     if (!isNewRecord) {
       return
@@ -89,9 +91,9 @@ function Game() {
       }
       await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
     } catch (error) {
-      console.warn('Storing unsynced leaderboard result')
+      // Сохраняем результат в локальное хранилище что бы не потерять
       localStorage.setItem(
-        'pendingLeaderboard',
+        PENDING_LEADERBOARD_FIELD_NAME,
         JSON.stringify({ data, ratingFieldName })
       )
     }
@@ -101,8 +103,9 @@ function Game() {
     if (status === 'won' && user?.login) {
       const ratingFieldName = getRatingFieldName(difficulty)
 
-      // Use a negative value because the API treats higher values as better results,
-      // but we want lower times to be considered better
+      // Время сохраняется в секундах и используется отрацительное значение.
+      // Это необходимо для сортировки на сервере - лучшее время = меньшее время,
+      // сервер же сортирует по убыванию
       const finish = finishTime as number
       const timeInSeconds = Math.floor((finish - startTime) / 1000) * -1
 
@@ -112,7 +115,7 @@ function Game() {
         [ratingFieldName]: timeInSeconds,
       }
 
-      sendResultToLeaderboard(resultData, ratingFieldName)
+      submitLeaderboardResult(resultData, ratingFieldName)
     }
 
     if (status === 'lost') {

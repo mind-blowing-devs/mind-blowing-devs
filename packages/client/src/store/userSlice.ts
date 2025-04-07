@@ -69,8 +69,8 @@ const userSlice = createSlice({
     ) {
       const { ratingFieldName, currentResult } = action.payload
       state.achievements.gameData[ratingFieldName] = currentResult
-      state.achievements.gamesPlayed++
-      state.achievements.gamesWon++
+      state.achievements.gamesPlayed += 1
+      state.achievements.gamesWon += 1
 
       const login = state.user?.login
       if (login) {
@@ -79,7 +79,7 @@ const userSlice = createSlice({
     },
 
     increasePlayedGamesCount(state) {
-      state.achievements.gamesPlayed++
+      state.achievements.gamesPlayed += 1
 
       const login = state.user?.login
       if (login) {

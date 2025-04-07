@@ -24,12 +24,11 @@ export default function LeaderboardTable({
   const { difficulty } = useAppSelector(state => state.gameState)
   const { user, achievements } = useAppSelector(state => state.user)
 
-  const [isLoadingTable, setIsLoadingTable] = useState(true)
-  const [table, setTable] = useState<LeaderboardData>([])
-
   const ratingFieldName = getRatingFieldName(level ?? difficulty)
-
   const userBestTime = achievements.gameData[ratingFieldName]
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [leaderboard, setLeaderboard] = useState<LeaderboardData>([])
 
   // Классы для адаптации под встраиваемый режим
   const tableClasses = isEmbedded
@@ -41,12 +40,12 @@ export default function LeaderboardTable({
 
     const getLeaderboard = async (data: Partial<GetLeaderboardData>) => {
       try {
-        setIsLoadingTable(true)
-        const leaderboard = await leaderboardAPI.getLeaderboard(
+        setIsLoading(true)
+        const result = await leaderboardAPI.getLeaderboard(
           data,
           controller.signal
         )
-        setTable(leaderboard)
+        setLeaderboard(result)
       } catch (error) {
         if (axios.isCancel(error)) {
           console.warn(
@@ -56,7 +55,7 @@ export default function LeaderboardTable({
           console.error('Failed to fetch leaderboard:', error)
         }
       } finally {
-        setIsLoadingTable(false)
+        setIsLoading(false)
       }
     }
 
@@ -78,9 +77,9 @@ export default function LeaderboardTable({
         </div>
       </div>
 
-      {isLoadingTable ? (
+      {isLoading ? (
         <AppSpinner />
-      ) : table.length ? (
+      ) : leaderboard.length ? (
         <table className={tableClasses}>
           <thead>
             <tr>
@@ -90,7 +89,7 @@ export default function LeaderboardTable({
             </tr>
           </thead>
           <tbody>
-            {table.map(({ data }, index) => (
+            {leaderboard.map(({ data }, index) => (
               <tr
                 key={data.playerLogin}
                 className={`text-center ${
@@ -106,7 +105,7 @@ export default function LeaderboardTable({
           </tbody>
         </table>
       ) : (
-        <p className="mt-4">no data</p>
+        <p className="mt-4 text-center">no data</p>
       )}
     </div>
   )

@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { LeaderboardTable } from '../../components'
 import { useAppSelector } from '../../store'
 
+const selectOptions = ['beginner', 'intermediate', 'expert']
+
 export default function Leaderboard() {
   const { difficulty } = useAppSelector(state => state.gameState)
   const [level, setLevel] = useState(difficulty)
@@ -40,7 +42,7 @@ export default function Leaderboard() {
             className="bg-[#BFBFBF] appearance-none px-5 py-1 pr-8 border-2 border-t-[#7B7B7B] border-l-[#7B7B7B] border-r-white border-b-white focus:outline-none cursor-pointer"
             onChange={e => setLevel(e.target.value as typeof difficulty)}
             value={level}>
-            {['beginner', 'intermediate', 'expert'].map(option => (
+            {selectOptions.map(option => (
               <option key={option} value={option}>
                 {option}
               </option>

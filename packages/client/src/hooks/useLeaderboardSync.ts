@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { leaderboardAPI } from '../api'
 
+export const PENDING_LEADERBOARD_FIELD_NAME = 'pendingLeaderboard'
+
 export const useLeaderboardSync = () => {
   useEffect(() => {
     const syncLeaderboard = async () => {
-      const raw = localStorage.getItem('pendingLeaderboard')
+      const raw = localStorage.getItem(PENDING_LEADERBOARD_FIELD_NAME)
 
       if (!raw) {
         return
@@ -14,7 +16,7 @@ export const useLeaderboardSync = () => {
 
       try {
         await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
-        localStorage.removeItem('pendingLeaderboard')
+        localStorage.removeItem(PENDING_LEADERBOARD_FIELD_NAME)
       } catch (error) {
         console.error('Failed to sync leaderboard:', error)
       }
