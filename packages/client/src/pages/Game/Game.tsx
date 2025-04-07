@@ -78,7 +78,7 @@ function Game() {
         </h1>
       </div>
 
-      <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] w-full xl:w-auto h-screen lg:h-[80vh] xl:h-auto flex flex-col">
+      <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] w-full xl:w-auto h-dvh lg:h-[80vh] xl:h-auto flex flex-col">
         <GameHeader
           gameStatus={status}
           minesLeft={minesLeft}

@@ -78,9 +78,9 @@ const GameField: FC<IGameCanvas> = ({
   const pointerDownTimeStampRef = useRef(0)
   // Начальные координаты при перетаскивании канваса.
   const startDragOffset = useRef({ x: 0, y: 0 })
-  // Флаг. Перемещается ли поле. Используется для отмены ховера при перемещении канваса и отмены фильтрации клика при снятии pointer после перемещения
+  // Флаг. Перемещается ли поле. Используется для отмены ховера при перемещении канваса и фильтрации клика при снятии pointer после перемещения
   const isFieldDragging = useRef(false)
-  // Флаг. Перемещается ли поле. Используется для отмены ховера при перемещении канваса и отмены фильтрации клика при снятии pointer после перемещения
+  // Флаг. Происходит ли ресайз поля. Используется для отмены ховера при ресайзе канваса и фильтрации клика при снятии pointer после ресайза
   const isFieldResizingRef = useRef(false)
   // Метка времени при отпускании pointer. Используется для фильтрации обработчика клика при завершении мастабирования (pinch)
   const pointerUpTimeRef = useRef(0)
@@ -145,7 +145,7 @@ const GameField: FC<IGameCanvas> = ({
       cellSize
     )
     renderField()
-    canvasRef.current?.focus()
+    canvasRef.current?.focus({ preventScroll: true })
     ctx.restore()
 
     return () => {
@@ -201,10 +201,11 @@ const GameField: FC<IGameCanvas> = ({
 
   function handlePointerMoveInner(event: CanvasExtendedPointerEvent) {
     if (
-      Math.abs(event.clientX - startDragOffset.current.x - translatePos.x) < 2 &&
+      Math.abs(event.clientX - startDragOffset.current.x - translatePos.x) <
+        2 &&
       Math.abs(event.clientY - startDragOffset.current.y - translatePos.y) < 2
     )
-    return;
+      return
 
     if (isFieldResizingRef.current) return
 
@@ -216,7 +217,7 @@ const GameField: FC<IGameCanvas> = ({
       })
     } else if (
       !isFieldDragging.current &&
-      (Date.now() - pointerUpTimeRef.current) > 100
+      Date.now() - pointerUpTimeRef.current > 100
     ) {
       event.scale = scale
       event.translatePos = translatePos
@@ -235,7 +236,7 @@ const GameField: FC<IGameCanvas> = ({
     if (
       !isFieldResizingRef.current &&
       !isFieldDragging.current &&
-      (Date.now() - pointerUpTimeRef.current) > 100
+      Date.now() - pointerUpTimeRef.current > 100
     ) {
       event.scale = scale
       event.translatePos = translatePos
@@ -248,7 +249,7 @@ const GameField: FC<IGameCanvas> = ({
       if (event.pointerType === 'touch') {
         if (
           pointerDownTimeStampRef.current !== 0 &&
-          (Date.now() - pointerDownTimeStampRef.current) > 250
+          Date.now() - pointerDownTimeStampRef.current > 250
         ) {
           handleContextMenu(event)
         } else {
