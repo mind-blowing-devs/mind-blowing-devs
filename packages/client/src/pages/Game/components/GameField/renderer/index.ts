@@ -25,7 +25,7 @@ export default function initializeRenderer(
     ctx.clearRect(x, y, cellSize, cellSize)
   }
 
-  return function renderCell(
+  function renderCell(
     object: string,
     x: number,
     y: number,
@@ -83,4 +83,27 @@ export default function initializeRenderer(
         throw new Error('Render object not implemented')
     }
   }
+
+  function renderFieldBorder(
+    XcellsAmount: number,
+    YcellsAmount: number,
+    cellSize: number
+  ) {
+    const border = new Path2D()
+    const x = 0
+    const y = 0
+    const fieldSizeX = XcellsAmount * cellSize
+    const fieldSizeY = YcellsAmount * cellSize
+
+    border.moveTo(x, y)
+    border.lineTo(x + fieldSizeX, y)
+    border.lineTo(x + fieldSizeX, y + fieldSizeY)
+    border.lineTo(x, y + fieldSizeY)
+    border.lineTo(x, y)
+    ctx.lineWidth = 3
+    ctx.strokeStyle = '#000'
+    ctx.stroke(border)
+  }
+
+  return { renderCell, renderFieldBorder }
 }

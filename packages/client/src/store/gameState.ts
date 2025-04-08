@@ -22,6 +22,10 @@ export interface GameState {
   finishTime: number | undefined
   difficulty: 'beginner' | 'intermediate' | 'expert'
   firstMoveMade: boolean
+  scale: number
+  translatePos: { x: number; y: number }
+  cellSize: number
+  isCanvasDraggable: boolean
 }
 
 const initialState: GameState = {
@@ -34,6 +38,10 @@ const initialState: GameState = {
   finishTime: undefined,
   difficulty: 'beginner',
   firstMoveMade: false,
+  scale: 1,
+  translatePos: { x: 40, y: 40 },
+  cellSize: 30,
+  isCanvasDraggable: false,
 }
 
 const gameState = createSlice({
@@ -106,6 +114,18 @@ const gameState = createSlice({
       state.startTime = action.payload
       state.firstMoveMade = true
     },
+    setScale: (state, action: PayloadAction<number>) => {
+      state.scale = action.payload
+    },
+    setTranslatePos: (
+      state,
+      action: PayloadAction<GameState['translatePos']>
+    ) => {
+      state.translatePos = action.payload
+    },
+    setIsCanvasDraggable: (state, action: PayloadAction<boolean>) => {
+      state.isCanvasDraggable = action.payload
+    },
   },
 })
 
@@ -116,6 +136,9 @@ export const {
   updateDifficulty,
   updateHover,
   setStartTime,
+  setScale,
+  setTranslatePos,
+  setIsCanvasDraggable,
 } = gameState.actions
 
 export default gameState.reducer
