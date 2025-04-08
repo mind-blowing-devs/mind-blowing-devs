@@ -25,7 +25,11 @@ export default function Profile() {
   }
 
   const handlePasswordChange = async (data: ChangePasswordData) => {
-    await userAPI.changePassword(data)
+    try {
+      await userAPI.changePassword(data)
+    } catch (error) {
+      console.log(`changing password error: ${error}`)
+    }
   }
 
   let content = (

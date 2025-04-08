@@ -54,17 +54,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const login = async (data: UserSignInData, origin: string) => {
-    await authAPI.signIn(data)
-    await getUser()
-    setIsLogged(true)
-    navigate(origin || '/', { replace: true })
+    try {
+      await authAPI.signIn(data)
+      await getUser()
+      setIsLogged(true)
+      navigate(origin || '/', { replace: true })
+    } catch (error) {
+      console.log(`login error: ${error}`)
+    }
   }
 
   const signUp = async (data: UserSignUpData) => {
-    await authAPI.signUp(data)
-    await getUser()
-    setIsLogged(true)
-    navigate('/', { replace: true })
+    try {
+      await authAPI.signUp(data)
+      await getUser()
+      setIsLogged(true)
+      navigate('/', { replace: true })
+    } catch (error) {
+      console.log(`sign up error: ${error}`)
+    }
   }
 
   const logout = async () => {
@@ -74,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLogged(false)
       navigate('/', { replace: true })
     } catch (error) {
-      console.log('logout error ', error)
+      console.log(`logout error: ${error}`)
     }
   }
 

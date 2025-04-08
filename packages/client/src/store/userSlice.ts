@@ -3,7 +3,7 @@ import {
   createSlice,
   type PayloadAction,
 } from '@reduxjs/toolkit'
-import { userAPI, type User } from '../api'
+import { type User, userAPI } from '../api'
 
 export type UserAchievements = {
   gamesPlayed: number
