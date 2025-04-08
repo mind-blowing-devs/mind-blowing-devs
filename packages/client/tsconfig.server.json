@@ -2,7 +2,7 @@
     "compilerOptions": {
       "composite": true,
       "target": "es2019",
-      "module": "node18",
+      "module": "nodenext",
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
       "lib": ["es2019", "DOM"],
