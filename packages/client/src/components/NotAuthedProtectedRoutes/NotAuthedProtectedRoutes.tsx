@@ -8,7 +8,7 @@ export default () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center w-screen h-screen">
+      <div className="flex justify-center items-center h-screen">
         <AppSpinner color={'#000'} size={20} />
       </div>
     )

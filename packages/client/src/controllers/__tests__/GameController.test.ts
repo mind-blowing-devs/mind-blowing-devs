@@ -1,11 +1,11 @@
 import GameController from '../GameController'
-import React from 'react'
+import type { CanvasExtendedPointerEvent } from '../GameController'
 
 // intermediate difficulty creates field 25*25
 const difficulty = 'intermediate'
 const fieldRows = 25
 const fieldColumns = 25
-const cellSize = 32
+const cellSize = 30
 
 // Mock Redux store
 jest.mock('../../store/store', () => ({
@@ -15,6 +15,7 @@ jest.mock('../../store/store', () => ({
         difficulty: 'intermediate',
         firstMoveMade: false,
         hoveredCell: null,
+        cellSize: 30,
       },
     })),
     dispatch: jest.fn(),
@@ -46,7 +47,7 @@ const createMockMouseEvent = (
   xPos: number,
   yPos: number,
   canvas: HTMLCanvasElement
-): React.MouseEvent<HTMLCanvasElement> => {
+): CanvasExtendedPointerEvent => {
   const event = new MouseEvent('click', {
     bubbles: true,
     cancelable: true,
@@ -61,7 +62,7 @@ const createMockMouseEvent = (
     writable: false,
   })
 
-  return event as unknown as React.MouseEvent<HTMLCanvasElement>
+  return event as unknown as CanvasExtendedPointerEvent
 }
 
 describe('Game Controller', () => {
@@ -127,7 +128,7 @@ describe('Game Controller', () => {
     )
     const mouseEvent = createMockMouseEvent(1, 0, canvas)
 
-    gameController.handleRightClick(mouseEvent)
+    gameController.handleContextMenu(mouseEvent)
 
     expect(toggleFlagEngineMethod).toBeCalledWith(0, 0)
   })
@@ -139,7 +140,7 @@ describe('Game Controller', () => {
     )
     const mouseEvent = createMockMouseEvent(257, 130, canvas)
 
-    gameController.handleRightClick(mouseEvent)
+    gameController.handleContextMenu(mouseEvent)
 
     expect(toggleFlagEngineMethod).toBeCalledWith(4, 8)
   })
@@ -155,7 +156,7 @@ describe('Game Controller', () => {
       canvas
     )
 
-    gameController.handleRightClick(mouseEvent)
+    gameController.handleContextMenu(mouseEvent)
 
     expect(toggleFlagEngineMethod).toBeCalledWith(25, 25)
   })
