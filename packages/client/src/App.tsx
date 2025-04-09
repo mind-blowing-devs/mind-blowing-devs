@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import { AuthProvider } from './hooks'
+import { AuthProvider, useLeaderboardSync } from './hooks'
 import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
 
 import {
@@ -24,6 +24,8 @@ import {
 } from './components'
 
 function App() {
+  useLeaderboardSync()
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {

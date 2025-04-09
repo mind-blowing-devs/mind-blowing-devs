@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -6,11 +6,15 @@ import {
   useAppSelector,
   useAppDispatch,
   toggleFullScreen,
+  updateAchievements,
+  increasePlayedGamesCount,
   setIsCanvasDraggable,
 } from '../../store'
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
+import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
+import { PENDING_LEADERBOARD_FIELD_NAME } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
 
 type Difficulty = RootState['gameState']['difficulty']
@@ -27,6 +31,8 @@ function Game() {
     startTime,
     finishTime,
   } = useAppSelector(state => state.gameState)
+
+  const { user, achievements } = useAppSelector(state => state.user)
 
   const dispatch = useAppDispatch()
   const screenSize = useScreenSize()
@@ -69,6 +75,60 @@ function Game() {
       gameController.generateGame()
     }
   }
+
+  const submitLeaderboardResult = async (
+    data: GameData,
+    ratingFieldName: string
+  ) => {
+    const currentResult = Number(data[ratingFieldName])
+    const previousResult = achievements.gameData[ratingFieldName]
+
+    const isNewRecord =
+      typeof previousResult !== 'number' || currentResult > previousResult
+
+    if (!isNewRecord) {
+      return
+    }
+
+    dispatch(updateAchievements({ ratingFieldName, currentResult }))
+
+    try {
+      if (!navigator.onLine) {
+        throw new Error('offline')
+      }
+      await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
+    } catch (error) {
+      // Сохраняем результат в локальное хранилище что бы не потерять
+      localStorage.setItem(
+        PENDING_LEADERBOARD_FIELD_NAME,
+        JSON.stringify({ data, ratingFieldName })
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (status === 'won' && user?.login) {
+      const ratingFieldName = getRatingFieldName(difficulty)
+
+      // Время сохраняется в секундах и используется отрацительное значение.
+      // Это необходимо для сортировки на сервере - лучшее время = меньшее время,
+      // сервер же сортирует по убыванию
+      const finish = finishTime as number
+      const timeInSeconds = Math.floor((finish - startTime) / 1000) * -1
+
+      const resultData: GameData = {
+        playerLogin: user.login,
+        ...achievements.gameData,
+        [ratingFieldName]: timeInSeconds,
+      }
+
+      submitLeaderboardResult(resultData, ratingFieldName)
+    }
+
+    if (status === 'lost') {
+      dispatch(increasePlayedGamesCount())
+    }
+  }, [status])
 
   return (
     <main className="flex flex-col items-center justify-center lg:min-h-screen lg:p-4 select-none">
