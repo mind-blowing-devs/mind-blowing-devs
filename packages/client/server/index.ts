@@ -7,9 +7,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const port = process.env.PORT || 80
+const port = process.env.PORT || 8080;
 const clientPath = path.join(__dirname, '..')
 const isDev = process.env.NODE_ENV === 'development'
+import { Request as ExpressRequest } from 'express';
 
 async function createServer() {
   const app = express()
@@ -32,10 +33,10 @@ async function createServer() {
     const url = req.originalUrl
 
     try {
-      let render: () => Promise<string>
+      let render: (req: ExpressRequest) => Promise<string>
       let template: string
 
-      if (isDev) {
+      if (vite) {
         // Получаем файл client/index.html
         template = await fs.readFile(
           path.resolve(clientPath, 'index.html'),
@@ -68,7 +69,7 @@ async function createServer() {
       }
 
       // Получаем HTML-строку из JSX
-      const appHtml = await render()
+      const appHtml = await render(req);
 
       // Заменяем комментарий на сгенерированную HTML-строку
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
@@ -76,7 +77,7 @@ async function createServer() {
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).send(html)
     } catch (e) {
-      if (isDev) vite.ssrFixStacktrace(e as Error)
+      if (vite) vite.ssrFixStacktrace(e as Error)
       next(e)
     }
   })

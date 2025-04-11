@@ -1,27 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import { AuthProvider } from './hooks'
+import { Link, useNavigate, Outlet } from 'react-router-dom'
 import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
-
-import {
-  SignUp,
-  SignIn,
-  Main,
-  Profile,
-  Forum,
-  ForumTopic,
-  CreateTopic,
-  Game,
-  Leaderboard,
-  Error404,
-  Error500,
-} from './pages'
-
-import {
-  NotAuthedProtectedRoutes,
-  AuthedProtectedRoutes,
-  ErrorBoundary,
-} from './components'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -68,8 +47,6 @@ function App() {
   }
 
   startServiceWorker()
-
-  const navigate = useNavigate()
   return (
     <div className="App font-press bg-body-color">
       <header
@@ -82,9 +59,8 @@ function App() {
           Navigation (For devs)
         </button>
         <nav
-          className={`absolute left-0 top-full w-full sm:max-w-[13rem] bg-white shadow-md transition-all duration-300 z-10 rounded ${
-            isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-          }`}>
+          className={`absolute left-0 top-full w-full sm:max-w-[13rem] bg-white shadow-md transition-all duration-300 z-10 rounded ${isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+            }`}>
           <div>
             {[
               'Forum',
@@ -109,27 +85,7 @@ function App() {
           </div>
         </nav>
       </header>
-      <ErrorBoundary navigate={navigate}>
-        <AuthProvider>
-          <Routes>
-            <Route element={<NotAuthedProtectedRoutes />}>
-              <Route index element={<Main />}></Route>
-              <Route path="/forum" element={<Forum />}></Route>
-              <Route path="/CreateTopic" element={<CreateTopic />}></Route>
-              <Route path="/forumtopic" element={<ForumTopic />}></Route>
-              <Route path="/game" element={<Game />}></Route>
-              <Route path="/leaderboard" element={<Leaderboard />}></Route>
-              <Route path="/profile" element={<Profile />}></Route>
-            </Route>
-            <Route element={<AuthedProtectedRoutes />}>
-              <Route path="/signUp" element={<SignUp />}></Route>
-              <Route path="/signin" element={<SignIn />}></Route>
-            </Route>
-            <Route path="*" element={<Error404 />}></Route>
-            <Route path="/500" element={<Error500 />}></Route>
-          </Routes>
-        </AuthProvider>
-      </ErrorBoundary>
+      <Outlet />
     </div>
   )
 }

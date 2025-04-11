@@ -4,9 +4,8 @@ import {
   useMemo,
   useEffect,
   useState,
-  ReactNode,
 } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Outlet } from 'react-router-dom'
 import { authAPI, UserSignInData, UserSignUpData } from '../api/authAPI'
 import { useAppDispatch } from '../store/store'
 import { setUser } from '../store/userSlice'
@@ -27,7 +26,7 @@ const AuthContext = createContext<AuthContextType>({
   signUp: async () => Promise.resolve(),
 })
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = () => {
   const [isLogged, setIsLogged] = useState(false)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
@@ -89,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     [isLogged, loading]
   )
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}><Outlet /></AuthContext.Provider>
 }
 
 export const useAuth = () => {
