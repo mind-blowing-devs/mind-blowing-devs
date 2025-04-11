@@ -7,7 +7,12 @@ import {
   ReactNode,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { authAPI, UserSignInData, UserSignUpData } from '../api/authAPI'
+import {
+  authAPI,
+  UserSignInData,
+  UserSignUpData,
+  OAuthYandexData,
+} from '../api/authAPI'
 import { useAppDispatch } from '../store/store'
 import { setUser } from '../store/userSlice'
 
@@ -17,7 +22,11 @@ type AuthContextType = {
   login: (data: UserSignInData, origin: string) => Promise<void>
   logout: () => Promise<void>
   signUp: (data: UserSignUpData) => Promise<void | unknown>
+  signInWithYandex: () => Promise<void>
+  handleYandexCallback: (code: string) => Promise<void>
 }
+
+const REDIRECT_URI = 'http://localhost:3000'
 
 const AuthContext = createContext<AuthContextType>({
   isLogged: false,
@@ -25,6 +34,8 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => Promise.resolve(),
   logout: async () => Promise.resolve(),
   signUp: async () => Promise.resolve(),
+  signInWithYandex: async () => Promise.resolve(),
+  handleYandexCallback: async () => Promise.resolve(),
 })
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -53,6 +64,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuthStatus()
   }, [])
 
+  // Проверка URL на наличие кода авторизации при загрузке
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const code = url.searchParams.get('code')
+
+    if (code) {
+      handleYandexCallback(code)
+        .then(() => {
+          // Удаляем code из URL после обработки
+          url.searchParams.delete('code')
+          window.history.replaceState({}, document.title, url.toString())
+        })
+        .catch(error => {
+          console.error('OAuth error:', error)
+        })
+    }
+  }, [])
+
   const login = async (data: UserSignInData, origin: string) => {
     await authAPI.signIn(data)
     await getUser()
@@ -78,6 +107,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const signInWithYandex = async () => {
+    try {
+      const serviceId = await authAPI.getYandexServiceId(REDIRECT_URI)
+      const authUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${serviceId}&redirect_uri=${REDIRECT_URI}`
+      window.location.href = authUrl
+    } catch (error) {
+      console.error('Failed to get Yandex service ID:', error)
+    }
+  }
+
+  const handleYandexCallback = async (code: string) => {
+    try {
+      const oauthData: OAuthYandexData = {
+        code,
+        redirect_uri: REDIRECT_URI,
+      }
+      await authAPI.signInWithYandex(oauthData)
+      await getUser()
+      setIsLogged(true)
+      navigate('/', { replace: true })
+    } catch (error) {
+      console.error('Failed to sign in with Yandex:', error)
+    }
+  }
+
   const value = useMemo(
     () => ({
       loading,
@@ -85,6 +139,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signUp,
       login,
       logout,
+      signInWithYandex,
+      handleYandexCallback,
     }),
     [isLogged, loading]
   )
