@@ -91,7 +91,7 @@ function SignUp() {
     mode: 'onBlur',
     reValidateMode: 'onBlur',
   })
-  const { signUp } = useAuth()
+  const { signUp, signInWithYandex } = useAuth()
   const [errorHint, setErrorHint] = useState('')
 
   const onSubmit = async (data: TSignUpSchema) => {
@@ -148,6 +148,15 @@ function SignUp() {
         {errorHint && (
           <p className="text-center text-[12px] text-red-500">{errorHint}</p>
         )}
+
+        <div className="flex justify-center mt-4">
+          <button
+            type="button"
+            onClick={signInWithYandex}
+            className="bg-[#FFCC00] hover:bg-[#FFC000] text-black px-4 py-2 text-[16px] flex items-center">
+            <span>Войти с Яндекс</span>
+          </button>
+        </div>
       </form>
 
       <div className="text-font-color mt-4 flex flex-col gap-2">
