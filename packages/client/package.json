@@ -3,12 +3,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "devSSR": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development node server/index.js",
-    "buildSSR": "tsc --project tsconfig.server.json && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "previewSSR": "node server/index.js",
+    "dev": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development node server/index.js",
+    "build": "tsc --project tsconfig.server.json && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "preview": "node server/index.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest ./"
