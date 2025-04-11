@@ -9,13 +9,12 @@ import themeReducer from './themeSlice'
 import fullScreenReducer from './fullscreenSlice'
 import userReducer from './userSlice'
 
-
 const store = configureStore({
   reducer: {
     gameState: gameState,
     theme: themeReducer,
     fullScreen: fullScreenReducer,
-    user: userReducer
+    user: userReducer,
   },
 })
 

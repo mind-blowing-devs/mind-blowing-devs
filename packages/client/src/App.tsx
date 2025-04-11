@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
+import { useLeaderboardSync } from './hooks'
 import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
 
 function App() {
+  useLeaderboardSync()
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
