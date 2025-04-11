@@ -15,6 +15,11 @@ export type UserSignInData = {
   password: string
 }
 
+export type OAuthYandexData = {
+  code: string
+  redirect_uri: string
+}
+
 class AuthAPI extends BaseAPI {
   // Temp
   async signUp(data: UserSignUpData) {
@@ -32,6 +37,17 @@ class AuthAPI extends BaseAPI {
   async checkIfAuthed(): Promise<User> {
     const { data } = await this.api.get('/auth/user')
     return data
+  }
+
+  async getYandexServiceId(redirect_uri: string): Promise<string> {
+    const { data } = await this.api.get('/oauth/yandex/service-id', {
+      params: { redirect_uri },
+    })
+    return data.service_id
+  }
+
+  async signInWithYandex(data: OAuthYandexData): Promise<void> {
+    await this.api.post('/oauth/yandex', data)
   }
 }
 
