@@ -59,13 +59,13 @@ async function createServer() {
         )
 
         // Получаем путь до модуля клиента, чтобы не тащить средства сборки клиента на сервер
-        const pathToServer = path.join(
-          pathToFileURL(clientPath).href,
-          'dist/server/entry-server.js'
-        )
+        const { href: serverIndexHtmlFileUrl } = new URL(
+          './dist/server/entry-server.js',
+          `${pathToFileURL(clientPath).href}/`
+        );
 
         // Импортируем этот модуль и вызываем с начальным состоянием
-        render = (await import(pathToServer)).render
+        render = (await import(serverIndexHtmlFileUrl)).render
       }
 
       // Получаем HTML-строку из JSX
