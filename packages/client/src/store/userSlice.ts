@@ -3,7 +3,7 @@ import {
   createSlice,
   type PayloadAction,
 } from '@reduxjs/toolkit'
-import { userAPI, type User } from '../api'
+import { changeAvatarApi, type User } from '../api'
 
 export type UserAchievements = {
   gamesPlayed: number
@@ -31,7 +31,7 @@ export const changeAvatar = createAsyncThunk(
   'user/changeAvatar',
   async (data: FormData, { rejectWithValue }) => {
     try {
-      const user = await userAPI.changeAvatar(data)
+      const user = await changeAvatarApi(data)
       return user
     } catch (error) {
       return rejectWithValue('Error durring avatar change')

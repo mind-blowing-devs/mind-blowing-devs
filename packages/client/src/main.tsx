@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider as ReduxProvider } from 'react-redux'
 import store from './store/store'
 import { ThemeProvider } from './components'
+import { AuthProvider } from './hooks'
 import App from './App'
 
 createRoot(document.getElementById('root') as HTMLElement).render(
@@ -12,7 +13,9 @@ createRoot(document.getElementById('root') as HTMLElement).render(
     <BrowserRouter>
       <ReduxProvider store={store}>
         <ThemeProvider>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </ThemeProvider>
       </ReduxProvider>
     </BrowserRouter>

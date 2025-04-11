@@ -29,7 +29,6 @@ export default function CreateTopic() {
   })
 
   const onSubmit = (data: CreateTopicFormValues) => {
-    console.log('Form Data:', data)
     alert('Not implemented')
     reset()
   }
