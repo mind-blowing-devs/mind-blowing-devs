@@ -50,7 +50,7 @@ function SignIn() {
     mode: 'onBlur',
     reValidateMode: 'onBlur',
   })
-  const { login } = useAuth()
+  const { login, signInWithYandex } = useAuth()
   const location = useLocation()
   const [errorHint, setErrorHint] = useState('')
 
@@ -110,6 +110,15 @@ function SignIn() {
         {errorHint && (
           <p className="text-center text-[12px] text-red-500">{errorHint}</p>
         )}
+
+        <div className="flex justify-center mt-4">
+          <button
+            type="button"
+            onClick={signInWithYandex}
+            className="bg-[#FFCC00] hover:bg-[#FFC000] text-black px-4 py-2 text-[16px] flex items-center">
+            <span>Войти с Яндекс</span>
+          </button>
+        </div>
       </form>
 
       <div className="text-font-color mt-4 flex flex-col gap-2">
