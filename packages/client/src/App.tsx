@@ -45,7 +45,7 @@ function App() {
   }, [])
 
   const startServiceWorker = () => {
-    if ('serviceWorker' in navigator) {
+    if (globalThis.navigator && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker
           .register('/service-worker.js')
