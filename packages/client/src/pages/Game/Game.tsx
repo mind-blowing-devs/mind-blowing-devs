@@ -16,6 +16,7 @@ import { GameController } from '../../controllers'
 import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
 import { PENDING_LEADERBOARD_FIELD_NAME } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
+import { useNotifications } from '../../hooks/useNotifications'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -31,6 +32,8 @@ function Game() {
     startTime,
     finishTime,
   } = useAppSelector(state => state.gameState)
+
+  useNotifications(status)
 
   const { user, achievements } = useAppSelector(state => state.user)
 
