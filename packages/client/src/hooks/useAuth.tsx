@@ -7,7 +7,14 @@ import {
   ReactNode,
 } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { authAPI, UserSignInData, UserSignUpData } from '../api/authAPI'
+import {
+  checkIfAuthed,
+  logOut,
+  signIn,
+  signUpApi,
+  UserSignInData,
+  UserSignUpData,
+} from '../api/authAPI'
 import { useAppDispatch } from '../store/store'
 import { setUser } from '../store/userSlice'
 
@@ -34,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch()
 
   const getUser = async () => {
-    const user = await authAPI.checkIfAuthed()
+    const user = await checkIfAuthed()
     dispatch(setUser(user))
   }
 
@@ -55,7 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (data: UserSignInData, origin: string) => {
     try {
-      await authAPI.signIn(data)
+      await signIn(data)
       await getUser()
       setIsLogged(true)
       navigate(origin || '/', { replace: true })
@@ -66,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signUp = async (data: UserSignUpData) => {
     try {
-      await authAPI.signUp(data)
+      await signUpApi(data)
       await getUser()
       setIsLogged(true)
       navigate('/', { replace: true })
@@ -77,7 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await authAPI.logOut()
+      await logOut()
       dispatch(setUser(null))
       setIsLogged(false)
       navigate('/', { replace: true })

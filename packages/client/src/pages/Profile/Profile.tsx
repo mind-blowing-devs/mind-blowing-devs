@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
-import { type ChangePasswordData, userAPI } from '../../api'
+import { changePassword, type ChangePasswordData } from '../../api'
 import {
   Avatar,
   ProfileActions,
@@ -26,7 +26,7 @@ export default function Profile() {
 
   const handlePasswordChange = async (data: ChangePasswordData) => {
     try {
-      await userAPI.changePassword(data)
+      await changePassword(data)
     } catch (error) {
       console.log(`changing password error: ${error}`)
     }

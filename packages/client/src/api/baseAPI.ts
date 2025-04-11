@@ -1,9 +1,7 @@
 import axios from 'axios'
 
-export abstract class BaseAPI {
-  protected api = axios.create({
-    baseURL: 'https://ya-praktikum.tech/api/v2',
-    headers: { 'Content-Type': 'application/json' },
-    withCredentials: true,
-  })
-}
+export const $axios = axios.create({
+  baseURL: 'https://ya-praktikum.tech/api/v2',
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
+})

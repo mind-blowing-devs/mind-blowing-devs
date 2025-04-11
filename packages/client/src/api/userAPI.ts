@@ -1,4 +1,4 @@
-import { BaseAPI } from './baseAPI'
+import { $axios } from './baseAPI'
 
 export type User = {
   id: number
@@ -16,17 +16,15 @@ export type ChangePasswordData = {
   newPassword: string
 }
 
-class UserAPI extends BaseAPI {
-  async changeAvatar(data: FormData): Promise<User> {
-    const response = await this.api.put('/user/profile/avatar', data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-    return response.data
-  }
-
-  async changePassword(data: ChangePasswordData): Promise<void> {
-    await this.api.put('/user/password', data)
-  }
+export const changeAvatarApi = async (data: FormData): Promise<User> => {
+  const response = await $axios.put('/user/profile/avatar', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return response.data
 }
 
-export const userAPI = new UserAPI()
+export const changePassword = async (
+  data: ChangePasswordData
+): Promise<void> => {
+  return await $axios.put('/user/password', data)
+}
