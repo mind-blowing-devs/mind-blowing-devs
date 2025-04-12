@@ -7,7 +7,7 @@ type FullscreenState = {
 }
 
 const initialState: FullscreenState = {
-  isFullscreen: Boolean(document.fullscreenElement),
+  isFullscreen: Boolean(globalThis.document && document.fullscreenElement),
 }
 
 const fullScreenSlice = createSlice({

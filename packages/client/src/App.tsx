@@ -1,26 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+
+import { Link, Outlet } from 'react-router-dom'
 import { useLeaderboardSync, useAuth } from './hooks'
 import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
-
-import {
-  SignUp,
-  SignIn,
-  Main,
-  Profile,
-  Forum,
-  ForumTopic,
-  CreateTopic,
-  Game,
-  Leaderboard,
-  Error,
-} from './pages'
-
-import {
-  NotAuthedProtectedRoutes,
-  AuthedProtectedRoutes,
-  ErrorBoundary,
-} from './components'
 
 function App() {
   useLeaderboardSync()
@@ -46,7 +28,7 @@ function App() {
   }, [])
 
   const startServiceWorker = () => {
-    if ('serviceWorker' in navigator) {
+    if (globalThis.navigator && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker
           .register('/service-worker.js')
@@ -69,8 +51,6 @@ function App() {
   }
 
   startServiceWorker()
-
-  const navigate = useNavigate()
   const { isLogged } = useAuth()
 
   const privateRoutes = [
@@ -83,6 +63,7 @@ function App() {
   ]
   const publicRoutes = ['SignIn', 'SignUp']
   const errorRoutes = ['404', '500']
+
   return (
     <div className="App font-press bg-body-color">
       <header
@@ -121,25 +102,7 @@ function App() {
           </div>
         </nav>
       </header>
-      <ErrorBoundary navigate={navigate}>
-        <Routes>
-          <Route element={<NotAuthedProtectedRoutes />}>
-            <Route index element={<Main />}></Route>
-            <Route path="/forum" element={<Forum />}></Route>
-            <Route path="/CreateTopic" element={<CreateTopic />}></Route>
-            <Route path="/forumtopic" element={<ForumTopic />}></Route>
-            <Route path="/game" element={<Game />}></Route>
-            <Route path="/leaderboard" element={<Leaderboard />}></Route>
-            <Route path="/profile" element={<Profile />}></Route>
-          </Route>
-          <Route element={<AuthedProtectedRoutes />}>
-            <Route path="/signUp" element={<SignUp />}></Route>
-            <Route path="/signin" element={<SignIn />}></Route>
-          </Route>
-          <Route path="*" element={<Error errorCode="404" />}></Route>
-          <Route path="/500" element={<Error errorCode="500" />}></Route>
-        </Routes>
-      </ErrorBoundary>
+      <Outlet />
     </div>
   )
 }

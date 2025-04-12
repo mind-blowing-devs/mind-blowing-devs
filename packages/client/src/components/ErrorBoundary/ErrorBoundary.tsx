@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Outlet } from 'react-router-dom'
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -71,4 +71,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-export default ErrorBoundary
+const ErrorBoundaryWrapper = () => {
+  const navigate = useNavigate();
+  return <ErrorBoundary navigate={navigate}><Outlet /></ErrorBoundary>;
+};
+
+export default ErrorBoundaryWrapper;
