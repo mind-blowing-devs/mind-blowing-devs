@@ -40,6 +40,7 @@ function App() {
         .catch((error: string) => {
           console.log('ServiceWorker registration failed: ', error)
         })
+    }
   }, [])
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -47,8 +48,6 @@ function App() {
     setIsDropdownOpen(!isDropdownOpen)
   }
 
-
-  const navigate = useNavigate()
   const { isLogged } = useAuth()
 
   const privateRoutes = [
