@@ -1,5 +1,4 @@
-import { MenuButton } from './components'
-import { Logo } from '../../components'
+import { Logo, Button } from '../../components'
 import { useAuth } from '../../hooks'
 
 export default function Main() {
@@ -12,10 +11,38 @@ export default function Main() {
 
       <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full max-w-xl h-96 text-xs md:text-base sm:text-sm">
         <Logo />
-        <MenuButton to="/game" text="play now" label="Start a game" />
-        <MenuButton to="/leaderboard" text="leaderboard" label="Leaderboard" />
-        <MenuButton to="/profile" text="profile" label="Show my profile" />
-        <MenuButton to="/forum" text="forum" label="Open forum" />
+        <Button
+          isLink={true}
+          to="/game"
+          ariaLabel="Start a game"
+          variant="primary"
+          className="w-[256px] max-w-xs my-3 sm:my-4">
+          play now
+        </Button>
+        <Button
+          isLink={true}
+          to="/leaderboard"
+          ariaLabel="Leaderboard"
+          variant="primary"
+          className="w-[256px] max-w-xs my-3 sm:my-4">
+          leaderboard
+        </Button>
+        <Button
+          isLink={true}
+          to="/profile"
+          ariaLabel="Show my profile"
+          variant="primary"
+          className="w-[256px] max-w-xs my-3 sm:my-4">
+          profile
+        </Button>
+        <Button
+          isLink={true}
+          to="/forum"
+          ariaLabel="Open forum"
+          variant="primary"
+          className="w-[256px] max-w-xs my-3 sm:my-4">
+          forum
+        </Button>
       </div>
 
       <button
