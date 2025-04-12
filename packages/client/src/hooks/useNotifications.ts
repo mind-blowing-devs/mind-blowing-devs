@@ -2,17 +2,12 @@ import { useEffect, useRef } from 'react'
 
 export const useNotifications = (status: string) => {
   const notificationRef = useRef<Notification | null>(null)
-  const enabledRef = useRef(status === 'playing')
-
-  useEffect(() => {
-    enabledRef.current = status === 'playing'
-  }, [status])
 
   useEffect(() => {
     const handlePageLeave = () => {
       if (
         document.visibilityState === 'hidden' &&
-        enabledRef.current &&
+        status === 'playing' &&
         Notification.permission === 'granted'
       ) {
         notificationRef.current = new Notification('Minesweeper!', {
@@ -37,5 +32,5 @@ export const useNotifications = (status: string) => {
 
     return () =>
       document.removeEventListener('visibilitychange', handlePageLeave)
-  }, [])
+  }, [status])
 }
