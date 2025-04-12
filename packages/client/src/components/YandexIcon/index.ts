@@ -1,3 +1,1 @@
-import YandexIcon from './YandexIcon'
-
-export default YandexIcon
+export { default as YandexIcon } from './YandexIcon'
