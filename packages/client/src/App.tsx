@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import { Link, Outlet } from 'react-router-dom'
 import { useLeaderboardSync } from './hooks'
 import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
@@ -50,6 +51,19 @@ function App() {
   }
 
   startServiceWorker()
+  const { isLogged } = useAuth()
+
+  const privateRoutes = [
+    'Forum',
+    'ForumTopic',
+    'CreateTopic',
+    'Game',
+    'Leaderboard',
+    'Profile',
+  ]
+  const publicRoutes = ['SignIn', 'SignUp']
+  const errorRoutes = ['404', '500']
+
   return (
     <div className="App font-press bg-body-color">
       <header
@@ -65,26 +79,25 @@ function App() {
           className={`absolute left-0 top-full w-full sm:max-w-[13rem] bg-white shadow-md transition-all duration-300 z-10 rounded ${isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
             }`}>
           <div>
-            {[
-              'Forum',
-              'ForumTopic',
-              'CreateTopic',
-              'Game',
-              'Leaderboard',
-              'Profile',
-              'SignIn',
-              'SignUp',
-              '500',
-              '404',
-            ].map(page => (
-              <Link
-                key={page}
-                to={page.toLowerCase()}
-                className="block px-5 py-2 text-black hover:bg-gray-200"
-                onClick={() => setIsDropdownOpen(false)}>
-                {page}
-              </Link>
-            ))}
+            {[...privateRoutes, ...publicRoutes, ...errorRoutes].map(page => {
+              const isErrorRoute = errorRoutes.includes(page)
+
+              return isErrorRoute ||
+                (isLogged && privateRoutes.includes(page)) ||
+                (!isLogged && publicRoutes.includes(page)) ? (
+                <Link
+                  key={page}
+                  to={page.toLowerCase()}
+                  className="block px-5 py-2 text-black hover:bg-gray-200"
+                  onClick={() => setIsDropdownOpen(false)}>
+                  {page}
+                </Link>
+              ) : (
+                <h1 key={page} className="block px-5 py-2 text-gray-500">
+                  {page}
+                </h1>
+              )
+            })}
           </div>
         </nav>
       </header>

@@ -21,7 +21,6 @@ export default function ForumTopic() {
   })
 
   const onSubmit = (data: FormValues) => {
-    console.log('Form data:', data)
     alert('Not implemented')
     reset()
   }

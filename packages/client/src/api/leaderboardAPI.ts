@@ -1,5 +1,5 @@
-import { BaseAPI } from './baseAPI'
 import { RootState } from '../store'
+import { $axios } from './baseAPI'
 
 export type Difficulty = RootState['gameState']['difficulty']
 
@@ -23,9 +23,9 @@ export function getRatingFieldName(level: Difficulty): string {
   return TEAM_NAME + level
 }
 
-class LeaderboardAPI extends BaseAPI {
+class LeaderboardAPI {
   async addUserToLeaderboard(gameData: GameData, field: string): Promise<void> {
-    await this.api.post('/leaderboard', {
+    await $axios.post('/leaderboard', {
       data: gameData,
       ratingFieldName: field,
       teamName: TEAM_NAME,
@@ -36,7 +36,7 @@ class LeaderboardAPI extends BaseAPI {
     data: Partial<GetLeaderboardData>,
     signal?: AbortSignal
   ): Promise<LeaderboardData> {
-    const result = await this.api.post('/leaderboard/all', data, { signal })
+    const result = await $axios.post('/leaderboard/all', data, { signal })
     return result.data
   }
 }
