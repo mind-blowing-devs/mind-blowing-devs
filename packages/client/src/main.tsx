@@ -1,23 +1,21 @@
 import './index.css'
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
 import { Provider as ReduxProvider } from 'react-redux'
 import store from './store/store'
 import { ThemeProvider } from './components'
-import { AuthProvider } from './hooks'
-import App from './App'
+import ReactDOM from 'react-dom/client';
+import { routes } from './routes';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-createRoot(document.getElementById('root') as HTMLElement).render(
+
+const router = createBrowserRouter(routes);
+ReactDOM.hydrateRoot(document.getElementById('root') as HTMLElement,
   <StrictMode>
-    <BrowserRouter>
-      <ReduxProvider store={store}>
-        <ThemeProvider>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </ThemeProvider>
-      </ReduxProvider>
-    </BrowserRouter>
+    <ReduxProvider store={store}>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </ReduxProvider>
   </StrictMode>
-)
+);
+
