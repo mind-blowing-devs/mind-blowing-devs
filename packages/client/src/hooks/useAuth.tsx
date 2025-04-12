@@ -1,18 +1,18 @@
+import { createContext, useContext, useMemo, useEffect, useState } from 'react'
+
+import { useNavigate, Outlet } from 'react-router-dom'
 import {
-  createContext,
-  useContext,
-  useMemo,
-  useEffect,
-  useState,
-  ReactNode,
-} from 'react'
-import { useNavigate } from 'react-router-dom'
-import {
-  authAPI,
+  checkIfAuthed,
+  logOut,
+  signIn,
+  signUpApi,
+  getYandexServiceId,
+  signInWithYandex,
   UserSignInData,
   UserSignUpData,
   OAuthYandexData,
 } from '../api/authAPI'
+
 import { useAppDispatch } from '../store/store'
 import { setUser } from '../store/userSlice'
 
@@ -38,14 +38,14 @@ const AuthContext = createContext<AuthContextType>({
   handleYandexCallback: async () => Promise.resolve(),
 })
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = () => {
   const [isLogged, setIsLogged] = useState(false)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const getUser = async () => {
-    const user = await authAPI.checkIfAuthed()
+    const user = await checkIfAuthed()
     dispatch(setUser(user))
   }
 
@@ -83,33 +83,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const login = async (data: UserSignInData, origin: string) => {
-    await authAPI.signIn(data)
-    await getUser()
-    setIsLogged(true)
-    navigate(origin || '/', { replace: true })
+    try {
+      await signIn(data)
+      await getUser()
+      setIsLogged(true)
+      navigate(origin || '/', { replace: true })
+    } catch (error) {
+      console.log(`login error: ${error}`)
+    }
   }
 
   const signUp = async (data: UserSignUpData) => {
-    await authAPI.signUp(data)
-    await getUser()
-    setIsLogged(true)
-    navigate('/', { replace: true })
+    try {
+      await signUpApi(data)
+      await getUser()
+      setIsLogged(true)
+      navigate('/', { replace: true })
+    } catch (error) {
+      console.log(`sign up error: ${error}`)
+    }
   }
 
   const logout = async () => {
     try {
-      await authAPI.logOut()
+      await logOut()
       dispatch(setUser(null))
       setIsLogged(false)
       navigate('/', { replace: true })
     } catch (error) {
-      console.log('logout error ', error)
+      console.log(`logout error: ${error}`)
     }
   }
 
-  const signInWithYandex = async () => {
+  const signInWithYandexAuth = async () => {
     try {
-      const serviceId = await authAPI.getYandexServiceId(REDIRECT_URI)
+      const serviceId = await getYandexServiceId(REDIRECT_URI)
       const authUrl = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${serviceId}&redirect_uri=${REDIRECT_URI}`
       window.location.href = authUrl
     } catch (error) {
@@ -123,7 +131,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         code,
         redirect_uri: REDIRECT_URI,
       }
-      await authAPI.signInWithYandex(oauthData)
+      await signInWithYandex(oauthData)
       await getUser()
       setIsLogged(true)
       navigate('/', { replace: true })
@@ -139,13 +147,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signUp,
       login,
       logout,
-      signInWithYandex,
+      signInWithYandex: signInWithYandexAuth,
       handleYandexCallback,
     }),
     [isLogged, loading]
   )
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      <Outlet />
+    </AuthContext.Provider>
+  )
 }
 
 export const useAuth = () => {

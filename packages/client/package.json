@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "tsc --project tsconfig.server.json && cross-env NODE_ENV=development node server/index.js",
+    "build": "tsc --project tsconfig.server.json && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "preview": "node server/index.js",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest ./"
@@ -17,6 +17,7 @@
     "axios": "^1.7.9",
     "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
+    "express": "^5.1.0",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,6 +25,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "6.21.3",
     "use-debounce": "^10.0.4",
+    "vite": "^6.2.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -32,6 +34,7 @@
     "@testing-library/react": "^16.2.0",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.1.1",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-react": "^4.2.1",
@@ -44,8 +47,7 @@
     "prettier": "^2.8.8",
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.2.6",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.4"
+    "typescript": "^5.3.3"
   },
   "license": "MIT"
 }

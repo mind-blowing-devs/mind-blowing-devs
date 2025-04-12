@@ -7,7 +7,9 @@ type ThemeState = {
 }
 
 const initialState: ThemeState = {
-  theme: (localStorage.getItem('theme') as Theme) || 'classic',
+  theme:
+    (globalThis.localStorage && (localStorage.getItem('theme') as Theme)) ||
+    'classic',
 }
 
 const themeSlice = createSlice({
