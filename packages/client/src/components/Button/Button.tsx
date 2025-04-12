@@ -47,10 +47,18 @@ export default function Button({
     secondary: 'bg-[#D9D9D9] text-black hover:opacity-80 active:opacity-50',
   }
 
-  const buttonStyles = `${baseStyles} ${variantStyles[variant]} ${className}`
+  const buttonStyles = `${baseStyles} ${variantStyles[variant]} ${className} ${
+    variant === 'yandex' && icon ? 'pl-12 relative' : ''
+  }`
+
+  const iconStyles =
+    variant === 'yandex'
+      ? 'absolute left-0 top-0 h-full flex items-center justify-center px-2'
+      : ''
+
   const buttonContent = (
     <>
-      {icon && icon}
+      {icon && <span className={iconStyles}>{icon}</span>}
       {children}
     </>
   )

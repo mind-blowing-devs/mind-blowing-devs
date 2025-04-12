@@ -113,7 +113,7 @@ function SignIn() {
             onClick={signInWithYandex}
             variant="yandex"
             className="w-[240px]"
-            icon={<YandexIcon width={20} height={20} />}>
+            icon={<YandexIcon width={32} height={32} />}>
             sign in
           </Button>
         </div>
