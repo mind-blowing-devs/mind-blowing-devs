@@ -8,8 +8,7 @@ import {
   CreateTopic,
   Game,
   Leaderboard,
-  Error404,
-  Error500,
+  Error,
 } from './pages';
 import {
   NotAuthedProtectedRoutes,
@@ -39,8 +38,8 @@ export const routes = createRoutesFromElements(
           <Route path="/signUp" element={<SignUp />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>
         </Route>
-        <Route path="*" element={<Error404 />}></Route>
-        <Route path="/500" element={<Error500 />}></Route>
+        <Route path="*" element={<Error errorCode="404" />}></Route>
+        <Route path="/500" element={<Error errorCode="500" />}></Route>
       </Route>
     </Route>
   </Route>
