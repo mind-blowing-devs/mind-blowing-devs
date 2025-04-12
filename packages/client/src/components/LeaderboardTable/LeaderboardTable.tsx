@@ -38,7 +38,7 @@ export default function LeaderboardTable({
   useEffect(() => {
     const controller = new AbortController()
 
-    const requestLeaderboard = async (data: Partial<GetLeaderboardData>) => {
+    const fetchLeaderboard = async (data: Partial<GetLeaderboardData>) => {
       try {
         setIsLoading(true)
         const result = await getLeaderboard(data, controller.signal)
@@ -56,7 +56,7 @@ export default function LeaderboardTable({
       }
     }
 
-    requestLeaderboard({
+    fetchLeaderboard({
       ratingFieldName,
       cursor: 0,
       limit: 10,
