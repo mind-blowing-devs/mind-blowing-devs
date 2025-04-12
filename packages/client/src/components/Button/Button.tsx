@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 type ButtonVariant = 'primary' | 'yandex' | 'secondary'
 
-interface BaseButtonProps {
+interface IBaseButton {
   className?: string
   children: ReactNode
   disabled?: boolean
@@ -13,19 +13,19 @@ interface BaseButtonProps {
   icon?: ReactNode
 }
 
-interface LinkButtonProps extends BaseButtonProps {
+interface ILinkButton extends IBaseButton {
   isLink: true
   to: string | Partial<Path>
   onClick?: never
 }
 
-interface ActionButtonProps extends BaseButtonProps {
+interface IActionButton extends IBaseButton {
   isLink?: false
   to?: never
   onClick?: () => void
 }
 
-type ButtonProps = LinkButtonProps | ActionButtonProps
+type ButtonProps = ILinkButton | IActionButton
 
 export default function Button({
   children,
