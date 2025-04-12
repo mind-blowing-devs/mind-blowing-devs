@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { formatTime } from '../../utils'
 import {
   getRatingFieldName,
-  leaderboardAPI,
+  getLeaderboard,
   type LeaderboardData,
   type GetLeaderboardData,
   type Difficulty,
@@ -38,13 +38,10 @@ export default function LeaderboardTable({
   useEffect(() => {
     const controller = new AbortController()
 
-    const getLeaderboard = async (data: Partial<GetLeaderboardData>) => {
+    const requestLeaderboard = async (data: Partial<GetLeaderboardData>) => {
       try {
         setIsLoading(true)
-        const result = await leaderboardAPI.getLeaderboard(
-          data,
-          controller.signal
-        )
+        const result = await getLeaderboard(data, controller.signal)
         setLeaderboard(result)
       } catch (error) {
         if (axios.isCancel(error)) {
@@ -59,7 +56,7 @@ export default function LeaderboardTable({
       }
     }
 
-    getLeaderboard({
+    requestLeaderboard({
       ratingFieldName,
       cursor: 0,
       limit: 10,

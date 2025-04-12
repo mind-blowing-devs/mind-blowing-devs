@@ -13,7 +13,11 @@ import {
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
-import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
+import {
+  type GameData,
+  getRatingFieldName,
+  addUserToLeaderboard,
+} from '../../api'
 import { PENDING_LEADERBOARD_FIELD_NAME } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
 
@@ -96,7 +100,7 @@ function Game() {
       if (!navigator.onLine) {
         throw new Error('offline')
       }
-      await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
+      await addUserToLeaderboard(data, ratingFieldName)
     } catch (error) {
       // Сохраняем результат в локальное хранилище что бы не потерять
       localStorage.setItem(
