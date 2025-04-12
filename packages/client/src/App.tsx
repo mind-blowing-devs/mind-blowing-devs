@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Link, Outlet } from 'react-router-dom'
-import { useLeaderboardSync } from './hooks'
+import { useLeaderboardSync, useAuth } from './hooks'
 import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
 
 function App() {
@@ -76,8 +76,9 @@ function App() {
           Navigation (For devs)
         </button>
         <nav
-          className={`absolute left-0 top-full w-full sm:max-w-[13rem] bg-white shadow-md transition-all duration-300 z-10 rounded ${isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-            }`}>
+          className={`absolute left-0 top-full w-full sm:max-w-[13rem] bg-white shadow-md transition-all duration-300 z-10 rounded ${
+            isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          }`}>
           <div>
             {[...privateRoutes, ...publicRoutes, ...errorRoutes].map(page => {
               const isErrorRoute = errorRoutes.includes(page)
