@@ -18,7 +18,6 @@ import {
 import App from './App'
 import { AuthProvider } from './hooks'
 import { AppDispatch, RootState } from './store'
-import { createRoutesFromElements, Route } from 'react-router-dom'
 import type { RouteObject } from 'react-router-dom'
 
 export type PageInitContext = {
