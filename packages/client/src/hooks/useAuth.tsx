@@ -26,7 +26,7 @@ type AuthContextType = {
   handleYandexCallback: (code: string) => Promise<void>
 }
 
-const REDIRECT_URI = 'http://localhost:3000'
+const REDIRECT_URI = 'http://localhost:5000'
 
 const AuthContext = createContext<AuthContextType>({
   isLogged: false,

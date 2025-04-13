@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 5000
 const clientPath = path.join(__dirname, '..')
 const isDev = process.env.NODE_ENV === 'development'
 import { Request as ExpressRequest } from 'express'
