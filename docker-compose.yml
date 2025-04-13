@@ -13,8 +13,8 @@ services:
         ports:
             - "${CLIENT_PORT}:80"
         environment:
-          - CLIENT_PORT=${EXTERNAL_SERVER_URL}
-          - SERVER_PORT=${INTERNAL_SERVER_URL}
+          - CLIENT_PORT=${CLIENT_PORT}
+          - SERVER_PORT=${SERVER_PORT}
     server:
         container_name: prakticum-server
         image: prackicum-server
