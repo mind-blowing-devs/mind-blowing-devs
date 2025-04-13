@@ -4,7 +4,7 @@ import { AppInput, AppSpinner } from '../../components'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getValidationRules } from '../../utils'
-import { useAuth } from '../../hooks'
+import { useAuth, usePage } from '../../hooks'
 import { useState } from 'react'
 import { AxiosError } from 'axios'
 import { Helmet } from 'react-helmet'
@@ -93,6 +93,8 @@ function SignUp() {
     reValidateMode: 'onBlur',
   })
   const { signUp } = useAuth()
+  usePage({})
+
   const [errorHint, setErrorHint] = useState('')
 
   const onSubmit = async (data: TSignUpSchema) => {

@@ -3,12 +3,15 @@ import { useState } from 'react'
 import { LeaderboardTable } from '../../components'
 import { useAppSelector } from '../../store'
 import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const selectOptions = ['beginner', 'intermediate', 'expert']
 
 export default function Leaderboard() {
   const { difficulty } = useAppSelector(state => state.gameState)
   const [level, setLevel] = useState(difficulty)
+
+  usePage({})
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">

@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const schema = z.object({
   topicTitle: z
@@ -28,6 +29,7 @@ export default function CreateTopic() {
   } = useForm({
     resolver: zodResolver(schema),
   })
+  usePage({})
 
   const onSubmit = (data: CreateTopicFormValues) => {
     alert('Not implemented')

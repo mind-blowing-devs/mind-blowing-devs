@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const schema = z.object({
   comment: z.string().min(1, 'Reply is required'),
@@ -20,6 +21,8 @@ export default function ForumTopic() {
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
+
+  usePage({})
 
   const onSubmit = (data: FormValues) => {
     alert('Not implemented')

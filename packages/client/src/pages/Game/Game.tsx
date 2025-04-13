@@ -14,7 +14,7 @@ import {
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
 import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
-import { PENDING_LEADERBOARD_FIELD_NAME } from '../../hooks'
+import { PENDING_LEADERBOARD_FIELD_NAME, usePage } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
 import { Helmet } from 'react-helmet'
 
@@ -32,6 +32,7 @@ function Game() {
     startTime,
     finishTime,
   } = useAppSelector(state => state.gameState)
+  usePage({})
 
   const { user, achievements } = useAppSelector(state => state.user)
 

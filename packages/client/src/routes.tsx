@@ -31,15 +31,20 @@ export type PageInitArgs = {
   ctx: PageInitContext
 }
 
+// Add fetchData filed to a page for preloading state on the server
+// Preloader should be defined in a (page.tsx) and be imported here
+// Спринт 9/11: Спринт 7 → Тема 4/8: Server Side Rendering → Урок 7/12: Redux и серверный роутинг
+// https://practicum.yandex.ru/trainer/middle-frontend/lesson/a0677cf8-5ce7-4100-bfa8-26a8c75e11eb/#d8f8e0b0-fa84-4687-95bc-9cf5c74b1d44
+
 export const routes: RouteObject[] = [
   {
     element: <ErrorBoundary />,
     children: [
       {
-        element: <App />,
+        element: <AuthProvider />,
         children: [
           {
-            element: <AuthProvider />,
+            element: <App />,
             children: [
               {
                 element: <NotAuthedProtectedRoutes />,
@@ -102,27 +107,3 @@ export const routes: RouteObject[] = [
     ],
   },
 ]
-
-export const deprecatedRoutes = createRoutesFromElements(
-  <Route element={<ErrorBoundary />}>
-    <Route element={<App />}>
-      <Route element={<AuthProvider />}>
-        <Route element={<NotAuthedProtectedRoutes />}>
-          <Route index element={<Main />}></Route>
-          <Route path="/forum" element={<Forum />}></Route>
-          <Route path="/CreateTopic" element={<CreateTopic />}></Route>
-          <Route path="/forumtopic" element={<ForumTopic />}></Route>
-          <Route path="/game" element={<Game />}></Route>
-          <Route path="/leaderboard" element={<Leaderboard />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
-        </Route>
-        <Route element={<AuthedProtectedRoutes />}>
-          <Route path="/signUp" element={<SignUp />}></Route>
-          <Route path="/signin" element={<SignIn />}></Route>
-        </Route>
-        <Route path="*" element={<Error errorCode="404" />}></Route>
-        <Route path="/500" element={<Error errorCode="500" />}></Route>
-      </Route>
-    </Route>
-  </Route>
-)

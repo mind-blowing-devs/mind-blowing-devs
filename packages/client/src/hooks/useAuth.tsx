@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, useContext, useMemo, useEffect, useState } from 'react'
 
 import { useNavigate, Outlet } from 'react-router-dom'
 import {
@@ -105,7 +99,11 @@ export const AuthProvider = () => {
     [isLogged, loading]
   )
 
-  return <AuthContext.Provider value={value}><Outlet /></AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      <Outlet />
+    </AuthContext.Provider>
+  )
 }
 
 export const useAuth = () => {

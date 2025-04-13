@@ -8,7 +8,7 @@ import {
   ChangePassword,
 } from './components'
 import { useAppSelector, useAppDispatch, changeAvatar } from '../../store'
-import { useAuth } from '../../hooks'
+import { useAuth, usePage } from '../../hooks'
 import { Helmet } from 'react-helmet'
 
 export default function Profile() {
@@ -16,6 +16,8 @@ export default function Profile() {
   const { logout } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const { user, achievements } = useAppSelector(state => state.user)
+
+  usePage({})
 
   const editParam = searchParams.get('edit')
   const isEditPassword = editParam === 'password'

@@ -1,10 +1,12 @@
 import { MenuButton } from './components'
 import { Logo } from '../../components'
-import { useAuth } from '../../hooks'
+import { useAuth, usePage } from '../../hooks'
 import { Helmet } from 'react-helmet'
 
 export default function Main() {
   const { logout } = useAuth()
+  usePage({})
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
       <Helmet>

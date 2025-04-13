@@ -3,6 +3,7 @@ import {
   type TypedUseSelectorHook,
   useSelector,
   useDispatch,
+  useStore as useStoreBase,
 } from 'react-redux'
 import gameState from './gameState'
 import themeReducer from './themeSlice'
@@ -43,5 +44,6 @@ export type AppDispatch = typeof store.dispatch
 // Typed hooks
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+export const useStore: () => typeof store = useStoreBase
 
 export default store

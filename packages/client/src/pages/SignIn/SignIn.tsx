@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getValidationRules } from '../../utils'
-import { useAuth } from '../../hooks'
+import { useAuth, usePage } from '../../hooks'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -52,6 +52,8 @@ function SignIn() {
     reValidateMode: 'onBlur',
   })
   const { login } = useAuth()
+  usePage({})
+
   const location = useLocation()
   const [errorHint, setErrorHint] = useState('')
 

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Filter, TopicsList, type TopicItemProps } from './components'
 import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const mockData: TopicItemProps[] = [
   {
@@ -34,6 +35,8 @@ const mockData: TopicItemProps[] = [
 ]
 
 export default function Forum() {
+  usePage({})
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
       <Helmet>

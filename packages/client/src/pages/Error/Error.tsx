@@ -1,8 +1,11 @@
 import { Logo } from '../../components'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 export default function Error({ errorCode }: ErrorPageProps) {
+  usePage({})
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
       <Helmet>
