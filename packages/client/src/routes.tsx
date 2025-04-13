@@ -9,20 +9,102 @@ import {
   Game,
   Leaderboard,
   Error,
-} from './pages';
+} from './pages'
 import {
   NotAuthedProtectedRoutes,
   AuthedProtectedRoutes,
   ErrorBoundary,
-
-} from './components';
-import App from './App';
-import { AuthProvider } from './hooks';
+} from './components'
+import App from './App'
+import { AuthProvider } from './hooks'
+import { AppDispatch, RootState } from './store'
 import { createRoutesFromElements, Route } from 'react-router-dom'
+import type { RouteObject } from 'react-router-dom'
 
+export type PageInitContext = {
+  clientToken?: string
+}
 
-export const routes = createRoutesFromElements(
-  <Route element={<ErrorBoundary />} >
+export type PageInitArgs = {
+  dispatch: AppDispatch
+  state: RootState
+  ctx: PageInitContext
+}
+
+export const routes: RouteObject[] = [
+  {
+    element: <ErrorBoundary />,
+    children: [
+      {
+        element: <App />,
+        children: [
+          {
+            element: <AuthProvider />,
+            children: [
+              {
+                element: <NotAuthedProtectedRoutes />,
+                children: [
+                  {
+                    index: true,
+                    element: <Main />,
+                  },
+                  {
+                    path: '/forum',
+                    element: <Forum />,
+                  },
+                  {
+                    path: '/CreateTopic',
+                    element: <CreateTopic />,
+                  },
+                  {
+                    path: '/forumtopic',
+                    element: <ForumTopic />,
+                  },
+                  {
+                    path: '/game',
+                    element: <Game />,
+                  },
+                  {
+                    path: '/leaderboard',
+                    element: <Leaderboard />,
+                  },
+                  {
+                    path: '/profile',
+                    element: <Profile />,
+                  },
+                ],
+              },
+              {
+                element: <AuthedProtectedRoutes />,
+                children: [
+                  {
+                    path: '/signUp',
+                    element: <SignUp />,
+                  },
+                  {
+                    path: '/signin',
+                    element: <SignIn />,
+                  },
+                ],
+              },
+              {
+                path: '*',
+                element: <Error errorCode="404" />,
+              },
+              {
+                path: '/500',
+                element: <Error errorCode="500" />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]
+
+export const deprecatedRoutes = createRoutesFromElements(
+  <Route element={<ErrorBoundary />}>
     <Route element={<App />}>
       <Route element={<AuthProvider />}>
         <Route element={<NotAuthedProtectedRoutes />}>
@@ -43,4 +125,4 @@ export const routes = createRoutesFromElements(
       </Route>
     </Route>
   </Route>
-);
+)

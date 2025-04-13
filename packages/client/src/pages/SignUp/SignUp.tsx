@@ -7,6 +7,7 @@ import { getValidationRules } from '../../utils'
 import { useAuth } from '../../hooks'
 import { useState } from 'react'
 import { AxiosError } from 'axios'
+import { Helmet } from 'react-helmet'
 
 type PageInput = {
   name:
@@ -112,6 +113,13 @@ function SignUp() {
 
   return (
     <main className="h-[100%] flex flex-col items-center justify-center gap-10 pt-[5rem] pb-[5rem] w-full">
+      <Helmet>
+        <title>Create your account / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Let's begin Minesweeper Adventure! Sign in or create an account to start sweeping mines!"
+        />
+      </Helmet>
       <h1 className="text-font-color mb-4 max-w-[30rem] text-center">
         Create your account to start sweeping mines!
       </h1>

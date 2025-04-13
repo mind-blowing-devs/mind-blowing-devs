@@ -2,15 +2,19 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
 import fs from 'fs/promises'
-import path from 'path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import path from 'node:path'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
+import serialize from 'serialize-javascript'
+import type { HelmetData } from 'react-helmet'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const port = process.env.PORT || 8080;
+// We cannot use global __dirname since the output file is not a commonjs format
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const port = process.env.PORT || 8080
 const clientPath = path.join(__dirname, '..')
 const isDev = process.env.NODE_ENV === 'development'
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest } from 'express'
 
 async function createServer() {
   const app = express()
@@ -33,7 +37,9 @@ async function createServer() {
     const url = req.originalUrl
 
     try {
-      let render: (req: ExpressRequest) => Promise<string>
+      let render: (
+        req: ExpressRequest
+      ) => Promise<{ html: string; initialState: unknown; helmet: HelmetData }>
       let template: string
 
       if (vite) {
@@ -47,32 +53,40 @@ async function createServer() {
         template = await vite.transformIndexHtml(url, template)
 
         // Загружаем модуль клиента, он будет рендерить HTML-код
-        const ssrLoadModuleRes = await vite.ssrLoadModule(
-          path.join(clientPath, 'src/entry-server.tsx')
-        )
-
-        render = ssrLoadModuleRes.render
+        render = (
+          await vite.ssrLoadModule(
+            path.join(clientPath, 'src/entry-server.tsx')
+          )
+        ).render
       } else {
         template = await fs.readFile(
           path.join(clientPath, 'dist/client/index.html'),
           'utf-8'
         )
 
-        // Получаем путь до модуля клиента, чтобы не тащить средства сборки клиента на сервер
-        const { href: serverIndexHtmlFileUrl } = new URL(
-          './dist/server/entry-server.js',
-          `${pathToFileURL(clientPath).href}/`
-        );
-
         // Импортируем этот модуль и вызываем с начальным состоянием
-        render = (await import(serverIndexHtmlFileUrl)).render
+        // entryPath fixes import since we cannot use default ones or __dirname
+        const entryPath = pathToFileURL(
+          path.join(clientPath, 'dist/server/entry-server.js')
+        ).href
+        render = (await import(entryPath)).render
       }
 
-      // Получаем HTML-строку из JSX
-      const appHtml = await render(req);
+      const { html: appHtml, initialState, helmet } = await render(req)
 
       // Заменяем комментарий на сгенерированную HTML-строку
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml)
+      const html = template
+        .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(
+          `<!--ssr-helmet-->`,
+          `${helmet.meta.toString()} ${helmet.title.toString()} ${helmet.link.toString()}`
+        )
+        .replace(
+          `<!--ssr-initial-state-->`,
+          `<script>window.REDUX_INITIAL_STATE = ${serialize(initialState, {
+            isJSON: true,
+          })}</script>`
+        )
 
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).send(html)

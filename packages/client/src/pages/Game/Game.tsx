@@ -16,6 +16,7 @@ import { GameController } from '../../controllers'
 import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
 import { PENDING_LEADERBOARD_FIELD_NAME } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
+import { Helmet } from 'react-helmet'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -132,6 +133,13 @@ function Game() {
 
   return (
     <main className="flex flex-col items-center justify-center lg:min-h-screen lg:p-4 select-none">
+      <Helmet>
+        <title>Play Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Minesweeper is a logic puzzle video game genre generally played on personal computers. The game features a grid of clickable tiles, with hidden mines (depicted as naval mines in the original game) dispersed throughout the board. The objective is to clear the board without detonating any mines, with help from clues about the number of neighboring mines in each field."
+        />
+      </Helmet>
       <div className="text-center pb-4 hidden lg:block">
         <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] lg:mb-[72px] sm:text-xl text-center text-font-color">
           Every click counts! Can you beat the minefield?

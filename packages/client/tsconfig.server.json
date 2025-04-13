@@ -8,4 +8,4 @@
       "lib": ["es2019", "DOM"],
     },
     "include": ["server/index.ts"]
-  } 
+  }

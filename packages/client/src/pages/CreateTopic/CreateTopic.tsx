@@ -3,6 +3,7 @@ import { TitleInput, DescriptionInput, CategoryInput } from './components'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Helmet } from 'react-helmet'
 
 const schema = z.object({
   topicTitle: z
@@ -35,6 +36,13 @@ export default function CreateTopic() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
+      <Helmet>
+        <title>Create a Topic / Forum</title>
+        <meta
+          name="description"
+          content="Create any Topic regarding Mind-blowing_Devs or Minesweeper Adventure game!"
+        />
+      </Helmet>
       <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
         Minesweeper Forum
       </h1>

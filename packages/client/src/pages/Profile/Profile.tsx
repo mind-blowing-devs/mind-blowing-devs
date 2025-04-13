@@ -9,6 +9,7 @@ import {
 } from './components'
 import { useAppSelector, useAppDispatch, changeAvatar } from '../../store'
 import { useAuth } from '../../hooks'
+import { Helmet } from 'react-helmet'
 
 export default function Profile() {
   const dispatch = useAppDispatch()
@@ -39,7 +40,7 @@ export default function Profile() {
     />
   )
 
-  let heading = 'Profile'
+  let heading = 'My Profile'
 
   if (isEditPassword) {
     content = <ChangePassword onPasswordChange={handlePasswordChange} />
@@ -51,6 +52,13 @@ export default function Profile() {
 
   return (
     <main className="flex flex-col items-center min-h-screen p-4 sm:p-6">
+      <Helmet>
+        <title>{heading} / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Change your appearance by editing your name or changing avatar. You can change your password as well if you want more safety!"
+        />
+      </Helmet>
       <h1 className="mt-2 sm:text-xl text-font-color">{heading}</h1>
       <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 w-full max-w-xl text-xs sm:text-sm md:text-base">
         <Avatar avatar={user?.avatar ?? null} />

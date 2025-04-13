@@ -13,8 +13,8 @@ services:
         ports:
             - "${CLIENT_PORT}:80"
         environment:
-          - CLIENT_PORT=${CLIENT_PORT}
-          - SERVER_PORT=${SERVER_PORT}
+          - CLIENT_PORT=${EXTERNAL_SERVER_URL}
+          - SERVER_PORT=${INTERNAL_SERVER_URL}
     server:
         container_name: prakticum-server
         image: prackicum-server
@@ -30,7 +30,7 @@ services:
           SERVER_PORT: ${SERVER_PORT}
 
     postgres:
-      image: postgres:14     
+      image: postgres:14
       ports:
         - "${POSTGRES_PORT}:${POSTGRES_PORT}"
       environment:
