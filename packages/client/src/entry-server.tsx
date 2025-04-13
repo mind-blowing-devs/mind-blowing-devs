@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/server'
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest } from 'express'
 import { StrictMode } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import store from './store/store'
@@ -9,19 +9,18 @@ import {
   createStaticHandler,
   createStaticRouter,
   StaticRouterProvider,
-} from 'react-router-dom/server';
+} from 'react-router-dom/server'
 
 import { createFetchRequest } from './entry.server.utils'
 
-
 export const render = async (req: ExpressRequest) => {
-  const { query, dataRoutes } = createStaticHandler(routes);
+  const { query, dataRoutes } = createStaticHandler(routes)
 
   // 2. Создаёт node Request из ExpressRequest
-  const fetchRequest = createFetchRequest(req);
+  const fetchRequest = createFetchRequest(req)
 
   // 3. Создаёт контекст для роутера, в нем будет находиться информация, которая доступна на клиенте «из коробки»
-  const context = await query(fetchRequest);
+  const context = await query(fetchRequest)
 
   // 4. Если context — это Response, то приходит к выводу, что сейчас идёт процесс редиректа и поэтому выбрасывает исключение.
   if (context instanceof Response) {
@@ -29,7 +28,6 @@ export const render = async (req: ExpressRequest) => {
   }
 
   const router = createStaticRouter(dataRoutes, context)
-
 
   return ReactDOM.renderToString(
     <StrictMode>
@@ -39,5 +37,5 @@ export const render = async (req: ExpressRequest) => {
         </ThemeProvider>
       </ReduxProvider>
     </StrictMode>
-  );
+  )
 }

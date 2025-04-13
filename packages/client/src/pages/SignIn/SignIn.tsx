@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { AppInput, AppSpinner } from '../../components'
+import { AppInput, AppSpinner, Button, YandexIcon } from '../../components'
 import { Link, useLocation } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -50,7 +50,7 @@ function SignIn() {
     mode: 'onBlur',
     reValidateMode: 'onBlur',
   })
-  const { login } = useAuth()
+  const { login, signInWithYandex } = useAuth()
   const location = useLocation()
   const [errorHint, setErrorHint] = useState('')
 
@@ -93,22 +93,35 @@ function SignIn() {
           ))}
         </div>
 
-        {!isSubmitting ? (
-          <div className="flex justify-center">
-            <button
+        <div className="flex flex-col items-center gap-4">
+          {!isSubmitting ? (
+            <Button
+              type="submit"
               disabled={isSubmitting}
-              className="bg-black text-white w-fit px-2 text-[20px]">
+              variant="primary"
+              className="w-[240px]">
               start game
-            </button>
-          </div>
-        ) : (
-          <div className="flex justify-center">
-            <AppSpinner color={'#000'} />
-          </div>
-        )}
+            </Button>
+          ) : (
+            <div className="h-[52px] flex items-center">
+              <AppSpinner color={'#000'} />
+            </div>
+          )}
+
+          <Button
+            type="button"
+            onClick={signInWithYandex}
+            variant="yandex"
+            className="w-[240px]"
+            icon={<YandexIcon width={32} height={32} />}>
+            sign in
+          </Button>
+        </div>
 
         {errorHint && (
-          <p className="text-center text-[12px] text-red-500">{errorHint}</p>
+          <p className="text-center text-[12px] text-red-500 mt-4">
+            {errorHint}
+          </p>
         )}
       </form>
 

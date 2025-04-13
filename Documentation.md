@@ -1,23 +1,26 @@
 # Техническая документация: Minesweeper game
 
 ## 1. Общая информация
+
 Minesweeper game — это классическая 2D-игра с разными уровнями сложности. Разработка ведётся с использованием современных технологий, включая React, TypeScript, Vite, Redux и Canvas API. Бэкенд реализован на Node.js с PostgreSQL и Sequelize. Игра имеет доску рекордов и встроенные форумы для обсуждения.
 
 ### Клиентская часть
+
 - [Технологии](#21-технологии)
 - [Архитектура игры](#23-архитектура-игры)
 - [Общие концепции ахитектуры игры](#component-interaction-summary)
 - [Архитектура сетевых клиентов](#24-Сетевой-клиент)
 
 ### Серверная часть
+
 - [Технологии](#31-технологии)
 - [API эндпоинты](#32-API-эндпоинты)
 
 ### Дальнейшие шаги
+
 - [Безопасность](#4-Безопасность)
 - [Развёртывание](#5-Развёртывание)
 - [Дальнейшее развитие](#6-Дальнейшее-развитие)
-
 
 ---
 
@@ -31,7 +34,9 @@ Minesweeper game — это классическая 2D-игра с разным
 ---
 
 ## 2. Клиентская часть приложения
+
 ### 2.1 Технологии
+
 - **React** (фреймворк для построения пользовательского интерфейса)
 - **React Router** (routing)
 - **Redux Toolkit** (state manager)
@@ -56,16 +61,19 @@ Minesweeper game — это классическая 2D-игра с разным
 ### 2.3 Архитектура игры
 
 ### GameBoard.tsx (Компонент рендера игрового поля)
+
 - Отрисовывает поле с помощью **Canvas API**
 - Подписывается на глобальное состояние Redux (`CellData[][]`)
 - Делегирует события кликов в `GameController.ts`
 
 ### GameController.ts (Компонент управления игрой)
+
 - Обрабатывает пользовательские взаимодействия
 - Обновляет глобальное состояние **Redux** на основе данных из GameEngine.ts
 - Связывает UI и игровую логику
 
 ### GameEngine.ts (Игровая логика)
+
 - Управляет расстановкой мин, открытием клеток и постановкой флагов
 - Обрабатывает игровые события, включая завершение игры
 - Содержит алгоритмы генерации и обновления игрового поля
@@ -73,9 +81,11 @@ Minesweeper game — это классическая 2D-игра с разным
 ## GameBoard.tsx
 
 ### **React component: `GameBoard`**
+
 Ответственнен за render игрового поля с помощью Canvas API.
 
 ### **State**
+
 - Подписывается на global Redux game state (`CellData[][]`).
 
 ### **Methods**
@@ -87,16 +97,19 @@ Minesweeper game — это классическая 2D-игра с разным
 **`onRightClick(x: number, y: number): void`** - Вызывается при правом клике на клетку, делегирует действие `GameController.ts`
 
 ### **Event Handling**
+
 - Пользовательские клики обрабатываются в `GameController.ts`. `GameBoard.tsx` отражает только изменения из state.
 
 ## GameController.ts
 
 ### **Component: `GameController`**
+
 Обрабатывает пользовательские взаимодействия, вызывая соответствующие интерфейсы в `GameEngine`.
 Также обновляет global state, после получения измененного состояния от `GameEngine`.
 Выступает связующим звеном между UI и игровой логикой.
 
 ### **State**
+
 - Использует Redux для обновления global game state (`CellData[][]`).
 
 ### **Event Handlers**
@@ -110,22 +123,27 @@ Minesweeper game — это классическая 2D-игра с разным
 ## GameEngine.ts
 
 ### **Class: `GameEngine`**
+
 Содержит игровую логику, такую как: расстановку мин, раскрытие клеток и расстановку флагов, содержит методы для управления `GameBoard.tsx`.
 
 ### **Constructor**
+
 ```ts
 constructor(rows: number, cols: number, mines: number)
 ```
+
 Создает игровое поле с рандомно расположенными минами.
 
 ### **Methods**
 
 **`revealCell(x: number, y: number): GameState`** - Открывает клетку по координатам.
+
 - Игнорирует клетки с флагами.
 - Если клетка рядом не содержит мины, процесс повторится для нее (recursively), и так до клетки с миной.
 - Триггерит game-over state если клетка с миной.
 
 **`toggleFlag(x: number, y: number): GameState`** - Ставит/убирает flag с клетки.
+
 - Флаг можно поставить только на нераскрытую клетку.
 
 **`isGameOver(): boolean`** - Проиграна ли игра
@@ -133,16 +151,18 @@ constructor(rows: number, cols: number, mines: number)
 **`getState(): GameState`** - Возвращает текущее состояние игры
 
 ### **Interface: `CellData`**
+
 ```ts
 interface CellData {
-    isRevealed: boolean;
-    isMine: boolean;
-    isFlagged: boolean;
-    surroundingMines: number; // Number of mines connected to the emptyCell (3x3 around)
+  isRevealed: boolean
+  isMine: boolean
+  isFlagged: boolean
+  surroundingMines: number // Number of mines connected to the emptyCell (3x3 around)
 }
 ```
 
 ### **Type: `GameState`**
+
 ```ts
 type GameState = CellData[][] // Game Fielld 2D representation
 ```
@@ -161,26 +181,40 @@ type GameState = CellData[][] // Game Fielld 2D representation
 ---
 
 ### 2.4 Сетевой клиент
+
 Работа с сетевыми запросами делится на `Controllers` и `APIs`.
+
 - `APIs` — Делают только сетевые запросы. Они должны вернуть данные, полученные после запроса, никак не обрабатывая их.
-Имеют интерфейсы `create`, `request`, `update`, `delete` и используются контроллерами.
-Хранятся в папке `/api` находящиеся в корневой папке с ресурсами, или в папке с компонентом (если API специфичный и используется только этим компонентом). Примеры названий `UserApi.ts`, `AvatarApi.ts`.
+  Имеют интерфейсы `create`, `request`, `update`, `delete` и используются контроллерами.
+  Хранятся в папке `/api` находящиеся в корневой папке с ресурсами, или в папке с компонентом (если API специфичный и используется только этим компонентом). Примеры названий `UserApi.ts`, `AvatarApi.ts`.
 - `Controllers` — Работают с данными и обновляют state. Используют `APIs` для получения данных с сервера.
-Методы контроллера часто вызываются UI-компонентом или другим контроллером.
-Хранятся в папке `/сontrollers` находящиеся в корневой папке с ресурсами, или в папке с компонентом (если controller специфичный и используется только этим компонентом). Примеры названий `SessionController.ts`, `ProfileController.ts`.
+  Методы контроллера часто вызываются UI-компонентом или другим контроллером.
+  Хранятся в папке `/сontrollers` находящиеся в корневой папке с ресурсами, или в папке с компонентом (если controller специфичный и используется только этим компонентом). Примеры названий `SessionController.ts`, `ProfileController.ts`.
 
 ![requests_architecture_representation](images/request-architecture.png)
 
 ---
 
 ### 2.5 Авторизация
+
 После успешной авторизации `AuthController` должен обновить статус авторизации в global state.
 React Router должен ориентироваться на global state и после изменения статуса разрешать пользователю открывать страницы, требующие авторизации.
+
+#### OAuth авторизация через Яндекс
+
+**Клиентская часть:**
+
+- Использование API Яндекс.Практикума для OAuth-авторизации
+- Получение service_id через `/oauth/yandex/service-id`
+- Обмен кода авторизации через `/oauth/yandex`
+- Локальная разработка с использованием `http://localhost:3000`
 
 ---
 
 ## 3. Серверная часть
+
 ### 3.1 Технологии
+
 - **Node.js** (серверная среда выполнения JavaScript)
 - **Express.js** (фреймворк для API)
 - **PostgreSQL** (реляционная база данных)
@@ -188,51 +222,60 @@ React Router должен ориентироваться на global state и п
 - **OAuth** (аутентификация пользователей)
 
 ### 3.2 API-эндпоинты
+
 #### Пользовательская аутентификация
+
 - `POST /api/auth/register` — регистрация пользователя.
 - `POST /api/auth/login` — вход в систему.
 - `POST /api/auth/logout` — выход из системы.
 
 #### Профиль
+
 - `GET /api/user` — получение данных о пользователе.
 - `PUT /api/user` — обновление профиля.
 - `PUT /api/avatar` — загрузка нового аватара.
 - `DELETE /api/avatar` — удаление аватара.
 
 #### Лидерборд
+
 - `GET /api/leaderboard` — получение списка лидеров.
 - `POST /api/leaderboard` — добавление нового рекорда.
 
 #### Форум
+
 - `GET /api/forum/topics` — полученить список тем форума.
 - `POST /api/forum/topics` — создание новой темы.
 - `POST /api/forum/topics/{topic_id}/comment` — добавление комментария.
 
 ### 3.3 Пример API-контроллера
-```ts
-import express from 'express';
-import { getLeaderboard } from '../services/leaderboardService';
 
-const router = express.Router();
+```ts
+import express from 'express'
+import { getLeaderboard } from '../services/leaderboardService'
+
+const router = express.Router()
 
 router.get('/leaderboard', async (req, res) => {
-  const leaderboard = await getLeaderboard();
-  res.json(leaderboard);
-});
+  const leaderboard = await getLeaderboard()
+  res.json(leaderboard)
+})
 
-export default router;
+export default router
 ```
 
 ## 4. Безопасность
+
 - **OAuth** для аутентификации.
 - **Защита от XSS и SQL-инъекций**.
 - **CSP** для предотвращения внедрения вредоносных скриптов.
 
 ## 5. Развёртывание
+
 - Проект хостится на Yandex.Cloud.
 - Nginx настроен с поддержкой HTTP/2 и HTTP/3 (QUIC), сжатие GZIP.
 
 ## 6. Дальнейшее развитие
+
 - Добавление онлайн функционала с помощью WebSocket.
 - Оптимизация UI/UX.
 - Адаптация под мобильные устройства.

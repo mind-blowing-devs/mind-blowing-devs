@@ -9,20 +9,18 @@ import {
   Game,
   Leaderboard,
   Error,
-} from './pages';
+} from './pages'
 import {
   NotAuthedProtectedRoutes,
   AuthedProtectedRoutes,
   ErrorBoundary,
-
-} from './components';
-import App from './App';
-import { AuthProvider } from './hooks';
+} from './components'
+import App from './App'
+import { AuthProvider } from './hooks'
 import { createRoutesFromElements, Route } from 'react-router-dom'
 
-
 export const routes = createRoutesFromElements(
-  <Route element={<ErrorBoundary />} >
+  <Route element={<ErrorBoundary />}>
     <Route element={<App />}>
       <Route element={<AuthProvider />}>
         <Route element={<NotAuthedProtectedRoutes />}>
@@ -43,4 +41,4 @@ export const routes = createRoutesFromElements(
       </Route>
     </Route>
   </Route>
-);
+)

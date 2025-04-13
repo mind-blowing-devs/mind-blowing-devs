@@ -7,10 +7,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5000
 const clientPath = path.join(__dirname, '..')
 const isDev = process.env.NODE_ENV === 'development'
-import { Request as ExpressRequest } from 'express';
+import { Request as ExpressRequest } from 'express'
 
 async function createServer() {
   const app = express()
@@ -62,14 +62,14 @@ async function createServer() {
         const { href: serverIndexHtmlFileUrl } = new URL(
           './dist/server/entry-server.js',
           `${pathToFileURL(clientPath).href}/`
-        );
+        )
 
         // Импортируем этот модуль и вызываем с начальным состоянием
         render = (await import(serverIndexHtmlFileUrl)).render
       }
 
       // Получаем HTML-строку из JSX
-      const appHtml = await render(req);
+      const appHtml = await render(req)
 
       // Заменяем комментарий на сгенерированную HTML-строку
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
