@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { leaderboardAPI } from '../api'
+import { addUserToLeaderboard } from '../api'
 
 export const PENDING_LEADERBOARD_FIELD_NAME = 'pendingLeaderboard'
 
@@ -15,7 +15,7 @@ export const useLeaderboardSync = () => {
       const { data, ratingFieldName } = JSON.parse(raw)
 
       try {
-        await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
+        await addUserToLeaderboard(data, ratingFieldName)
         localStorage.removeItem(PENDING_LEADERBOARD_FIELD_NAME)
       } catch (error) {
         console.error('Failed to sync leaderboard:', error)

@@ -19,26 +19,25 @@ export type GetLeaderboardData = {
 export const TEAM_NAME = 'mbd'
 
 // Creating unique field for team
-export function getRatingFieldName(level: Difficulty): string {
+export const getRatingFieldName = (level: Difficulty): string => {
   return TEAM_NAME + level
 }
 
-class LeaderboardAPI {
-  async addUserToLeaderboard(gameData: GameData, field: string): Promise<void> {
-    await $axios.post('/leaderboard', {
-      data: gameData,
-      ratingFieldName: field,
-      teamName: TEAM_NAME,
-    })
-  }
-
-  async getLeaderboard(
-    data: Partial<GetLeaderboardData>,
-    signal?: AbortSignal
-  ): Promise<LeaderboardData> {
-    const result = await $axios.post('/leaderboard/all', data, { signal })
-    return result.data
-  }
+export const addUserToLeaderboard = async (
+  gameData: GameData,
+  field: string
+): Promise<void> => {
+  await $axios.post('/leaderboard', {
+    data: gameData,
+    ratingFieldName: field,
+    teamName: TEAM_NAME,
+  })
 }
 
-export const leaderboardAPI = new LeaderboardAPI()
+export const getLeaderboard = async (
+  data: Partial<GetLeaderboardData>,
+  signal?: AbortSignal
+): Promise<LeaderboardData> => {
+  const result = await $axios.post('/leaderboard/all', data, { signal })
+  return result.data
+}
