@@ -17,8 +17,27 @@ export const getTopicById = (req: Request, res: Response) => {
   return
 }
 
-export const createTopic = (req: Request, res: Response) => {
-  const { title, author, description, category } = req.body
-  const topic = topicService.create({ title, author, description, category })
-  return res.status(201).json(topic)
+export const createTopic = async (req: Request, res: Response) => {
+  try {
+    const { title, author, description, category } = req.body
+    const topic = await topicService.create({
+      title,
+      author,
+      description,
+      category,
+    })
+    return res.status(201).json(topic)
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((error as any).name === 'SequelizeUniqueConstraintError') {
+      return res
+        .status(400)
+        .json({ reason: 'Topic with this title already exists' })
+    }
+
+    return res.status(500).json({
+      message: 'Error during topic creation',
+      error: (error as Error).message,
+    })
+  }
 }

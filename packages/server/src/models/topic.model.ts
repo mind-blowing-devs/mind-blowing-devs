@@ -1,11 +1,31 @@
-import type { Comment } from './comment.model'
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  HasMany,
+  CreatedAt,
+} from 'sequelize-typescript'
+import { Comment } from './comment.model'
 
-export interface Topic {
-  id: number
-  title: string
-  description: string
+@Table
+export class Topic extends Model {
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
+  title!: string
+
+  @Column({ type: DataType.TEXT, allowNull: false })
+  description!: string
+
+  @Column({ type: DataType.STRING, allowNull: true })
   category?: string
-  author: string
-  createdAt: Date
-  comments: Comment[]
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  author!: string
+
+  @CreatedAt
+  @Column({ type: DataType.DATE })
+  override createdAt!: Date
+
+  @HasMany(() => Comment)
+  comments!: Comment[]
 }

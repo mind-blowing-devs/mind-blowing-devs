@@ -1,28 +1,27 @@
-import { Client } from 'pg'
+import { Sequelize } from 'sequelize-typescript'
+import { Topic } from './models/topic.model'
+import { Comment } from './models/comment.model'
+import { Reply } from './models/reply.model'
+import dotenv from 'dotenv'
+dotenv.config()
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env
+export const sequelize = new Sequelize({
+  dialect: 'postgres',
+  host: 'localhost', // or service name in docker-compose in app in docker
+  port: process.env.POSTGRES_PORT ? Number(process.env.DB_PORT) : 5432,
+  database: 'user',
+  username: 'user',
+  password: 'password',
+  models: [Topic, Comment, Reply],
+})
 
-export const createClientAndConnect = async (): Promise<Client | null> => {
+export const connectDB = async () => {
   try {
-    const client = new Client({
-      user: POSTGRES_USER,
-      host: 'localhost',
-      database: POSTGRES_DB,
-      password: POSTGRES_PASSWORD,
-      port: Number(POSTGRES_PORT),
-    })
-
-    await client.connect()
-
-    const res = await client.query('SELECT NOW()')
-    console.log('  ➜ 🎸 Connected to the database at:', res?.rows?.[0].now)
-    client.end()
-
-    return client
-  } catch (e) {
-    console.error(e)
+    await sequelize.authenticate()
+    console.log('Connected to PostgreSQL!')
+    await sequelize.sync({ force: true }) // Use { force: true } to drop and recreate tables
+  } catch (error) {
+    console.error('Unable to connect to the database:', error)
+    throw error
   }
-
-  return null
 }

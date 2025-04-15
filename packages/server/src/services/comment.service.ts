@@ -1,6 +1,6 @@
-import type { Comment } from '../models/comment.model'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const comments: Comment[] = []
+const comments: any[] = []
 let idCounter = 1
 
 export const create = (data: {

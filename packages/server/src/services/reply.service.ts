@@ -1,6 +1,6 @@
-import type { Reply } from '../models/reply.model'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const replies: Reply[] = []
+const replies: any[] = []
 let idCounter = 1
 
 export const create = (data: {

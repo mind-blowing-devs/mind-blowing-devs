@@ -1,7 +1,25 @@
-export interface Reply {
-  id: number
-  commentId: number
-  body: string
-  authorId: number
-  createdAt: Date
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+} from 'sequelize-typescript'
+import { Comment } from './comment.model'
+
+@Table
+export class Reply extends Model {
+  @ForeignKey(() => Comment)
+  @Column(DataType.INTEGER)
+  commentId!: number
+
+  @Column(DataType.TEXT)
+  body!: string
+
+  @Column(DataType.INTEGER)
+  authorId!: number
+
+  @BelongsTo(() => Comment)
+  comment!: Comment
 }

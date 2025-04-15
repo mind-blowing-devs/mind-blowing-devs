@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Topic } from '../models/topic.model'
 
 export type CreateTopicData = {
@@ -7,40 +8,29 @@ export type CreateTopicData = {
   author: string
 }
 
-const topics: Topic[] = [
-  {
-    id: 1,
-    title: 'First Topic',
-    description: 'Loremg fgdjfgdkgdk',
-    category: 'General',
-    author: 'John Doe',
-    createdAt: new Date(),
-    comments: [],
-  },
-  {
-    id: 2,
-    title: 'Second Topic',
-    description: 'Loremg fgdjfgdkgdk',
-    category: 'General',
-    author: 'Jane Doe',
-    createdAt: new Date(),
-    comments: [],
-  },
-]
-let idCounter = 1
+export const getAll = async () => {
+  const topics = await Topic.findAll({
+    order: [['createdAt', 'DESC']],
+  })
 
-export const getAll = () => topics
+  return topics
+}
 
-export const getById = (id: number) => topics.find(t => t.id === id)
-
-export const create = (data: CreateTopicData) => {
-  const topic: Topic = {
-    id: idCounter++,
-    ...data,
-    category: data.category || 'General',
-    createdAt: new Date(),
-    comments: [],
+export const getById = async (id: number) => {
+  const topic = await Topic.findByPk(id)
+  if (!topic) {
+    return null
   }
-  topics.push(topic)
+  return topic
+}
+
+export const create = async (data: CreateTopicData) => {
+  const topic = await Topic.create({
+    title: data.title,
+    description: data.description,
+    author: data.author,
+    category: data.category || 'General',
+  })
+
   return topic
 }
