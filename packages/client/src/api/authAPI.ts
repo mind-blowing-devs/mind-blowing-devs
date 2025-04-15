@@ -15,6 +15,11 @@ export type UserSignInData = {
   password: string
 }
 
+export type OAuthYandexData = {
+  code: string
+  redirect_uri: string
+}
+
 export const signUpApi = async (data: UserSignUpData) => {
   return await $axios.post('/auth/signup', data)
 }
@@ -30,4 +35,19 @@ export const logOut = async (): Promise<void> => {
 export const checkIfAuthed = async (): Promise<User> => {
   const { data } = await $axios.get('/auth/user')
   return data
+}
+
+export const getYandexServiceId = async (
+  redirect_uri: string
+): Promise<string> => {
+  const { data } = await $axios.get('/oauth/yandex/service-id', {
+    params: { redirect_uri },
+  })
+  return data.service_id
+}
+
+export const signInWithYandex = async (
+  data: OAuthYandexData
+): Promise<void> => {
+  return await $axios.post('/oauth/yandex', data)
 }

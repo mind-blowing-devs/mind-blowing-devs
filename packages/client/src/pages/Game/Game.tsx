@@ -13,10 +13,15 @@ import {
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
-import { type GameData, getRatingFieldName, leaderboardAPI } from '../../api'
+import {
+  type GameData,
+  getRatingFieldName,
+  addUserToLeaderboard,
+} from '../../api'
 import { PENDING_LEADERBOARD_FIELD_NAME, usePage } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
 import { Helmet } from 'react-helmet'
+import { useNotifications } from '../../hooks/useNotifications'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -33,6 +38,8 @@ function Game() {
     finishTime,
   } = useAppSelector(state => state.gameState)
   usePage({})
+
+  useNotifications(status)
 
   const { user, achievements } = useAppSelector(state => state.user)
 
@@ -98,7 +105,7 @@ function Game() {
       if (!navigator.onLine) {
         throw new Error('offline')
       }
-      await leaderboardAPI.addUserToLeaderboard(data, ratingFieldName)
+      await addUserToLeaderboard(data, ratingFieldName)
     } catch (error) {
       // Сохраняем результат в локальное хранилище что бы не потерять
       localStorage.setItem(

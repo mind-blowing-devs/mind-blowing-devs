@@ -15,14 +15,17 @@ const initCache = async () => {
 const tryNetwork = (request, time) => {
   return new Promise((resolve, rej) => {
     const timer = setTimeout(() => rej, time)
+
     fetch(request).then(res => {
       clearTimeout(timer)
-      const responseClone = res.clone()
-      caches.open(CACHE_NAME).then(cache => {
-        if (request.url.indexOf('http') === 0) {
+
+      if (request.method === 'GET' && request.url.startsWith('http')) {
+        const responseClone = res.clone()
+        caches.open(CACHE_NAME).then(cache => {
           cache.put(request, responseClone)
-        }
-      })
+        })
+      }
+
       resolve(res)
     }, rej)
   })

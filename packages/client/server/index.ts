@@ -11,7 +11,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 // We cannot use global __dirname since the output file is not a commonjs format
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 5000
 const clientPath = path.join(__dirname, '..')
 const isDev = process.env.NODE_ENV === 'development'
 import { Request as ExpressRequest } from 'express'
