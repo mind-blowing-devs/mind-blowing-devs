@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Filter, TopicsList, type TopicItemProps } from './components'
+import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const mockData: TopicItemProps[] = [
   {
@@ -33,8 +35,17 @@ const mockData: TopicItemProps[] = [
 ]
 
 export default function Forum() {
+  usePage({})
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
+      <Helmet>
+        <title>Forum / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Welcome to Forum! You can discuss any Topic regarding Mind-blowing_Devs or Minesweeper Adventure game!"
+        />
+      </Helmet>
       <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
         Minesweeper Forum
       </h1>

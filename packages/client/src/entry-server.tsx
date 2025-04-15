@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom/server'
 import { Request as ExpressRequest } from 'express'
-import { StrictMode } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
-import store from './store/store'
+import { reducer } from './store'
 import { ThemeProvider } from './components'
 import { routes } from './routes'
 import {
@@ -11,31 +10,48 @@ import {
   StaticRouterProvider,
 } from 'react-router-dom/server'
 
-import { createFetchRequest } from './entry.server.utils'
+import { createFetchRequest, createUrl } from './entry.server.utils'
+import { Helmet } from 'react-helmet'
+import { configureStore } from '@reduxjs/toolkit'
+import { matchRoutes } from 'react-router-dom'
+import { setPageHasBeenInitializedOnServer } from './store/ssrSlice'
 
 export const render = async (req: ExpressRequest) => {
   const { query, dataRoutes } = createStaticHandler(routes)
-
-  // 2. Создаёт node Request из ExpressRequest
   const fetchRequest = createFetchRequest(req)
-
-  // 3. Создаёт контекст для роутера, в нем будет находиться информация, которая доступна на клиенте «из коробки»
   const context = await query(fetchRequest)
 
-  // 4. Если context — это Response, то приходит к выводу, что сейчас идёт процесс редиректа и поэтому выбрасывает исключение.
+  // redirect
   if (context instanceof Response) {
     throw context
   }
 
+  const store = configureStore({ reducer })
+
+  const url = createUrl(req)
+
+  const foundRoutes = matchRoutes(routes, url)
+  if (!foundRoutes) {
+    throw new Error('Route not found')
+  }
+
+  store.dispatch(setPageHasBeenInitializedOnServer(true))
+
   const router = createStaticRouter(dataRoutes, context)
 
-  return ReactDOM.renderToString(
-    <StrictMode>
-      <ReduxProvider store={store}>
-        <ThemeProvider>
-          <StaticRouterProvider router={router} context={context} />
-        </ThemeProvider>
-      </ReduxProvider>
-    </StrictMode>
+  const html = ReactDOM.renderToString(
+    <ReduxProvider store={store}>
+      <ThemeProvider>
+        <StaticRouterProvider router={router} context={context} />
+      </ThemeProvider>
+    </ReduxProvider>
   )
+
+  const helmet = Helmet.renderStatic()
+
+  return {
+    html,
+    helmet,
+    initialState: store.getState(),
+  }
 }

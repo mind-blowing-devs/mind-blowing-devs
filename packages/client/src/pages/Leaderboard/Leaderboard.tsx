@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { LeaderboardTable } from '../../components'
 import { useAppSelector } from '../../store'
+import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const selectOptions = ['beginner', 'intermediate', 'expert']
 
@@ -9,8 +11,17 @@ export default function Leaderboard() {
   const { difficulty } = useAppSelector(state => state.gameState)
   const [level, setLevel] = useState(difficulty)
 
+  usePage({})
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+      <Helmet>
+        <title>Top 10 Minesweeper Players / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Find out who managed to achieve the best score in Minesweeper game"
+        />
+      </Helmet>
       <h1 className="mt-10 sm:text-xl text-center text-font-color">
         Top 10 Minesweeper Players
       </h1>

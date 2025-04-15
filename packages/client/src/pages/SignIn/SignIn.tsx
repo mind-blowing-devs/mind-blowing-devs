@@ -4,9 +4,10 @@ import { Link, useLocation } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getValidationRules } from '../../utils'
-import { useAuth } from '../../hooks'
+import { useAuth, usePage } from '../../hooks'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
+import { Helmet } from 'react-helmet'
 
 type PageInput = {
   name: 'login' | 'password'
@@ -51,6 +52,8 @@ function SignIn() {
     reValidateMode: 'onBlur',
   })
   const { login, signInWithYandex } = useAuth()
+  usePage({})
+
   const location = useLocation()
   const [errorHint, setErrorHint] = useState('')
 
@@ -74,6 +77,13 @@ function SignIn() {
 
   return (
     <main className="w-screen h-screen flex flex-col items-center justify-center gap-10">
+      <Helmet>
+        <title>Sign in / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Let's begin Minesweeper Adventure! Sign in or create an account to start sweeping mines!"
+        />
+      </Helmet>
       <h1 className="text-font-color mb-4 max-w-[30rem] text-center">
         Log in to start your minefield adventure!
       </h1>

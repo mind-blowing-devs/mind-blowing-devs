@@ -1,9 +1,18 @@
 import { Logo } from '../../components'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 export default function Error({ errorCode }: ErrorPageProps) {
+  usePage({})
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+      <Helmet>
+        <title>
+          {errorCode} {errorCode === '500' ? 'Server Error' : 'Not Found'}
+        </title>
+      </Helmet>
       <p className="w-full max-w-[250px] sm:max-w-xl mb-[42px] sm:mb-[72px] sm:text-xl text-center text-font-color">
         {errorCode === '500'
           ? 'Oops! Something exploded on the server!'

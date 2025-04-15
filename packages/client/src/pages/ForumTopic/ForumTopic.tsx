@@ -3,6 +3,8 @@ import { CommentInput, Reply } from './components'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Helmet } from 'react-helmet'
+import { usePage } from '../../hooks'
 
 const schema = z.object({
   comment: z.string().min(1, 'Reply is required'),
@@ -20,6 +22,8 @@ export default function ForumTopic() {
     resolver: zodResolver(schema),
   })
 
+  usePage({})
+
   const onSubmit = (data: FormValues) => {
     alert('Not implemented')
     reset()
@@ -27,6 +31,10 @@ export default function ForumTopic() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
+      <Helmet>
+        <title>Topic / Minesweeper Adventure game</title>
+        <meta name="description" content="Topic description" />
+      </Helmet>
       <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
         Minesweeper Forum
       </h1>
