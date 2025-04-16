@@ -7,11 +7,11 @@ dotenv.config()
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',
-  host: 'localhost', // or service name in docker-compose in app in docker
-  port: process.env.POSTGRES_PORT ? Number(process.env.DB_PORT) : 5432,
-  database: 'user',
-  username: 'user',
-  password: 'password',
+  host: 'localhost', // or service name in docker-compose if app in docker
+  port: Number(process.env.POSTGRES_PORT),
+  database: process.env.POSTGRES_DB,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
   models: [Topic, Comment, Reply],
 })
 
