@@ -13,7 +13,7 @@ import { Reply } from './reply.model'
 @Table
 export class Comment extends Model {
   @ForeignKey(() => Topic)
-  @Column(DataType.UUID)
+  @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
   topicId!: string
 
   @Column({ type: DataType.TEXT, allowNull: false })

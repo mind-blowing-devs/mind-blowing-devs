@@ -1,3 +1,3 @@
-export const getErrorObject = (message: string): { reason: string } => {
+export function getErrorObject(message: string): { reason: string } {
   return { reason: message }
 }

@@ -11,7 +11,7 @@ import { Comment } from './comment.model'
 @Table
 export class Reply extends Model {
   @ForeignKey(() => Comment)
-  @Column(DataType.INTEGER)
+  @Column({ type: DataType.INTEGER, allowNull: false, onDelete: 'CASCADE' })
   commentId!: number
 
   @Column(DataType.TEXT)

@@ -1,10 +1,7 @@
 import express from 'express'
 import { createComment, getComments } from '../controllers'
 import { validateRequestData } from '../middlewares'
-import {
-  createCommentSchema,
-  getCommentsSchema,
-} from '../schemas/comment.schema'
+import { createCommentSchema, getCommentsSchema } from '../schemas'
 
 const router = express.Router()
 

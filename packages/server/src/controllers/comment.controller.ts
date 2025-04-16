@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express'
-import { Comment } from '../models/comment.model'
-import { Topic } from '../models/topic.model'
+import { Comment, Topic } from '../models'
 import { getErrorObject } from '../utils'
 import { sequelize } from '../db'
 
@@ -8,6 +7,12 @@ export const createComment = async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction()
   try {
     const { topicId, body, author } = req.body
+
+    const topic = await Topic.findByPk(topicId, { transaction })
+    if (!topic) {
+      await transaction.rollback()
+      return res.status(404).json(getErrorObject('topic not found'))
+    }
 
     const comment = await Comment.create(
       {

@@ -1,8 +1,7 @@
 import type { Request, Response } from 'express'
 import { getErrorObject } from '../utils'
 import { sequelize } from '../db'
-import { Comment } from '../models/comment.model'
-import { Reply } from '../models/reply.model'
+import { Comment, Reply } from '../models'
 
 export const createReply = async (req: Request, res: Response) => {
   const transaction = await sequelize.transaction()

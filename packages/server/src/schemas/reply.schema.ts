@@ -1,4 +1,4 @@
-import { Comment } from '../models/comment.model'
+import { Comment } from '../models'
 import { z } from 'zod'
 
 export const createReplySchema = z.object({

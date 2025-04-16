@@ -1,23 +1,12 @@
 import { z } from 'zod'
-import { Topic } from '../models/topic.model'
+import { Topic } from '../models'
 
 export const createCommentSchema = z.object({
   topicId: z
     .string({
       required_error: 'topicId is required',
     })
-    .uuid({ message: 'invalid topicId format' })
-    .refine(
-      async id => {
-        try {
-          const topic = await Topic.findByPk(id)
-          return !!topic
-        } catch (error) {
-          return false
-        }
-      },
-      { message: 'topic does not exist' }
-    ),
+    .uuid({ message: 'invalid topicId format' }),
   author: z
     .string({
       required_error: 'author is required',

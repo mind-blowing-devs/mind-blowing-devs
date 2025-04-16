@@ -4,9 +4,7 @@ import cors from 'cors'
 dotenv.config()
 
 import express from 'express'
-import topicRoutes from './routes/topic.routes'
-import commentRoutes from './routes/comment.routes'
-import replyRoutes from './routes/reply.routes'
+import { topicRoutes, commentRoutes, replyRoutes } from './routes'
 import { connectDB } from './db'
 
 const app = express()
