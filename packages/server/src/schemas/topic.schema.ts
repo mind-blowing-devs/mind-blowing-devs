@@ -10,6 +10,7 @@ export const createTopicSchema = z.object({
   description: z.string({
     required_error: 'description is required',
   }),
+  category: z.string().optional(),
 })
 
 export const updateTopicSchema = z
