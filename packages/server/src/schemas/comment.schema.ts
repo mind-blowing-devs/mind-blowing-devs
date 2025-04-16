@@ -32,9 +32,7 @@ export const createCommentSchema = z.object({
 
 export const getCommentsSchema = z.object({
   topicId: z
-    .string({
-      required_error: 'topicId is required',
-    })
+    .string()
     .uuid({ message: 'invalid topicId format' })
     .refine(
       async id => {

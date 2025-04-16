@@ -1,23 +1,33 @@
-import { Request, Response } from 'express'
-import * as replyService from '../services/reply.service'
+import type { Request, Response } from 'express'
+import { getErrorObject } from '../utils'
+import { sequelize } from '../db'
+import { Comment } from '../models/comment.model'
+import { Reply } from '../models/reply.model'
 
-export const createReply = (req: Request, res: Response) => {
-  const { commentId, body, authorId } = req.body
-  const reply = replyService.create({ commentId, body, authorId })
-  return res.status(201).json(reply)
-}
+export const createReply = async (req: Request, res: Response) => {
+  const transaction = await sequelize.transaction()
+  try {
+    const { commentId, body, author } = req.body
 
-export const updateReply = (req: Request, res: Response) => {
-  const id = Number(req.params.id)
-  const { body } = req.body
-  const updated = replyService.update(id, { body })
-  if (!updated) return res.status(404).json({ message: 'Reply not found' })
-  return res.json(updated)
-}
+    const reply = await Reply.create(
+      {
+        commentId,
+        body,
+        author,
+      },
+      { transaction }
+    )
 
-export const deleteReply = (req: Request, res: Response) => {
-  const id = Number(req.params.id)
-  const deleted = replyService.remove(id)
-  if (!deleted) return res.status(404).json({ message: 'Reply not found' })
-  return res.json({ message: 'Reply deleted' })
+    await Comment.increment('repliesCount', {
+      by: 1,
+      where: { id: commentId },
+      transaction,
+    })
+
+    await transaction.commit()
+    return res.status(201).json(reply)
+  } catch (error) {
+    await transaction.rollback()
+    return res.status(500).json(getErrorObject('Error adding reply'))
+  }
 }

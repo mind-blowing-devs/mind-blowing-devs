@@ -22,6 +22,9 @@ export class Comment extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   author!: string
 
+  @Column({ type: DataType.INTEGER, defaultValue: 0 })
+  repliesCount!: number
+
   @BelongsTo(() => Topic)
   topic!: Topic
 
