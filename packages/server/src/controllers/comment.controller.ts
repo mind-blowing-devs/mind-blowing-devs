@@ -1,23 +1,56 @@
-import { Request, Response } from 'express'
-import * as commentService from '../services/comment.service'
+import type { Request, Response } from 'express'
+import { Comment } from '../models/comment.model'
+import { Topic } from '../models/topic.model'
+import { getErrorObject } from '../utils'
+import { sequelize } from '../db'
 
-export const createComment = (req: Request, res: Response) => {
-  const { topicId, body, authorId } = req.body
-  const comment = commentService.create({ topicId, body, authorId })
-  return res.status(201).json(comment)
+export const createComment = async (req: Request, res: Response) => {
+  const transaction = await sequelize.transaction()
+  try {
+    const { topicId, body, author } = req.body
+
+    const comment = await Comment.create(
+      {
+        topicId,
+        body,
+        author,
+      },
+      { transaction }
+    )
+
+    await Topic.increment('commentCount', {
+      by: 1,
+      where: { id: topicId },
+      transaction,
+    })
+    await Topic.update(
+      { lastCommentAt: new Date() },
+      { where: { id: topicId }, transaction }
+    )
+
+    await transaction.commit()
+    return res.status(201).json(comment)
+  } catch (error) {
+    await transaction.rollback()
+    return res.status(500).json(getErrorObject('Error creating comment'))
+  }
 }
 
-export const updateComment = (req: Request, res: Response) => {
-  const id = Number(req.params.id)
-  const { body } = req.body
-  const updated = commentService.update(id, { body })
-  if (!updated) return res.status(404).json({ message: 'Comment not found' })
-  return res.json(updated)
-}
+export const getComments = async (req: Request, res: Response) => {
+  try {
+    const { topicId, offset, limit } = req.query
 
-export const deleteComment = (req: Request, res: Response) => {
-  const id = Number(req.params.id)
-  const deleted = commentService.remove(id)
-  if (!deleted) return res.status(404).json({ message: 'Comment not found' })
-  return res.json({ message: 'Comment deleted' })
+    const comments = await Comment.findAll({
+      where: { topicId },
+      order: [['createdAt', 'DESC']],
+      offset: parseInt(offset as string, 10),
+      limit: parseInt(limit as string, 10),
+    })
+
+    return res.json(comments)
+  } catch (error) {
+    return res
+      .status(500)
+      .json(getErrorObject('Error fetching comments for topic'))
+  }
 }

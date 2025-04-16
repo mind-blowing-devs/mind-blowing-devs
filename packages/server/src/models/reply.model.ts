@@ -17,8 +17,8 @@ export class Reply extends Model {
   @Column(DataType.TEXT)
   body!: string
 
-  @Column(DataType.INTEGER)
-  authorId!: number
+  @Column(DataType.STRING)
+  author!: string
 
   @BelongsTo(() => Comment)
   comment!: Comment

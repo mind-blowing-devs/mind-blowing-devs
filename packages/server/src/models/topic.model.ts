@@ -3,13 +3,20 @@ import {
   Column,
   Model,
   DataType,
+  PrimaryKey,
+  Default,
   HasMany,
-  CreatedAt,
 } from 'sequelize-typescript'
 import { Comment } from './comment.model'
+import { v4 as uuidv4 } from 'uuid'
 
 @Table
 export class Topic extends Model {
+  @PrimaryKey
+  @Default(uuidv4)
+  @Column({ type: DataType.UUID })
+  override id!: string
+
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   title!: string
 
@@ -22,9 +29,11 @@ export class Topic extends Model {
   @Column({ type: DataType.STRING, allowNull: false })
   author!: string
 
-  @CreatedAt
-  @Column({ type: DataType.DATE })
-  override createdAt!: Date
+  @Column({ type: DataType.INTEGER, defaultValue: 0 })
+  commentCount!: number
+
+  @Column({ type: DataType.DATE, allowNull: true })
+  lastCommentAt?: Date
 
   @HasMany(() => Comment)
   comments!: Comment[]

@@ -13,14 +13,14 @@ import { Reply } from './reply.model'
 @Table
 export class Comment extends Model {
   @ForeignKey(() => Topic)
-  @Column(DataType.INTEGER)
-  topicId!: number
+  @Column(DataType.UUID)
+  topicId!: string
 
-  @Column(DataType.TEXT)
+  @Column({ type: DataType.TEXT, allowNull: false })
   body!: string
 
-  @Column(DataType.INTEGER)
-  authorId!: number
+  @Column({ type: DataType.STRING, allowNull: false })
+  author!: string
 
   @BelongsTo(() => Topic)
   topic!: Topic

@@ -1,12 +1,12 @@
 import express from 'express'
 import { getAllTopics, getTopicById, createTopic } from '../controllers'
 import { createTopicSchema } from '../schemas/topic.schema'
-import { validateBody } from '../middlewares/validateBody'
+import { validateRequestData } from '../middlewares'
 
 const router = express.Router()
 
 router.get('/', getAllTopics)
 router.get('/:id', getTopicById)
-router.post('/', validateBody(createTopicSchema), createTopic)
+router.post('/', validateRequestData(createTopicSchema), createTopic)
 
 export default router
