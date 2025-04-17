@@ -4,33 +4,31 @@ import { sequelize } from '../db'
 import { Op } from 'sequelize'
 import { TOPIC_NOT_FOUND, COMMENT_NOT_FOUND } from '../constants'
 
-export const createComment = async ({
-  topicId,
-  body,
-  author,
-}: CreateCommentData) => {
+export const createComment = async (data: CreateCommentData) => {
   const transaction = await sequelize.transaction()
+
   try {
-    const topic = await Topic.findByPk(topicId, { transaction })
+    const topic = await Topic.findByPk(data.topicId, { transaction })
     if (!topic) {
       throw new Error(TOPIC_NOT_FOUND)
     }
 
-    const comment = await Comment.create(
+    const comment = await Comment.create(data, { transaction })
+
+    // update topic with new comment
+    await topic.update(
       {
-        topicId,
-        body,
-        author,
+        commentCount: topic.commentCount + 1,
+        lastCommentAt: comment.createdAt,
       },
       { transaction }
     )
 
-    await topic.update(
-      { commentCount: topic.commentCount + 1, lastCommentAt: new Date() },
-      { transaction }
-    )
-
     await transaction.commit()
+
+    const commentData = comment.get({ plain: true })
+    delete commentData.updatedAt
+
     return comment
   } catch (error) {
     await transaction.rollback()
@@ -43,13 +41,13 @@ export const getComments = async ({
   offset,
   limit,
 }: GetCommentsData) => {
-  const comments = await Comment.findAll({
+  return await Comment.findAll({
     where: { topicId },
     order: [['createdAt', 'DESC']],
     offset,
     limit,
+    attributes: { exclude: ['updatedAt'] },
   })
-  return comments
 }
 
 export const deleteComment = async (commentId: string) => {
@@ -64,7 +62,7 @@ export const deleteComment = async (commentId: string) => {
     const topicId = comment.topicId
 
     const lastComment = await Comment.findOne({
-      where: { topicId, id: { [Op.ne]: commentId } }, // Op.ne — оператор "не равно"
+      where: { topicId, id: { [Op.ne]: commentId } }, // exclude the comment being deleted
       order: [['createdAt', 'DESC']],
       transaction,
     })
@@ -78,7 +76,7 @@ export const deleteComment = async (commentId: string) => {
 
     await topic.update(
       {
-        commentCount: topic.commentCount - 1,
+        commentCount: Math.max(0, topic.commentCount - 1),
         lastCommentAt: lastComment ? lastComment.createdAt : null,
       },
       { transaction }

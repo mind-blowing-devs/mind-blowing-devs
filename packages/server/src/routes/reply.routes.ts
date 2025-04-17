@@ -17,7 +17,7 @@ router.get(
 )
 router.delete(
   '/:replyId',
-  validateRequestData(replyIdSchema),
+  validateRequestData(replyIdSchema, 'params'),
   deleteReplyController
 )
 

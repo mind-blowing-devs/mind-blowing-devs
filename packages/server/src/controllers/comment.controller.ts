@@ -4,9 +4,8 @@ import type {
   DeleteCommentRequest,
   GetCommentsRequest,
 } from '../types'
-import { getErrorObject } from '../utils'
+import { handleError } from '../utils'
 import { createComment, getComments, deleteComment } from '../services'
-import { TOPIC_NOT_FOUND, COMMENT_NOT_FOUND } from '../constants'
 
 export const createCommentController = async (
   req: CreateCommentRequest,
@@ -16,10 +15,7 @@ export const createCommentController = async (
     const comment = await createComment(req.body)
     return res.status(201).json(comment)
   } catch (error) {
-    if ((error as Error).message === TOPIC_NOT_FOUND) {
-      return res.status(404).json(getErrorObject('topic not found'))
-    }
-    return res.status(500).json(getErrorObject('error creating comment'))
+    return handleError(error, res, 'error creating comment')
   }
 }
 
@@ -31,9 +27,7 @@ export const getCommentsController = async (
     const comments = await getComments(req.query)
     return res.json(comments)
   } catch (error) {
-    return res
-      .status(500)
-      .json(getErrorObject('Error fetching comments for topic'))
+    return handleError(error, res, 'error fetching comments')
   }
 }
 
@@ -43,15 +37,8 @@ export const deleteCommentController = async (
 ) => {
   try {
     await deleteComment(req.params.commentId)
-
-    return res.status(200).json({ message: 'comment and related data deleted' })
+    return res.status(204).send()
   } catch (error) {
-    if ((error as Error).message === COMMENT_NOT_FOUND) {
-      return res.status(404).json(getErrorObject('comment not found'))
-    }
-    if ((error as Error).message === TOPIC_NOT_FOUND) {
-      return res.status(404).json(getErrorObject('topic not found'))
-    }
-    return res.status(500).json(getErrorObject('error deleting comment'))
+    return handleError(error, res, 'error deleting comment')
   }
 }

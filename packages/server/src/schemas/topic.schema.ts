@@ -14,8 +14,8 @@ export const createTopicSchema = z.object({
 })
 
 export const getAllTopicsSchema = z.object({
-  page: z.coerce.number().default(1),
-  limit: z.coerce.number().default(10),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).default(10),
 })
 
 export const updateTopicSchema = z

@@ -25,7 +25,7 @@ export class Reply extends Model {
 
   @ForeignKey(() => Reply)
   @Column({ type: DataType.UUID, allowNull: true, onDelete: 'CASCADE' }) // nullable for root replies
-  parentId!: string
+  parentReplyId!: string
 
   @Column(DataType.TEXT)
   body!: string

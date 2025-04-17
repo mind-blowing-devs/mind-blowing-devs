@@ -20,8 +20,8 @@ export const createCommentSchema = z.object({
 
 export const getCommentsSchema = z.object({
   topicId: z.string().uuid({ message: 'invalid topicId format' }),
-  offset: z.coerce.number().default(0),
-  limit: z.coerce.number().default(10),
+  offset: z.coerce.number().min(0).default(0),
+  limit: z.coerce.number().min(1).default(10),
 })
 
 export const commentIdSchema = z.object({

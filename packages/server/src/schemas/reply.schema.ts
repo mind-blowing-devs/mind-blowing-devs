@@ -6,11 +6,11 @@ export const createReplySchema = z.object({
       required_error: 'commentId is required',
     })
     .uuid({ message: 'invalid topicId format' }),
-  parentId: z
+  parentReplyId: z
     .string()
     .nullable()
     .refine(val => val === null || z.string().uuid().safeParse(val).success, {
-      message: 'parentId must be a valid UUID or null',
+      message: 'parentReplyId must be a valid UUID or null',
     }),
   author: z
     .string({
@@ -27,37 +27,25 @@ export const createReplySchema = z.object({
 export const getRepliesSchema = z
   .object({
     commentId: z.string().uuid().optional(),
-    parentId: z.string().uuid().optional(),
+    parentReplyId: z.string().uuid().optional(),
     offset: z.coerce.number().min(0).default(0),
     limit: z.coerce.number().min(1).default(10),
   })
   .superRefine((data, ctx) => {
     const hasCommentId = !!data.commentId
-    const hasParentId = !!data.parentId
+    const hasParentReplyId = !!data.parentReplyId
 
-    if (!hasCommentId && !hasParentId) {
+    if (!hasCommentId && !hasParentReplyId) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Either commentId or parentId must be provided',
-        path: ['commentId'],
-      })
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Either commentId or parentId must be provided',
-        path: ['parentId'],
+        message: 'commentId or parentReplyId must be provided',
       })
     }
 
-    if (hasCommentId && hasParentId) {
+    if (hasCommentId && hasParentReplyId) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Provide only one of commentId or parentId, not both',
-        path: ['commentId'],
-      })
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Provide only one of commentId or parentId, not both',
-        path: ['parentId'],
+        message: 'provide only one of commentId or parentReplyId, not both',
       })
     }
   })

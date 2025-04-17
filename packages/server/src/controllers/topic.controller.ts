@@ -5,7 +5,7 @@ import type {
   TopicIdParams,
   UpdateTopicRequest,
 } from '../types'
-import { getErrorObject } from '../utils'
+import { handleError } from '../utils'
 import {
   createTopic,
   getAllTopics,
@@ -13,7 +13,6 @@ import {
   updateTopicById,
   deleteTopicById,
 } from '../services'
-import { TOPIC_NOT_FOUND } from '../constants'
 
 export const createTopicController = async (
   req: CreateTopicRequest,
@@ -23,13 +22,7 @@ export const createTopicController = async (
     const topic = await createTopic(req.body)
     return res.status(201).json(topic)
   } catch (error) {
-    if ((error as Error).name === 'SequelizeUniqueConstraintError') {
-      return res
-        .status(400)
-        .json(getErrorObject('Topic with this title already exists'))
-    }
-
-    return res.status(500).json(getErrorObject('Error creating topic'))
+    return handleError(error, res, 'error creating topic')
   }
 }
 
@@ -41,7 +34,7 @@ export const getAllTopicsController = async (
     const topicsWithPagination = await getAllTopics(req.query)
     return res.json(topicsWithPagination)
   } catch (error) {
-    return res.status(500).json(getErrorObject('Error fetching topics'))
+    return handleError(error, res, 'error fetching topics')
   }
 }
 
@@ -53,10 +46,7 @@ export const getTopicByIdController = async (
     const topic = await getTopicWithComments(req.params.id)
     return res.json(topic)
   } catch (error) {
-    if ((error as Error).message === TOPIC_NOT_FOUND) {
-      return res.status(404).json(getErrorObject('Topic not found'))
-    }
-    return res.status(500).json(getErrorObject('Error fetching topic'))
+    return handleError(error, res, 'error fetching topic')
   }
 }
 
@@ -68,16 +58,7 @@ export const updateTopicController = async (
     const updatedTopic = await updateTopicById(req.params.id, req.body)
     return res.json(updatedTopic)
   } catch (error) {
-    if ((error as Error).name === 'SequelizeUniqueConstraintError') {
-      return res
-        .status(400)
-        .json(getErrorObject('Topic with this title already exists'))
-    }
-
-    if ((error as Error).message === TOPIC_NOT_FOUND) {
-      return res.status(404).json(getErrorObject('Topic not found'))
-    }
-    return res.status(500).json(getErrorObject('Error updating topic'))
+    return handleError(error, res, 'error updating topic')
   }
 }
 
@@ -89,10 +70,6 @@ export const deleteTopicController = async (
     await deleteTopicById(req.params)
     return res.status(204).send()
   } catch (error) {
-    if ((error as Error).message === TOPIC_NOT_FOUND) {
-      return res.status(404).json(getErrorObject('Topic not found'))
-    }
-
-    return res.status(500).json(getErrorObject('Error deleting topic'))
+    return handleError(error, res, 'error deleting topic')
   }
 }
