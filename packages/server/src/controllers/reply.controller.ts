@@ -2,6 +2,7 @@ import type { Response } from 'express'
 import { getErrorObject } from '../utils'
 import { createReply, deleteReply, getReplies } from '../services'
 import type { AddReplyRequest, GetRepliesData } from '../types'
+import { COMMENT_NOT_FOUND } from '../constants'
 
 export const createReplyController = async (
   req: AddReplyRequest,
@@ -17,7 +18,7 @@ export const createReplyController = async (
     return res.status(201).json(reply)
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message === 'COMMENT_NOT_FOUND') {
+      if (error.message === COMMENT_NOT_FOUND) {
         return res.status(404).json(getErrorObject('Comment not found'))
       }
       if (error.message === 'PARENT_REPLY_NOT_FOUND') {

@@ -6,12 +6,21 @@ import {
   updateTopicController,
   deleteTopicController,
 } from '../controllers'
-import { createTopicSchema, topicIdSchema, updateTopicSchema } from '../schemas'
+import {
+  createTopicSchema,
+  getAllTopicsSchema,
+  topicIdSchema,
+  updateTopicSchema,
+} from '../schemas'
 import { validateRequestData } from '../middlewares'
 
 const router = express.Router()
 
-router.get('/', getAllTopicsController)
+router.get(
+  '/',
+  validateRequestData(getAllTopicsSchema, 'query'),
+  getAllTopicsController as unknown as express.RequestHandler
+)
 router.get(
   '/:id',
   validateRequestData(topicIdSchema, 'params'),

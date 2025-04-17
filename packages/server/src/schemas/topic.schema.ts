@@ -10,7 +10,12 @@ export const createTopicSchema = z.object({
   description: z.string({
     required_error: 'description is required',
   }),
-  category: z.string().optional(),
+  category: z.string().optional().default('general'),
+})
+
+export const getAllTopicsSchema = z.object({
+  page: z.coerce.number().default(1),
+  limit: z.coerce.number().default(10),
 })
 
 export const updateTopicSchema = z

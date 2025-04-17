@@ -2,6 +2,7 @@ import { Comment, Topic } from '../models'
 import type { CreateCommentData, GetCommentsData } from '../types'
 import { sequelize } from '../db'
 import { Op } from 'sequelize'
+import { TOPIC_NOT_FOUND, COMMENT_NOT_FOUND } from '../constants'
 
 export const createComment = async ({
   topicId,
@@ -12,7 +13,7 @@ export const createComment = async ({
   try {
     const topic = await Topic.findByPk(topicId, { transaction })
     if (!topic) {
-      throw new Error('TOPIC_NOT_FOUND')
+      throw new Error(TOPIC_NOT_FOUND)
     }
 
     const comment = await Comment.create(
@@ -57,7 +58,7 @@ export const deleteComment = async (commentId: string) => {
   try {
     const comment = await Comment.findByPk(commentId, { transaction })
     if (!comment) {
-      throw new Error('COMMENT_NOT_FOUND')
+      throw new Error(COMMENT_NOT_FOUND)
     }
 
     const topicId = comment.topicId
@@ -72,7 +73,7 @@ export const deleteComment = async (commentId: string) => {
 
     const topic = await Topic.findByPk(topicId, { transaction })
     if (!topic) {
-      throw new Error('TOPIC_NOT_FOUND')
+      throw new Error(TOPIC_NOT_FOUND)
     }
 
     await topic.update(

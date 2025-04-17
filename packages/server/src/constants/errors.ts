@@ -1,0 +1,2 @@
+export const TOPIC_NOT_FOUND = 'TOPIC_NOT_FOUND'
+export const COMMENT_NOT_FOUND = 'COMMENT_NOT_FOUND'

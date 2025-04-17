@@ -1,25 +1,30 @@
-import type { CreateTopicData, UpdateTopicData } from '../types'
+import type {
+  CreateTopicData,
+  GetAllTopicsData,
+  TopicIdParams,
+  UpdateTopicData,
+} from '../types'
 import { Topic, Comment } from '../models'
 import { getPaginationData } from '../utils'
+import { TOPIC_NOT_FOUND } from '../constants'
 
 export const createTopic = async (data: CreateTopicData) => {
-  const topic = await Topic.create({
-    title: data.title,
-    description: data.description,
-    author: data.author,
-    category: data.category || 'General',
-  })
+  const topic = await Topic.create(data)
 
-  return topic
+  const topicData = topic.get({ plain: true })
+  delete topicData.updatedAt
+
+  return topicData
 }
 
-export const getAllTopics = async (page = 1, limit = 10) => {
+export const getAllTopics = async ({ page, limit }: GetAllTopicsData) => {
   const offset = (page - 1) * limit
 
   const { rows: topics, count: total } = await Topic.findAndCountAll({
     offset,
     limit,
     order: [['title', 'DESC']],
+    attributes: { exclude: ['updatedAt'] },
   })
 
   const pagination = getPaginationData(total, page, limit)
@@ -28,39 +33,49 @@ export const getAllTopics = async (page = 1, limit = 10) => {
 }
 
 export const getTopicWithComments = async (id: string) => {
-  const topic = await Topic.findByPk(id)
-
-  if (!topic) {
-    throw new Error('Topic not found')
-  }
-
-  const comments = await Comment.findAll({
-    where: { topicId: id },
-    order: [['createdAt', 'DESC']],
-    limit: 10,
+  const topic = await Topic.findByPk(id, {
+    include: [
+      {
+        model: Comment,
+        where: { topicId: id },
+        required: false,
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        attributes: { exclude: ['updatedAt'] },
+      },
+    ],
+    attributes: { exclude: ['updatedAt'] },
   })
 
-  return { topic, comments }
-}
-
-export const updateTopicById = async (id: string, data: UpdateTopicData) => {
-  const topic = await Topic.findByPk(id)
-
   if (!topic) {
-    throw new Error('Topic not found')
+    throw new Error(TOPIC_NOT_FOUND)
   }
-
-  await topic.update(data)
 
   return topic
 }
 
-export const deleteTopicById = async (id: string) => {
-  const topic = await Topic.findByPk(id)
+export const updateTopicById = async (id: string, data: UpdateTopicData) => {
+  const [affectedRows, [updatedTopic]] = await Topic.update(data, {
+    where: { id },
+    returning: true,
+  })
 
-  if (!topic) {
-    throw new Error('Topic not found')
+  if (affectedRows === 0) {
+    throw new Error(TOPIC_NOT_FOUND)
   }
 
-  await topic.destroy()
+  const topicData = updatedTopic.get({ plain: true })
+  delete topicData.updatedAt
+
+  return topicData
+}
+
+export const deleteTopicById = async ({ id }: TopicIdParams) => {
+  const deletedCount = await Topic.destroy({
+    where: { id },
+  })
+
+  if (deletedCount === 0) {
+    throw new Error(TOPIC_NOT_FOUND)
+  }
 }

@@ -1,6 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Request, Response } from 'express'
-import type { CreateTopicRequest } from '../types'
+import type {
+  CreateTopicRequest,
+  GetAllTopicsRequest,
+  TopicIdParams,
+  UpdateTopicRequest,
+} from '../types'
 import { getErrorObject } from '../utils'
 import {
   createTopic,
@@ -9,6 +13,7 @@ import {
   updateTopicById,
   deleteTopicById,
 } from '../services'
+import { TOPIC_NOT_FOUND } from '../constants'
 
 export const createTopicController = async (
   req: CreateTopicRequest,
@@ -18,7 +23,7 @@ export const createTopicController = async (
     const topic = await createTopic(req.body)
     return res.status(201).json(topic)
   } catch (error) {
-    if ((error as any).name === 'SequelizeUniqueConstraintError') {
+    if ((error as Error).name === 'SequelizeUniqueConstraintError') {
       return res
         .status(400)
         .json(getErrorObject('Topic with this title already exists'))
@@ -28,69 +33,63 @@ export const createTopicController = async (
   }
 }
 
-export const getAllTopicsController = async (req: Request, res: Response) => {
+export const getAllTopicsController = async (
+  req: GetAllTopicsRequest,
+  res: Response
+) => {
   try {
-    const page = parseInt(req.query.page as string) || 1
-    const limit = parseInt(req.query.limit as string) || 10
-
-    const { topics, pagination } = await getAllTopics(page, limit)
-
-    return res.json({ topics, pagination })
+    const topicsWithPagination = await getAllTopics(req.query)
+    return res.json(topicsWithPagination)
   } catch (error) {
     return res.status(500).json(getErrorObject('Error fetching topics'))
   }
 }
 
-export const getTopicByIdController = async (req: Request, res: Response) => {
+export const getTopicByIdController = async (
+  req: Request<TopicIdParams>,
+  res: Response
+) => {
   try {
-    const { id } = req.params
-
-    const topic = await getTopicWithComments(id)
-
+    const topic = await getTopicWithComments(req.params.id)
     return res.json(topic)
   } catch (error) {
-    if ((error as Error).message === 'Topic not found') {
+    if ((error as Error).message === TOPIC_NOT_FOUND) {
       return res.status(404).json(getErrorObject('Topic not found'))
     }
     return res.status(500).json(getErrorObject('Error fetching topic'))
   }
 }
 
-export const updateTopicController = async (req: Request, res: Response) => {
+export const updateTopicController = async (
+  req: UpdateTopicRequest,
+  res: Response
+) => {
   try {
-    const { id } = req.params
-    const { title, description, category } = req.body
-
-    const updatedTopic = await updateTopicById(id, {
-      title,
-      description,
-      category,
-    })
-
+    const updatedTopic = await updateTopicById(req.params.id, req.body)
     return res.json(updatedTopic)
   } catch (error) {
-    if ((error as any).name === 'SequelizeUniqueConstraintError') {
+    if ((error as Error).name === 'SequelizeUniqueConstraintError') {
       return res
         .status(400)
         .json(getErrorObject('Topic with this title already exists'))
     }
 
-    if ((error as Error).message === 'Topic not found') {
+    if ((error as Error).message === TOPIC_NOT_FOUND) {
       return res.status(404).json(getErrorObject('Topic not found'))
     }
     return res.status(500).json(getErrorObject('Error updating topic'))
   }
 }
 
-export const deleteTopicController = async (req: Request, res: Response) => {
+export const deleteTopicController = async (
+  req: Request<TopicIdParams>,
+  res: Response
+) => {
   try {
-    const { id } = req.params
-
-    await deleteTopicById(id)
-
-    return res.status(200).json({ message: 'Topic and related data deleted' })
+    await deleteTopicById(req.params)
+    return res.status(204).send()
   } catch (error) {
-    if ((error as Error).message === 'Topic not found') {
+    if ((error as Error).message === TOPIC_NOT_FOUND) {
       return res.status(404).json(getErrorObject('Topic not found'))
     }
 

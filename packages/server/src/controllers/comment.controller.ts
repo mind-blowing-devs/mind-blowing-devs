@@ -6,6 +6,7 @@ import type {
 } from '../types'
 import { getErrorObject } from '../utils'
 import { createComment, getComments, deleteComment } from '../services'
+import { TOPIC_NOT_FOUND, COMMENT_NOT_FOUND } from '../constants'
 
 export const createCommentController = async (
   req: CreateCommentRequest,
@@ -15,7 +16,7 @@ export const createCommentController = async (
     const comment = await createComment(req.body)
     return res.status(201).json(comment)
   } catch (error) {
-    if ((error as Error).message === 'TOPIC_NOT_FOUND') {
+    if ((error as Error).message === TOPIC_NOT_FOUND) {
       return res.status(404).json(getErrorObject('topic not found'))
     }
     return res.status(500).json(getErrorObject('error creating comment'))
@@ -45,10 +46,10 @@ export const deleteCommentController = async (
 
     return res.status(200).json({ message: 'comment and related data deleted' })
   } catch (error) {
-    if ((error as Error).message === 'COMMENT_NOT_FOUND') {
+    if ((error as Error).message === COMMENT_NOT_FOUND) {
       return res.status(404).json(getErrorObject('comment not found'))
     }
-    if ((error as Error).message === 'TOPIC_NOT_FOUND') {
+    if ((error as Error).message === TOPIC_NOT_FOUND) {
       return res.status(404).json(getErrorObject('topic not found'))
     }
     return res.status(500).json(getErrorObject('error deleting comment'))

@@ -1,6 +1,7 @@
 import { Reply, Comment } from '../models'
 import { sequelize } from '../db'
 import { AddReplyData, GetRepliesData } from '../types'
+import { COMMENT_NOT_FOUND } from '../constants'
 
 export const createReply = async ({
   commentId,
@@ -13,7 +14,7 @@ export const createReply = async ({
   try {
     const comment = await Comment.findByPk(commentId, { transaction })
     if (!comment) {
-      throw new Error('COMMENT_NOT_FOUND')
+      throw new Error(COMMENT_NOT_FOUND)
     }
 
     let reply
