@@ -4,7 +4,6 @@ import type {
   DeleteCommentRequest,
   GetCommentsRequest,
 } from '../types'
-
 import { getErrorObject } from '../utils'
 import { createComment, getComments, deleteComment } from '../services'
 
@@ -28,14 +27,7 @@ export const getCommentsController = async (
   res: Response
 ) => {
   try {
-    const { topicId, offset, limit } = req.query
-
-    const comments = await getComments({
-      topicId,
-      offset,
-      limit,
-    })
-
+    const comments = await getComments(req.query)
     return res.json(comments)
   } catch (error) {
     return res
