@@ -2,7 +2,7 @@ ARG NODE_VERSION=20
 ARG SERVER_PORT=${SERVER_PORT:-3001}
 
 # I use YARN_IGNORE_SCRIPTS to disable lefthook
-# Because it causes build fail with node:$NODE_VERSION-bookworm
+# Because it causes build to fail with node:$NODE_VERSION-bookworm
 
 FROM node:$NODE_VERSION-bookworm AS base
 
