@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { Topic } from '../models'
 
 export const createCommentSchema = z.object({
   topicId: z
@@ -20,20 +19,7 @@ export const createCommentSchema = z.object({
 })
 
 export const getCommentsSchema = z.object({
-  topicId: z
-    .string()
-    .uuid({ message: 'invalid topicId format' })
-    .refine(
-      async id => {
-        try {
-          const topic = await Topic.findByPk(id)
-          return !!topic
-        } catch (error) {
-          return false
-        }
-      },
-      { message: 'topic does not exist' }
-    ),
+  topicId: z.string().uuid({ message: 'invalid topicId format' }),
   offset: z.coerce.number().default(0),
   limit: z.coerce.number().default(10),
 })

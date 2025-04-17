@@ -1,32 +1,21 @@
-import type { Request, Response } from 'express'
+import type { Response } from 'express'
 import { getErrorObject } from '../utils'
-import { sequelize } from '../db'
-import { Comment, Reply } from '../models'
+import { createReply } from '../services'
+import type { AddReplyRequest } from '../types'
 
-export const createReply = async (req: Request, res: Response) => {
-  const transaction = await sequelize.transaction()
+export const createReplyController = async (
+  req: AddReplyRequest,
+  res: Response
+) => {
   try {
-    const { commentId, body, author } = req.body
-
-    const reply = await Reply.create(
-      {
-        commentId,
-        body,
-        author,
-      },
-      { transaction }
-    )
-
-    await Comment.increment('repliesCount', {
-      by: 1,
-      where: { id: commentId },
-      transaction,
+    const reply = await createReply({
+      commentId: req.body.commentId,
+      parentId: req.body.parentId,
+      body: req.body.body,
+      author: req.body.author,
     })
-
-    await transaction.commit()
     return res.status(201).json(reply)
   } catch (error) {
-    await transaction.rollback()
     return res.status(500).json(getErrorObject('Error adding reply'))
   }
 }

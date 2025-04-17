@@ -1,18 +1,17 @@
-import { Comment } from '../models'
 import { z } from 'zod'
 
 export const createReplySchema = z.object({
-  commentId: z.coerce.number().refine(
-    async id => {
-      try {
-        const comment = await Comment.findByPk(id)
-        return !!comment
-      } catch (error) {
-        return false
-      }
-    },
-    { message: 'comment does not exist' }
-  ),
+  commentId: z
+    .string({
+      required_error: 'commentId is required',
+    })
+    .uuid({ message: 'invalid topicId format' }),
+  parentId: z
+    .string()
+    .nullable()
+    .refine(val => val === null || z.string().uuid().safeParse(val).success, {
+      message: 'parentId must be a valid UUID or null',
+    }),
   author: z
     .string({
       required_error: 'author is required',

@@ -7,6 +7,7 @@ import {
   BelongsTo,
   PrimaryKey,
   Default,
+  HasMany,
 } from 'sequelize-typescript'
 import { v4 as uuidv4 } from 'uuid'
 import { Comment } from './comment.model'
@@ -22,12 +23,25 @@ export class Reply extends Model {
   @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
   commentId!: string
 
+  @ForeignKey(() => Reply)
+  @Column({ type: DataType.UUID, allowNull: true, onDelete: 'CASCADE' }) // nullable for root replies
+  parentId!: string
+
   @Column(DataType.TEXT)
   body!: string
 
   @Column(DataType.STRING)
   author!: string
 
+  @Column({ type: DataType.INTEGER, defaultValue: 0 })
+  repliesCount!: number
+
   @BelongsTo(() => Comment)
   comment!: Comment
+
+  @BelongsTo(() => Reply)
+  parentReply?: Reply // parent reply, if this is a nested reply
+
+  @HasMany(() => Reply)
+  replies!: Reply[]
 }

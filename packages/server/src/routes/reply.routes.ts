@@ -1,10 +1,10 @@
 import express from 'express'
-import { createReply } from '../controllers'
+import { createReplyController } from '../controllers'
 import { validateRequestData } from '../middlewares'
 import { createReplySchema } from '../schemas/reply.schema'
 
 const router = express.Router()
 
-router.post('/', validateRequestData(createReplySchema), createReply)
+router.post('/', validateRequestData(createReplySchema), createReplyController)
 
 export default router
