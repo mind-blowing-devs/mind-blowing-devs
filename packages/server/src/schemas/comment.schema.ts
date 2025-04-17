@@ -37,3 +37,7 @@ export const getCommentsSchema = z.object({
   offset: z.coerce.number().default(0),
   limit: z.coerce.number().default(10),
 })
+
+export const commentIdSchema = z.object({
+  commentId: z.string().uuid({ message: 'invalid commentId format' }),
+})

@@ -1,55 +1,39 @@
-import type { Request, Response } from 'express'
-import { Comment, Topic } from '../models'
+import type { Response } from 'express'
+import type {
+  CreateCommentRequest,
+  DeleteCommentRequest,
+  GetCommentsRequest,
+} from '../types'
+
 import { getErrorObject } from '../utils'
-import { sequelize } from '../db'
+import { createComment, getComments, deleteComment } from '../services'
 
-export const createComment = async (req: Request, res: Response) => {
-  const transaction = await sequelize.transaction()
+export const createCommentController = async (
+  req: CreateCommentRequest,
+  res: Response
+) => {
   try {
-    const { topicId, body, author } = req.body
-
-    const topic = await Topic.findByPk(topicId, { transaction })
-    if (!topic) {
-      await transaction.rollback()
-      return res.status(404).json(getErrorObject('topic not found'))
-    }
-
-    const comment = await Comment.create(
-      {
-        topicId,
-        body,
-        author,
-      },
-      { transaction }
-    )
-
-    await Topic.increment('commentCount', {
-      by: 1,
-      where: { id: topicId },
-      transaction,
-    })
-    await Topic.update(
-      { lastCommentAt: new Date() },
-      { where: { id: topicId }, transaction }
-    )
-
-    await transaction.commit()
+    const comment = await createComment(req.body)
     return res.status(201).json(comment)
   } catch (error) {
-    await transaction.rollback()
-    return res.status(500).json(getErrorObject('Error creating comment'))
+    if ((error as Error).message === 'TOPIC_NOT_FOUND') {
+      return res.status(404).json(getErrorObject('topic not found'))
+    }
+    return res.status(500).json(getErrorObject('error creating comment'))
   }
 }
 
-export const getComments = async (req: Request, res: Response) => {
+export const getCommentsController = async (
+  req: GetCommentsRequest,
+  res: Response
+) => {
   try {
     const { topicId, offset, limit } = req.query
 
-    const comments = await Comment.findAll({
-      where: { topicId },
-      order: [['createdAt', 'DESC']],
-      offset: parseInt(offset as string, 10),
-      limit: parseInt(limit as string, 10),
+    const comments = await getComments({
+      topicId,
+      offset,
+      limit,
     })
 
     return res.json(comments)
@@ -57,5 +41,24 @@ export const getComments = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json(getErrorObject('Error fetching comments for topic'))
+  }
+}
+
+export const deleteCommentController = async (
+  req: DeleteCommentRequest,
+  res: Response
+) => {
+  try {
+    await deleteComment(req.params.commentId)
+
+    return res.status(200).json({ message: 'comment and related data deleted' })
+  } catch (error) {
+    if ((error as Error).message === 'COMMENT_NOT_FOUND') {
+      return res.status(404).json(getErrorObject('comment not found'))
+    }
+    if ((error as Error).message === 'TOPIC_NOT_FOUND') {
+      return res.status(404).json(getErrorObject('topic not found'))
+    }
+    return res.status(500).json(getErrorObject('error deleting comment'))
   }
 }

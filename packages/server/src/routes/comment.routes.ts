@@ -1,11 +1,32 @@
 import express from 'express'
-import { createComment, getComments } from '../controllers'
+import {
+  createCommentController,
+  deleteCommentController,
+  getCommentsController,
+} from '../controllers'
 import { validateRequestData } from '../middlewares'
-import { createCommentSchema, getCommentsSchema } from '../schemas'
+import {
+  commentIdSchema,
+  createCommentSchema,
+  getCommentsSchema,
+} from '../schemas'
 
 const router = express.Router()
 
-router.get('/', validateRequestData(getCommentsSchema, 'query'), getComments)
-router.post('/', validateRequestData(createCommentSchema), createComment)
+router.get(
+  '/',
+  validateRequestData(getCommentsSchema, 'query'),
+  getCommentsController as unknown as express.RequestHandler
+)
+router.post(
+  '/',
+  validateRequestData(createCommentSchema),
+  createCommentController
+)
+router.delete(
+  '/:commentId',
+  validateRequestData(commentIdSchema, 'params'),
+  deleteCommentController
+)
 
 export default router

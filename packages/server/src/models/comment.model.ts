@@ -6,12 +6,20 @@ import {
   ForeignKey,
   BelongsTo,
   HasMany,
+  PrimaryKey,
+  Default,
 } from 'sequelize-typescript'
+import { v4 as uuidv4 } from 'uuid'
 import { Topic } from './topic.model'
 import { Reply } from './reply.model'
 
 @Table
 export class Comment extends Model {
+  @PrimaryKey
+  @Default(uuidv4)
+  @Column({ type: DataType.UUID })
+  override id!: string
+
   @ForeignKey(() => Topic)
   @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
   topicId!: string
