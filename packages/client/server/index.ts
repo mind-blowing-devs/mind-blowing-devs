@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import express from 'express'
 import fs from 'fs/promises'
 import path from 'node:path'
@@ -7,13 +5,21 @@ import { createServer as createViteServer, ViteDevServer } from 'vite'
 import serialize from 'serialize-javascript'
 import type { HelmetData } from 'react-helmet'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import dotenv from 'dotenv'
 
+const isDev = process.env.NODE_ENV === 'development'
 // We cannot use global __dirname since the output file is not a commonjs format
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const port = process.env.PORT || 5000
+
+// takes .env from the root when in development environment
+const envConfig = isDev
+  ? { path: path.resolve(__dirname, '../../../.env') }
+  : undefined
+dotenv.config(envConfig)
+
+const port = Number(process.env.CLIENT_PORT) || 5000
 const clientPath = path.join(__dirname, '..')
-const isDev = process.env.NODE_ENV === 'development'
 import { Request as ExpressRequest } from 'express'
 
 async function createServer() {
@@ -97,7 +103,7 @@ async function createServer() {
   })
 
   app.listen(port, () => {
-    console.log(`Client is listening on port: ${port}`)
+    console.log(`➜ Client is listening on port: ${port}`)
   })
 }
 

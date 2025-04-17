@@ -2,7 +2,8 @@
 
 [![Figma Design](https://badgen.net/badge/Figma/Design/FF7262)](<https://www.figma.com/design/ukplBDMNzVFXsVMjYUpKUq/Minesweeper-%E2%80%94-Interactive-Components-Demo-(Community)-(Copy)?node-id=1-63&t=L45VPRQdQyeT9xZk-1>)
 
-Дизайн проекта разработан в Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXsVMjYUpKUq/Minesweeper-%E2%80%94-Interactive-Components-Demo-(Community)-(Copy)?node-id=1-63&t=L45VPRQdQyeT9xZk-1>)
+Дизайн проекта разработан в
+Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXsVMjYUpKUq/Minesweeper-%E2%80%94-Interactive-Components-Demo-(Community)-(Copy)?node-id=1-63&t=L45VPRQdQyeT9xZk-1>)
 
 Проект включает следующие страницы:
 
@@ -42,11 +43,35 @@
 
 ### Как запускать?
 
+Перед запуском: Создайте `.env` файл в корне проекта (команда `cp .env.sample .env`) и заполните его нужными данными
+
+- **Запуск в IDE**
+
 1. Убедитесь что у вас установлен `node` и `docker`
 2. Выполните команду `yarn bootstrap` - это обязательный шаг, без него ничего работать не будет :)
 3. Выполните команду `yarn dev` чтобы запустить весь проект
 4. Выполните команду `yarn dev --scope=client` чтобы запустить только клиент
 5. Выполните команду `yarn dev --scope=server` чтобы запустить только server
+
+При запуске режима разработки (`yarn dev`) или отдельно сервера (`yarn dev --scope=server`) также запустятся база
+данных `postgres` и `pgadmin` в Docker контейнерах
+
+Данные для входа в pgadmin вы указывали в `.env` файле, в поле Host name/address нужно будет указать `postgres`
+
+- **Запуск в Docker**
+
+1. Убедитесь что у вас установлен `Docker`
+2. Выполните команду `yarn build:docker` чтобы собрать образы
+3. Выполните команду `yarn preview:docker` чтобы запустить контейнеры
+
+**Запустятся 4 сервиса:**
+
+- SSR-сервер
+- Backend-сервер
+- postgres
+- pgadmin
+
+Данные для входа в pgadmin вы указывали в `.env` файле, в поле Host name/address нужно будет указать `postgres`
 
 ### Как добавить зависимости?
 
