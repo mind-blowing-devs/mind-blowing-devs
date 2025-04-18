@@ -64,10 +64,7 @@ export const updateTopicById = async (id: string, data: UpdateTopicData) => {
     throw new Error(TOPIC_NOT_FOUND)
   }
 
-  const topicData = updatedTopic.get({ plain: true })
-  delete topicData.updatedAt
-
-  return topicData
+  return updatedTopic
 }
 
 export const deleteTopicById = async ({ id }: TopicIdParams) => {

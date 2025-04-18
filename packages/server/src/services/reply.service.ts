@@ -11,18 +11,12 @@ export const createReply = async (data: CreateReplyData) => {
   const transaction = await sequelize.transaction()
 
   try {
-    const comment = await Comment.findByPk(data.commentId, { transaction })
-    if (!comment) {
-      throw new Error(COMMENT_NOT_FOUND)
-    }
-
+    const { commentId, parentReplyId } = data
     let reply
 
-    if (data.parentReplyId) {
+    if (parentReplyId) {
       // reply to a reply
-      const parentReply = await Reply.findByPk(data.parentReplyId, {
-        transaction,
-      })
+      const parentReply = await Reply.findByPk(parentReplyId, { transaction })
 
       if (!parentReply) {
         throw new Error(PARENT_REPLY_NOT_FOUND)
@@ -34,7 +28,17 @@ export const createReply = async (data: CreateReplyData) => {
       await parentReply.save({ transaction })
     } else {
       // reply to a comment
+      if (!commentId) {
+        throw new Error()
+      }
+      const comment = await Comment.findByPk(commentId, { transaction })
+
+      if (!comment) {
+        throw new Error(COMMENT_NOT_FOUND)
+      }
+
       reply = await Reply.create(data, { transaction })
+
       comment.repliesCount += 1
       await comment.save({ transaction })
     }

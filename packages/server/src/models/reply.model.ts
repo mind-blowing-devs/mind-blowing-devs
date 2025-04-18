@@ -20,7 +20,7 @@ export class Reply extends Model {
   override id!: string
 
   @ForeignKey(() => Comment)
-  @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
+  @Column({ type: DataType.UUID, allowNull: true, onDelete: 'CASCADE' })
   commentId!: string
 
   @ForeignKey(() => Reply)

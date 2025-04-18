@@ -4,17 +4,16 @@ import xss from 'xss'
 export const createReplySchema = z
   .object({
     commentId: z
-      .string({
-        required_error: 'commentId is required',
-      })
-      .uuid({ message: 'invalid topicId format' }),
+      .string()
+      .uuid({ message: 'commentId must be a valid UUID' })
+      .nullable()
+      .optional(),
 
     parentReplyId: z
       .string()
+      .uuid({ message: 'parentReplyId must be a valid UUID' })
       .nullable()
-      .refine(val => val === null || z.string().uuid().safeParse(val).success, {
-        message: 'parentReplyId must be a valid UUID or null',
-      }),
+      .optional(),
 
     author: z
       .string({
@@ -33,6 +32,12 @@ export const createReplySchema = z
       .transform(val => xss(val.trim())),
   })
   .strict()
+  .refine(data => data.commentId || data.parentReplyId, {
+    message: 'Either commentId or parentReplyId must be provided',
+  })
+  .refine(data => !(data.commentId && data.parentReplyId), {
+    message: 'Only one of commentId or parentReplyId must be provided',
+  })
 
 export const getRepliesSchema = z
   .object({
