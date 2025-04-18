@@ -1,28 +1,38 @@
 import { z } from 'zod'
+import xss from 'xss'
 
-export const createReplySchema = z.object({
-  commentId: z
-    .string({
-      required_error: 'commentId is required',
-    })
-    .uuid({ message: 'invalid topicId format' }),
-  parentReplyId: z
-    .string()
-    .nullable()
-    .refine(val => val === null || z.string().uuid().safeParse(val).success, {
-      message: 'parentReplyId must be a valid UUID or null',
-    }),
-  author: z
-    .string({
-      required_error: 'author is required',
-    })
-    .min(1, 'author cannot be empty'),
-  body: z
-    .string({
-      required_error: 'body is required',
-    })
-    .min(1, 'body cannot be empty'),
-})
+export const createReplySchema = z
+  .object({
+    commentId: z
+      .string({
+        required_error: 'commentId is required',
+      })
+      .uuid({ message: 'invalid topicId format' }),
+
+    parentReplyId: z
+      .string()
+      .nullable()
+      .refine(val => val === null || z.string().uuid().safeParse(val).success, {
+        message: 'parentReplyId must be a valid UUID or null',
+      }),
+
+    author: z
+      .string({
+        required_error: 'author is required',
+      })
+      .min(1, { message: 'author must be at least 1 character' })
+      .max(50, { message: 'author must be at most 50 characters' })
+      .transform(val => xss(val.trim())),
+
+    body: z
+      .string({
+        required_error: 'body is required',
+      })
+      .min(1, { message: 'body must be at least 1 character' })
+      .max(200, { message: 'body must be at most 200 characters' })
+      .transform(val => xss(val.trim())),
+  })
+  .strict()
 
 export const getRepliesSchema = z
   .object({
@@ -31,6 +41,7 @@ export const getRepliesSchema = z
     offset: z.coerce.number().min(0).default(0),
     limit: z.coerce.number().min(1).default(10),
   })
+  .strict()
   .superRefine((data, ctx) => {
     const hasCommentId = !!data.commentId
     const hasParentReplyId = !!data.parentReplyId

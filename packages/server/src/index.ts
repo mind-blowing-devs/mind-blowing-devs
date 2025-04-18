@@ -13,9 +13,9 @@ const PORT = Number(process.env.SERVER_PORT) || 3001
 app.use(cors())
 app.use(express.json())
 
-app.use('/api/forum/topics', topicRoutes)
-app.use('/api/forum/comments', commentRoutes)
-app.use('/api/forum/replies', replyRoutes)
+app.use('/api/topics', topicRoutes)
+app.use('/api/comments', commentRoutes)
+app.use('/api/replies', replyRoutes)
 
 async function startServer() {
   try {
