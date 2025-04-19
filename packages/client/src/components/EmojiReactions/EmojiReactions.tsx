@@ -52,8 +52,8 @@ export default function EmojiReactions({ replyId }: IEmojiReactions) {
                 className="flex items-center bg-gray-100 rounded-full px-2 py-1 text-sm hover:bg-gray-200"
                 onClick={() => handleAddReaction(reaction.emoji)}
                 aria-label={`React with ${reaction.emoji}`}>
-                <span className="mr-1">{reaction.emoji}</span>
-                <span>{reaction.count}</span>
+                <span className="mr-1 text-xl">{reaction.emoji}</span>
+                <span className="text-xs text-gray-600">{reaction.count}</span>
               </button>
             ))}
           </div>
