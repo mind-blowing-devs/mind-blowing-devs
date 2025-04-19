@@ -23,12 +23,19 @@ export default function EmojiPicker({ onSelect, onClose }: EmojiPickerProps) {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('keydown', handleEscKey)
+    const eventHandlers: [string, EventListener][] = [
+      ['mousedown', handleClickOutside as EventListener],
+      ['keydown', handleEscKey as EventListener],
+    ]
+
+    eventHandlers.forEach(([event, handler]) => {
+      document.addEventListener(event, handler)
+    })
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscKey)
+      eventHandlers.forEach(([event, handler]) => {
+        document.removeEventListener(event, handler)
+      })
     }
   }, [onClose])
 
