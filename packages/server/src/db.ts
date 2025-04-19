@@ -3,7 +3,14 @@ import { Topic } from './models/topic.model'
 import { Comment } from './models/comment.model'
 import { Reply } from './models/reply.model'
 import dotenv from 'dotenv'
-dotenv.config()
+import path from 'path'
+
+const envConfig =
+  process.env.NODE_ENV === 'development'
+    ? { path: path.resolve(__dirname, '../../../.env') }
+    : undefined
+
+dotenv.config(envConfig)
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',

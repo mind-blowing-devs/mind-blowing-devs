@@ -1,11 +1,17 @@
 import 'reflect-metadata'
 import dotenv from 'dotenv'
 import cors from 'cors'
-dotenv.config()
-
+import path from 'path'
 import express from 'express'
 import { topicRoutes, commentRoutes, replyRoutes } from './routes'
 import { connectDB } from './db'
+
+const envConfig =
+  process.env.NODE_ENV === 'development'
+    ? { path: path.resolve(__dirname, '../../../.env') }
+    : undefined
+
+dotenv.config(envConfig)
 
 const app = express()
 const PORT = Number(process.env.SERVER_PORT) || 3001
