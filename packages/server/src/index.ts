@@ -5,6 +5,7 @@ import path from 'path'
 import express from 'express'
 import { topicRoutes, commentRoutes, replyRoutes } from './routes'
 import { connectDB } from './db'
+import { checkAuth } from './middlewares'
 
 const envConfig =
   process.env.NODE_ENV === 'development'
@@ -14,10 +15,19 @@ const envConfig =
 dotenv.config(envConfig)
 
 const app = express()
-const PORT = Number(process.env.SERVER_PORT) || 3001
+const PORT = Number(process.env.SERVER_PORT)
 
-app.use(cors())
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? process.env.ORIGIN_DEV_URL
+        : process.env.ORIGIN_PROD_URL,
+    credentials: true,
+  })
+)
 app.use(express.json())
+app.use(checkAuth)
 
 app.use('/api/topics', topicRoutes)
 app.use('/api/comments', commentRoutes)
