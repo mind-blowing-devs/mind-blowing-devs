@@ -63,11 +63,13 @@ export default function ForumTopic() {
             nickname="SweeperPro"
             timestamp="5 days ago"
             text="Кстати, кто-нибудь замечал, что первый клик иногда всё равно приводит к взрыву? Или это только у меня такое?"
+            id={1}
           />
           <Reply
             nickname="SweeperPro"
             timestamp="5 days ago"
             text="Кстати, кто-нибудь замечал, что первый клик иногда всё равно приводит к взрыву? Или это только у меня такое?"
+            id={2}
           />
           <button className="font-roboto font-normal sm:text-base text-sm pt-[10px] hover:text-gray-500">
             [More replies...]
