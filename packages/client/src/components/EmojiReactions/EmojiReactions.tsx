@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { useEmojiReactions } from '../../hooks'
-import { ALL_AVAILABLE_EMOJIS } from '../../api/reactionAPI'
+import EmojiPicker from './EmojiPicker'
 
 interface IEmojiReactions {
   replyId: number
@@ -8,7 +8,6 @@ interface IEmojiReactions {
 
 export default function EmojiReactions({ replyId }: IEmojiReactions) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const pickerRef = useRef<HTMLDivElement>(null)
 
   // Используем хук для работы с эмодзи-реакциями
   const { reactions, isLoading, addReaction, error } = useEmojiReactions({
@@ -29,30 +28,10 @@ export default function EmojiReactions({ replyId }: IEmojiReactions) {
     setShowEmojiPicker(prev => !prev)
   }, [])
 
-  // Проверяем клик вне панели выбора эмодзи
-  useEffect(() => {
-    if (!showEmojiPicker) return
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
-        setShowEmojiPicker(false)
-      }
-    }
-
-    const handleEscKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setShowEmojiPicker(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('keydown', handleEscKey)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('keydown', handleEscKey)
-    }
-  }, [showEmojiPicker])
+  // Функция для закрытия панели эмодзи
+  const closeEmojiPicker = useCallback(() => {
+    setShowEmojiPicker(false)
+  }, [])
 
   return (
     <div>
@@ -90,21 +69,10 @@ export default function EmojiReactions({ replyId }: IEmojiReactions) {
         </button>
 
         {showEmojiPicker && (
-          <div
-            ref={pickerRef}
-            className="absolute mt-1 bg-white border border-gray-200 rounded-md shadow-md p-2 z-10">
-            <div className="flex flex-wrap gap-2">
-              {ALL_AVAILABLE_EMOJIS.map(emoji => (
-                <button
-                  key={emoji}
-                  onClick={() => handleAddReaction(emoji)}
-                  className="text-xl hover:bg-gray-100 p-1 rounded-md cursor-pointer"
-                  aria-label={`Add ${emoji} reaction`}>
-                  {emoji}
-                </button>
-              ))}
-            </div>
-          </div>
+          <EmojiPicker
+            onSelect={handleAddReaction}
+            onClose={closeEmojiPicker}
+          />
         )}
       </div>
     </div>
