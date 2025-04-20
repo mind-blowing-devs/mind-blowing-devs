@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript'
 import { Topic } from './models/topic.model'
 import { Comment } from './models/comment.model'
 import { Reply } from './models/reply.model'
+import { Reaction } from './models/reaction.model'
 import dotenv from 'dotenv'
 import path from 'path'
 
@@ -25,7 +26,7 @@ export const sequelize = new Sequelize({
   database: POSTGRES_DB,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
-  models: [Topic, Comment, Reply],
+  models: [Topic, Comment, Reply, Reaction],
 })
 
 export const connectDB = async () => {
