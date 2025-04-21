@@ -3,8 +3,15 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import path from 'path'
 import express from 'express'
-import { topicRoutes, commentRoutes, replyRoutes } from './routes'
+import {
+  topicRoutes,
+  commentRoutes,
+  replyRoutes,
+  visualThemeRoutes,
+  authRoutes,
+} from './routes'
 import { connectDB } from './db'
+import { seedVisualThemes } from './seeding'
 import { checkAuth } from './middlewares'
 
 const envConfig =
@@ -32,10 +39,13 @@ app.use(checkAuth)
 app.use('/api/topics', topicRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/replies', replyRoutes)
+app.use('/api/visualthemes', visualThemeRoutes)
+app.use('/api/auth', authRoutes)
 
 async function startServer() {
   try {
     await connectDB()
+    await seedVisualThemes()
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`)
     })
