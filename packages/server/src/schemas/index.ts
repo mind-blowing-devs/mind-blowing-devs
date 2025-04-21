@@ -1,3 +1,5 @@
 export * from './comment.schema'
 export * from './reply.schema'
 export * from './topic.schema'
+export * from './visualTheme.schema'
+export * from './user.schema'
