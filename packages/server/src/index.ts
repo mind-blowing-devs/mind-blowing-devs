@@ -3,7 +3,12 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import path from 'path'
 import express from 'express'
-import { topicRoutes, commentRoutes, replyRoutes } from './routes'
+import {
+  topicRoutes,
+  commentRoutes,
+  replyRoutes,
+  reactionRoutes,
+} from './routes'
 import { connectDB } from './db'
 import { checkAuth } from './middlewares'
 
@@ -32,6 +37,7 @@ app.use(checkAuth)
 app.use('/api/topics', topicRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/replies', replyRoutes)
+app.use('/api/reactions', reactionRoutes)
 
 async function startServer() {
   try {
