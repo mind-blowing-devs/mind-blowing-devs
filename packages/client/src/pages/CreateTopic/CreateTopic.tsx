@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Helmet } from 'react-helmet'
 import { usePage } from '../../hooks'
+import { createTopic } from '../../api/topicsAPI'
+import { useAppSelector } from '../../store'
 
 const schema = z.object({
   topicTitle: z
@@ -31,9 +33,20 @@ export default function CreateTopic() {
   })
   usePage({})
 
-  const onSubmit = (data: CreateTopicFormValues) => {
-    alert('Not implemented')
-    reset()
+  const { user } = useAppSelector(state => state.user)
+
+  const onSubmit = async (data: CreateTopicFormValues) => {
+    try {
+      await createTopic({
+        title: data.topicTitle,
+        description: data.topicDescription,
+        author: user?.login ?? '',
+        category: data.topicCategory ?? '',
+      })
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
