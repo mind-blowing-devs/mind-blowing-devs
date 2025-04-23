@@ -5,6 +5,7 @@ import { Reply } from './models/reply.model'
 import { User } from './models/user.model'
 import { VisualTheme } from './models/visualTheme.model'
 import { UserVisualTheme } from './models/userVisualTheme.model'
+import { Reaction } from './models/reaction.model'
 import dotenv from 'dotenv'
 import path from 'path'
 
@@ -28,7 +29,7 @@ export const sequelize = new Sequelize({
   database: POSTGRES_DB,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
-  models: [Topic, Comment, Reply, User, VisualTheme, UserVisualTheme],
+  models: [Topic, Comment, Reply, Reaction, User, VisualTheme, UserVisualTheme]
 })
 
 export const connectDB = async () => {
