@@ -6,6 +6,13 @@ export const checkAuth = async (
   res: Response,
   next: NextFunction
 ) => {
+  if (
+    (req.method === 'GET' && req.path === '/api/visualthemes') ||
+    (req.method === 'POST' && req.path === '/api/auth/signUp')
+  ) {
+    return next()
+  }
+
   try {
     const { uuid, authCookie } = getAuthCookies(req.headers.cookie)
 

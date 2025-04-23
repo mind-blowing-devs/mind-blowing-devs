@@ -1,6 +1,7 @@
 import type { Response } from 'express'
 import { NOT_FOUND_MESSAGES } from '../constants'
 import { getErrorObject } from './getErrorObject'
+import { UniqueConstraintError } from 'sequelize'
 
 export function handleError(
   error: unknown,
@@ -8,10 +9,11 @@ export function handleError(
   message = 'An unexpected error occurred'
 ) {
   if (error instanceof Error) {
-    if (error.name === 'SequelizeUniqueConstraintError') {
-      return res
-        .status(400)
-        .json({ message: 'Topic with this title already exists' })
+    if (
+      error.name === 'SequelizeUniqueConstraintError' &&
+      error instanceof UniqueConstraintError
+    ) {
+      return res.status(400).json({ message: error.errors[0].message })
     }
 
     const errorMessage =
