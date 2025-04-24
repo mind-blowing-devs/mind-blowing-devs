@@ -87,8 +87,16 @@ export default function ForumTopic() {
   const onDeleteReply = async (commentId: string) => {
     try {
       await deleteTopicReply(commentId).then(() => {
-        const newComments = comments.filter(item => item.id !== commentId)
-        setComments(newComments)
+        const updatedComments = comments.filter(item => item.id !== commentId)
+        const updatedTotalPages = Math.ceil(
+          updatedComments.length / commentsPerPage
+        )
+        const newPage =
+          page > updatedTotalPages ? Math.max(updatedTotalPages, 1) : page
+
+        setComments(updatedComments)
+        setTotalPages(updatedTotalPages)
+        setPage(newPage)
       })
     } catch (error) {
       console.log(error)
@@ -129,8 +137,9 @@ export default function ForumTopic() {
               Replies ({comments.length})
             </h3>
 
-            {currentComments.map(comment => (
+            {currentComments.map((comment, index) => (
               <Reply
+                key={index}
                 id={comment.id}
                 nickname={comment.author}
                 timestamp={comment.createdAt}
@@ -140,7 +149,7 @@ export default function ForumTopic() {
               />
             ))}
 
-            {comments.length > 5 && (
+            {comments.length > commentsPerPage && (
               <div className="flex gap-2 mt-4">
                 <button
                   disabled={page <= 1}
