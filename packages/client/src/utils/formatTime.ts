@@ -15,11 +15,13 @@ export function formatTime(timestamp: number | undefined): string {
 export const formatDate = (date: string): string => {
   const formattedDate = new Date(date)
 
-  return formattedDate.toLocaleString('en-EN', {
+  const formatter = new Intl.DateTimeFormat('en-EN', {
     day: 'numeric',
     month: 'numeric',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   })
+
+  return formatter.format(formattedDate)
 }

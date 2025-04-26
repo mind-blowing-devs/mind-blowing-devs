@@ -91,8 +91,8 @@ export default function Forum() {
         <button
           className="font-press text-sm hover:text-gray-500 select-none"
           onClick={() => {
-            setPage(1)
-            fetchTopics()
+            if (page === 1) fetchTopics()
+            else setPage(1)
           }}>
           [refresh]
         </button>
