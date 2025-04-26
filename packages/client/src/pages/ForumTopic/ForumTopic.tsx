@@ -1,10 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { CommentInput, Reply } from './components'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Helmet } from 'react-helmet'
 import { usePage } from '../../hooks'
+import { useCallback, useEffect, useState } from 'react'
+import {
+  CommentsType,
+  createTopicReply,
+  deleteTopicReply,
+  ForumTopicDataType,
+  getTopicDetailed,
+} from '../../api/topicsAPI'
+import { AppSpinner } from '../../components'
+import { useAppSelector } from '../../store'
+import { formatDate } from '../../utils'
 
 const schema = z.object({
   comment: z.string().min(1, 'Reply is required'),
@@ -22,12 +33,79 @@ export default function ForumTopic() {
     resolver: zodResolver(schema),
   })
 
+  const [topic, setTopic] = useState<ForumTopicDataType | null>(null)
+  const [comments, setComments] = useState<CommentsType[]>([])
+
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+
+  const { user } = useAppSelector(state => state.user)
+
+  const { id } = useParams()
+
   usePage({})
 
-  const onSubmit = (data: FormValues) => {
-    alert('Not implemented')
+  const commentsPerPage = 4
+
+  const fetchData = useCallback(async () => {
+    try {
+      if (id) {
+        const response = await getTopicDetailed(id)
+        if (response.data) {
+          setTopic(response.data)
+          setComments(response.data.comments)
+          setTotalPages(Math.ceil(response.data.commentCount / commentsPerPage))
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }, [id])
+
+  useEffect(() => {
+    fetchData()
+
+    return () => {
+      setTopic(null)
+      setComments([])
+    }
+  }, [])
+
+  const onSubmit = async (data: FormValues) => {
+    if (user && id) {
+      await createTopicReply({
+        topicId: id,
+        author: user.login,
+        body: data.comment,
+      })
+      await fetchData()
+      setPage(1)
+    }
     reset()
   }
+
+  const onDeleteReply = async (commentId: string) => {
+    try {
+      await deleteTopicReply(commentId).then(() => {
+        const updatedComments = comments.filter(item => item.id !== commentId)
+        const updatedTotalPages = Math.ceil(
+          updatedComments.length / commentsPerPage
+        )
+        const newPage =
+          page > updatedTotalPages ? Math.max(updatedTotalPages, 1) : page
+
+        setComments(updatedComments)
+        setTotalPages(updatedTotalPages)
+        setPage(newPage)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const startIndex = (page - 1) * commentsPerPage
+  const endIndex = startIndex + commentsPerPage
+  const currentComments = comments.slice(startIndex, endIndex)
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-[50px]">
@@ -42,49 +120,70 @@ export default function ForumTopic() {
         Discuss strategies, share tips, and connect with other players!
       </h2>
 
-      <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] text-xs md:text-base sm:text-sm overflow-y-auto">
-        <h3 className="font-roboto font-semibold w-full my-[2px] sm:my-[4px] lg:my-[12px] text-lg lg:text-xl sm:text-lg text-black sm:text-center text-left">
-          Бум или Бах?
-        </h3>
-        <h4 className="font-roboto w-full font-sm lg:text-base sm:text-sm sm:mb-[20px] mb-[8px] text-black sm:text-center text-left">
-          Posted by: MineMaster • 2 days ago • Views: 142
-        </h4>
-        <p className="font-roboto">
-          Всем привет, сапёры! Давно хотел спросить у сообщества: как вы
-          реагируете, когда случайно подрываетесь на мине? Кричите "Бум"? Или
-          "Бах"? А может у вас есть своё негодование? Лично я всегда говорю
-          "Бах!" и бросаю мышку (не рекомендую). Жена уже привыкла к моим
-          внезапным возгласам во время игры :) А как у вас?
-        </p>
+      {topic ? (
+        <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] text-xs md:text-base sm:text-sm overflow-y-auto">
+          <h3 className="font-roboto font-semibold w-full my-[2px] sm:my-[4px] lg:my-[12px] text-lg lg:text-xl sm:text-lg text-black sm:text-center text-left">
+            {topic.title}
+          </h3>
+          <h4 className="font-roboto w-full font-sm lg:text-base sm:text-sm sm:mb-[20px] mb-[8px] text-black sm:text-center text-left">
+            {/* TODO: add Views functionality */}
+            Posted by: {topic.author} • {formatDate(topic.createdAt)} • Views:
+            142
+          </h4>
+          <p className="font-roboto">{topic.description}</p>
 
-        <section className="w-full">
-          <h3 className="font-roboto font-semibold my-[30px]">Replies (2)</h3>
-          <Reply
-            nickname="SweeperPro"
-            timestamp="5 days ago"
-            text="Кстати, кто-нибудь замечал, что первый клик иногда всё равно приводит к взрыву? Или это только у меня такое?"
-          />
-          <Reply
-            nickname="SweeperPro"
-            timestamp="5 days ago"
-            text="Кстати, кто-нибудь замечал, что первый клик иногда всё равно приводит к взрыву? Или это только у меня такое?"
-          />
-          <button className="font-roboto font-normal sm:text-base text-sm pt-[10px] hover:text-gray-500">
-            [More replies...]
-          </button>
-        </section>
+          <section className="w-full">
+            <h3 className="font-roboto font-semibold my-[30px]">
+              Replies ({comments.length})
+            </h3>
 
-        <form
-          className="w-full flex flex-col items-start"
-          onSubmit={handleSubmit(onSubmit)}>
-          <CommentInput register={register} error={errors.comment} />
-          <button
-            type="submit"
-            className="font-roboto font-normal sm:text-base text-sm hover:text-gray-500 self-end">
-            [submit reply]
-          </button>
-        </form>
-      </div>
+            {currentComments.map((comment, index) => (
+              <Reply
+                key={index}
+                id={comment.id}
+                nickname={comment.author}
+                timestamp={comment.createdAt}
+                text={comment.body}
+                currentUserNickname={user?.login ?? ''}
+                onDeleteReply={onDeleteReply}
+              />
+            ))}
+
+            {comments.length > commentsPerPage && (
+              <div className="flex gap-2 mt-4">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage(prev => prev - 1)}
+                  className="px-2 py-1 disabled:opacity-50">
+                  ← Prev
+                </button>
+                <span className="flex items-center">
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => setPage(prev => prev + 1)}
+                  className="px-2 py-1 disabled:opacity-50">
+                  Next →
+                </button>
+              </div>
+            )}
+          </section>
+
+          <form
+            className="w-full flex flex-col items-start"
+            onSubmit={handleSubmit(onSubmit)}>
+            <CommentInput register={register} error={errors.comment} />
+            <button
+              type="submit"
+              className="font-roboto font-normal sm:text-base text-sm hover:text-gray-500 self-end">
+              [submit reply]
+            </button>
+          </form>
+        </div>
+      ) : (
+        <AppSpinner />
+      )}
 
       <nav className="flex flex-col items-center gap-[16px] my-5 sm:my-8">
         <Link

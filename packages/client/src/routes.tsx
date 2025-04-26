@@ -61,7 +61,7 @@ export const routes: RouteObject[] = [
                     element: <CreateTopic />,
                   },
                   {
-                    path: '/forumtopic',
+                    path: '/forumtopic/:id',
                     element: <ForumTopic />,
                   },
                   {

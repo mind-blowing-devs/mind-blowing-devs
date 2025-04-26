@@ -11,3 +11,17 @@ export function formatTime(timestamp: number | undefined): string {
     '0'
   )}`
 }
+
+export const formatDate = (date: string): string => {
+  const formattedDate = new Date(date)
+
+  const formatter = new Intl.DateTimeFormat('en-EN', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  return formatter.format(formattedDate)
+}
