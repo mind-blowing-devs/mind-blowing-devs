@@ -23,7 +23,6 @@ import useScreenSize from '../../hooks/useScreenSize'
 import { Helmet } from 'react-helmet'
 import { useNotifications } from '../../hooks/useNotifications'
 import PlayTips from './components/PlayTips'
-import { Button } from '../../components'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
