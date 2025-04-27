@@ -6,7 +6,7 @@ export const $axios = axios.create({
   withCredentials: true,
 })
 
-export const $axiosTopics = axios.create({
+export const $axiosServerSide = axios.create({
   baseURL: 'http://localhost:5001/api',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,

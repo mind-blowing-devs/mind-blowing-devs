@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react'
-
 import { Link, Outlet } from 'react-router-dom'
 import { useLeaderboardSync, useAuth } from './hooks'
-import { useAppDispatch, setIsFullScreen, toggleFullScreen } from './store'
+import {
+  useAppDispatch,
+  setIsFullScreen,
+  toggleFullScreen,
+  useAppSelector,
+  setSelectedThemeId,
+  setThemes,
+} from './store'
+import { getThemes, getUserTheme } from './api/themeAPI'
 
 function App() {
   useLeaderboardSync()
 
   const dispatch = useAppDispatch()
+
+  const { user } = useAppSelector(state => state.user)
 
   useEffect(() => {
     const fullscreenchangeHandler = () =>
@@ -42,6 +51,38 @@ function App() {
         })
     }
   }, [])
+
+  useEffect(() => {
+    const fetchThemes = async () => {
+      if (user) {
+        try {
+          const [themesResponse, userThemeResponse] = await Promise.all([
+            getThemes(),
+            getUserTheme(String(user.id)),
+          ])
+
+          dispatch(setThemes(themesResponse.data))
+
+          if (
+            (userThemeResponse.data || userThemeResponse.data === null) &&
+            themesResponse.data.length
+          ) {
+            dispatch(
+              setSelectedThemeId(
+                userThemeResponse.data?.visualThemeId ??
+                  themesResponse.data.find((item: any) => item.name === 'dark')
+                    ?.id
+              )
+            )
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+
+    fetchThemes()
+  }, [user])
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const toggleDropdown = () => {

@@ -1,26 +1,39 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
-export type Theme = 'classic' | 'dark'
+export type Theme = {
+  id: string
+  name: string
+  settings: string
+}
 
 type ThemeState = {
-  theme: Theme
+  themes: Theme[]
+  selectedThemeId: string | null
 }
 
 const initialState: ThemeState = {
-  theme:
-    (globalThis.localStorage && (localStorage.getItem('theme') as Theme)) ||
-    'classic',
+  themes: [],
+  selectedThemeId: null,
 }
 
 const themeSlice = createSlice({
   name: 'theme',
   initialState,
   reducers: {
-    setTheme: (state, action: PayloadAction<Theme>) => {
-      state.theme = action.payload
+    setThemes: (state, action: PayloadAction<Theme[]>) => {
+      state.themes = action.payload
+    },
+    setSelectedThemeId: (state, action: PayloadAction<string>) => {
+      const newTheme = state.themes.find(
+        item => item.name === action.payload || item.id === action.payload
+      )?.id
+
+      if (newTheme) {
+        state.selectedThemeId = newTheme
+      }
     },
   },
 })
 
-export const { setTheme } = themeSlice.actions
+export const { setThemes, setSelectedThemeId } = themeSlice.actions
 export default themeSlice.reducer

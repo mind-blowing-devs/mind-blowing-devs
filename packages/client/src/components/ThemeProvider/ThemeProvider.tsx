@@ -6,11 +6,23 @@ type ThemeProviderProps = {
 }
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {
-  const { theme } = useAppSelector(state => state.theme)
+  const { themes, selectedThemeId } = useAppSelector(state => state.theme)
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+    if (themes) {
+      const settings = themes.find(item =>
+        selectedThemeId ? item.id === selectedThemeId : item.name === 'classic'
+      )?.settings
+
+      if (settings) {
+        const parsedSettings = JSON.parse(settings) as Record<string, string>
+
+        Object.entries(parsedSettings).forEach(([key, value]) => {
+          document.documentElement.style.setProperty(key, value)
+        })
+      }
+    }
+  }, [selectedThemeId])
 
   return <>{children}</>
 }

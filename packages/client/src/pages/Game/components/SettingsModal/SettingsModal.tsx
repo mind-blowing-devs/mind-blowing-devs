@@ -3,32 +3,42 @@ import {
   RootState,
   useAppDispatch,
   useAppSelector,
-  setTheme,
-  type Theme,
+  setSelectedThemeId,
 } from '../../../../store'
 
 import { GameButton } from '../GameButton'
 import { SettingsSelect } from '../SettingsSelect'
+import { saveUserTheme } from '../../../../api/themeAPI'
 
 type Difficulty = RootState['gameState']['difficulty']
 
 interface ISettingsModal {
   isOpen: boolean
   onClose: () => void
-  handleSave: (difficulty: Difficulty, theme: Theme) => void
+  handleSave: (difficulty: Difficulty) => void
 }
 
 const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
   const initialDifficulty = useAppSelector(state => state.gameState.difficulty)
+  const { themes, selectedThemeId } = useAppSelector(state => state.theme)
+  const { user } = useAppSelector(state => state.user)
 
   const dispatch = useAppDispatch()
-  const { theme } = useAppSelector(state => state.theme)
+
   const [difficulty, setDifficulty] = useState<Difficulty>(initialDifficulty)
 
   if (!isOpen) return null
 
-  const handleLocalSave = () => {
-    handleSave(difficulty, theme)
+  const handleLocalSave = async () => {
+    handleSave(difficulty)
+
+    if (user?.id)
+      try {
+        await saveUserTheme(user.id, selectedThemeId ?? '')
+      } catch (error) {
+        console.log(error)
+      }
+
     onClose()
   }
 
@@ -46,12 +56,16 @@ const SettingsModal: FC<ISettingsModal> = ({ isOpen, onClose, handleSave }) => {
             options={['beginner', 'intermediate', 'expert']}
             onChange={value => setDifficulty(value as Difficulty)}
           />
-          <SettingsSelect
-            label="theme"
-            value={theme}
-            options={['classic', 'dark']}
-            onChange={value => dispatch(setTheme(value as Theme))}
-          />
+          {themes.length > 0 && (
+            <SettingsSelect
+              label="theme"
+              value={
+                themes.find(item => item.id === selectedThemeId)?.name as string
+              }
+              options={themes.map(theme => theme.name)}
+              onChange={value => dispatch(setSelectedThemeId(value))}
+            />
+          )}
         </div>
 
         <div className="flex justify-end gap-2">

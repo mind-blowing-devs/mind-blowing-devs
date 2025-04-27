@@ -59,9 +59,8 @@ function Game() {
     setShowSettings(true)
   }
 
-  const handleSaveSettings = (difficulty: Difficulty, theme: Theme) => {
+  const handleSaveSettings = (difficulty: Difficulty) => {
     gameController.generateGame(difficulty)
-    localStorage.setItem('theme', theme)
   }
 
   // Метод для открытия полноэкранного режима
