@@ -22,6 +22,8 @@ import { PENDING_LEADERBOARD_FIELD_NAME, usePage } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
 import { Helmet } from 'react-helmet'
 import { useNotifications } from '../../hooks/useNotifications'
+import PlayTips from './components/PlayTips'
+import { Button } from '../../components'
 
 type Difficulty = RootState['gameState']['difficulty']
 type Theme = 'classic' | 'dark'
@@ -75,6 +77,13 @@ function Game() {
     gameController.generateGame()
   }
 
+  // показывает окно с результатом сразу после пройгрыша или выйгрыша
+  useEffect(() => {
+    if (status === 'won' || status === 'lost') {
+      setShowResult(true)
+    }
+  }, [status])
+
   // Функция для обработки клика на кнопку сброса
   const handleResetClick = () => {
     // Показываем модальное окно в соответствии с текущим статусом игры
@@ -107,7 +116,7 @@ function Game() {
       }
       await addUserToLeaderboard(data, ratingFieldName)
     } catch (error) {
-      // Сохраняем результат в локальное хранилище что бы не потерять
+      // Сохраняем результат в локальное хранилище, что бы не потерять
       localStorage.setItem(
         PENDING_LEADERBOARD_FIELD_NAME,
         JSON.stringify({ data, ratingFieldName })
@@ -119,7 +128,7 @@ function Game() {
     if (status === 'won' && user?.login) {
       const ratingFieldName = getRatingFieldName(difficulty)
 
-      // Время сохраняется в секундах и используется отрацительное значение.
+      // Время сохраняется в секундах и используется отрицательное значение.
       // Это необходимо для сортировки на сервере - лучшее время = меньшее время,
       // сервер же сортирует по убыванию
       const finish = finishTime as number
@@ -152,6 +161,13 @@ function Game() {
         <h1 className="w-full max-w-[250px] sm:max-w-xl mb-[42px] lg:mb-[72px] sm:text-xl text-center text-font-color">
           Every click counts! Can you beat the minefield?
         </h1>
+        <Link
+          className="hover:text-gray-500 text-xs sm:text-sm hidden lg:block"
+          aria-label="How to Play?"
+          target="_blank"
+          to="https://en.wikipedia.org/wiki/Minesweeper_(video_game)">
+          [?] How to Play
+        </Link>
       </div>
 
       <div className="bg-[#BFBFBF] p-2 border-4 border-t-white border-l-white border-r-[#7B7B7B] border-b-[#7B7B7B] w-full xl:w-auto h-dvh lg:h-[80vh] xl:h-auto flex flex-col">
@@ -197,6 +213,8 @@ function Game() {
         difficulty={difficulty}
         result={status === 'won' ? 'won' : 'lost'}
       />
+
+      <PlayTips />
     </main>
   )
 }
