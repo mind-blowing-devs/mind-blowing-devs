@@ -1,21 +1,38 @@
 import { EmojiReactions } from '../../../../components/EmojiReactions'
 
 export interface IReply {
+  id: string
   nickname: string
   text: string
   timestamp: string
-  id?: number
+  currentUserNickname: string
+  onDeleteReply: (commentId: string) => Promise<void>
 }
 
-export default function Reply({ nickname, text, timestamp, id = 0 }: IReply) {
+export default function Reply({
+  id,
+  nickname,
+  text,
+  timestamp,
+  currentUserNickname,
+  onDeleteReply,
+}: IReply) {
   return (
-    <div className="mb-4 pb-4 border-b border-gray-200">
-      <div className="font-roboto font-normal mb-[12px]">
-        <span className="underline decoration-solid">{nickname}</span> •{' '}
-        {timestamp}
+    <div className="group">
+      <div className="font-roboto font-normal mb-[12px] flex justify-between">
+        <div>
+          <span className="underline decoration-solid">{nickname}</span> • {timestamp}
+        </div>
+        {nickname === currentUserNickname && (
+          <button
+            className="opacity-0 group-hover:opacity-100 transition-opacity hover:text-gray-600"
+            onClick={() => onDeleteReply(id)}>
+            delete
+          </button>
+        )}
       </div>
       <span className="font-roboto">{text}</span>
-      <EmojiReactions replyId={id} />
+      <EmojiReactions replyId={Number(id)} />
     </div>
   )
 }

@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Helmet } from 'react-helmet'
 import { usePage } from '../../hooks'
+import { createTopic } from '../../api/topicsAPI'
+import { useAppSelector } from '../../store'
 
 const schema = z.object({
   topicTitle: z
@@ -31,9 +33,20 @@ export default function CreateTopic() {
   })
   usePage({})
 
-  const onSubmit = (data: CreateTopicFormValues) => {
-    alert('Not implemented')
-    reset()
+  const { user } = useAppSelector(state => state.user)
+
+  const onSubmit = async (data: CreateTopicFormValues) => {
+    try {
+      await createTopic({
+        title: data.topicTitle,
+        description: data.topicDescription,
+        author: user?.login ?? '',
+        category: data.topicCategory ?? '',
+      })
+      reset()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -45,9 +58,7 @@ export default function CreateTopic() {
           content="Create any Topic regarding Mind-blowing_Devs or Minesweeper Adventure game!"
         />
       </Helmet>
-      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
-        Minesweeper Forum
-      </h1>
+      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">Minesweeper Forum</h1>
       <h2 className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
       </h2>
@@ -65,10 +76,7 @@ export default function CreateTopic() {
           onSubmit={handleSubmit(onSubmit)}>
           <TitleInput register={register} error={errors.topicTitle} />
           <CategoryInput register={register} />
-          <DescriptionInput
-            register={register}
-            error={errors.topicDescription}
-          />
+          <DescriptionInput register={register} error={errors.topicDescription} />
         </form>
       </div>
 
