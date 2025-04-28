@@ -10,17 +10,23 @@ export default function EmojiReactions({ replyId }: IEmojiReactions) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   // Используем хук для работы с эмодзи-реакциями
-  const { reactions, isLoading, addReaction, error } = useEmojiReactions({
+  const { reactions, isLoading, addReaction, removeReaction, error } = useEmojiReactions({
     replyId,
   })
 
-  // Функция для добавления реакции эмодзи
-  const handleAddReaction = useCallback(
-    async (emoji: string) => {
-      await addReaction(emoji)
+  // Функция для добавления/удаления реакции эмодзи
+  const handleReactionClick = useCallback(
+    async (emoji: string, reactionId?: number) => {
+      if (reactionId && reactionId > 0) {
+        // Если это реакция текущего пользователя, удаляем её
+        await removeReaction(reactionId)
+      } else {
+        // Добавляем новую реакцию
+        await addReaction(emoji)
+      }
       setShowEmojiPicker(false)
     },
-    [addReaction]
+    [addReaction, removeReaction]
   )
 
   // Функция для отображения панели выбора эмодзи
@@ -36,22 +42,32 @@ export default function EmojiReactions({ replyId }: IEmojiReactions) {
   return (
     <div>
       {isLoading ? (
-        <div className="font-roboto mt-2 text-sm text-gray-500">
-          Loading reactions...
-        </div>
+        <div className="font-roboto mt-2 text-sm text-gray-500">Loading reactions...</div>
       ) : error ? (
-        <div className="font-roboto mt-2 text-sm text-red-500">
-          Error loading reactions
-        </div>
+        <div className="font-roboto mt-2 text-sm text-red-500">Error loading reactions</div>
       ) : (
         reactions.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
             {reactions.map(reaction => (
               <button
                 key={reaction.id || `${reaction.emoji}-${reaction.count}`}
-                className="flex items-center bg-gray-100 rounded-full px-2 py-1 text-sm hover:bg-gray-200"
-                onClick={() => handleAddReaction(reaction.emoji)}
-                aria-label={`React with ${reaction.emoji}`}>
+                className={`flex items-center rounded-full px-2 py-1 text-sm 
+                  ${
+                    reaction.userReacted
+                      ? 'bg-blue-100 hover:bg-blue-200'
+                      : 'bg-gray-100 hover:bg-gray-200'
+                  }`}
+                onClick={() =>
+                  handleReactionClick(
+                    reaction.emoji,
+                    reaction.userReacted ? reaction.id : undefined
+                  )
+                }
+                aria-label={
+                  reaction.userReacted
+                    ? `Remove ${reaction.emoji} reaction`
+                    : `React with ${reaction.emoji}`
+                }>
                 <span className="mr-1 text-xl">{reaction.emoji}</span>
                 <span className="text-xs text-gray-600">{reaction.count}</span>
               </button>
@@ -69,10 +85,7 @@ export default function EmojiReactions({ replyId }: IEmojiReactions) {
         </button>
 
         {showEmojiPicker && (
-          <EmojiPicker
-            onSelect={handleAddReaction}
-            onClose={closeEmojiPicker}
-          />
+          <EmojiPicker onSelect={handleReactionClick} onClose={closeEmojiPicker} />
         )}
       </div>
     </div>

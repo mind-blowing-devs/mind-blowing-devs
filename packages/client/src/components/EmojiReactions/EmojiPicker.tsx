@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react'
 import { ALL_AVAILABLE_EMOJIS } from '../../api/reactionAPI'
 
 interface EmojiPickerProps {
-  onSelect: (emoji: string) => void
+  onSelect: (emoji: string, reactionId?: number) => void
   onClose: () => void
 }
 

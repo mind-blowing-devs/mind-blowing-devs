@@ -29,15 +29,7 @@ export const useEmojiReactions = ({ replyId }: IUseEmojiReactions): IUseEmojiRea
 
     try {
       const fetchedReactions = await reactionAPI.getReactions(replyId)
-
-      // Преобразуем данные из API в формат для UI
-      const formattedReactions: EmojiReaction[] = fetchedReactions.map(reaction => ({
-        id: reaction.id,
-        emoji: reaction.emoji,
-        count: reaction.count,
-      }))
-
-      setReactions(formattedReactions)
+      setReactions(fetchedReactions)
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to fetch reactions'))
       console.error('Failed to fetch reactions:', err)
@@ -56,64 +48,42 @@ export const useEmojiReactions = ({ replyId }: IUseEmojiReactions): IUseEmojiRea
 
       try {
         const request: AddReactionRequest = {
-          replyId,
+          replyId: String(replyId),
           emoji,
         }
 
         const response = await reactionAPI.addReaction(request)
 
         if (response) {
-          // Обновляем состояние реакций после успешного API-вызова
-          setReactions(prevReactions => {
-            const existingReactionIndex = prevReactions.findIndex(
-              reaction => reaction.emoji === emoji
-            )
-
-            if (existingReactionIndex >= 0) {
-              // Обновляем существующую реакцию
-              const updatedReactions = [...prevReactions]
-              updatedReactions[existingReactionIndex] = {
-                ...updatedReactions[existingReactionIndex],
-                count: updatedReactions[existingReactionIndex].count + 1,
-                id: response.id,
-              }
-              return updatedReactions
-            } else {
-              // Добавляем новую реакцию
-              return [
-                ...prevReactions,
-                {
-                  id: response.id,
-                  emoji,
-                  count: 1,
-                },
-              ]
-            }
-          })
+          // После успешного добавления реакции, обновляем список реакций
+          await fetchReactions()
         }
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to add reaction'))
         console.error('Failed to add reaction:', err)
       }
     },
-    [replyId]
+    [replyId, fetchReactions]
   )
 
-  const removeReaction = useCallback(async (reactionId: number) => {
-    if (!reactionId) return
+  const removeReaction = useCallback(
+    async (reactionId: number) => {
+      if (!reactionId) return
 
-    try {
-      const success = await reactionAPI.removeReaction(reactionId)
+      try {
+        const success = await reactionAPI.removeReaction(reactionId)
 
-      if (success) {
-        // Удаляем реакцию из состояния
-        setReactions(prevReactions => prevReactions.filter(reaction => reaction.id !== reactionId))
+        if (success) {
+          // После успешного удаления реакции, обновляем список реакций
+          await fetchReactions()
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Failed to remove reaction'))
+        console.error('Failed to remove reaction:', err)
       }
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to remove reaction'))
-      console.error('Failed to remove reaction:', err)
-    }
-  }, [])
+    },
+    [fetchReactions]
+  )
 
   return {
     reactions,
