@@ -5,7 +5,8 @@
 Дизайн проекта разработан в
 Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXsVMjYUpKUq/Minesweeper-%E2%80%94-Interactive-Components-Demo-(Community)-(Copy)?node-id=1-63&t=L45VPRQdQyeT9xZk-1>)
 
-Проект включает следующие страницы:
+<details>
+  <summary>Страницы проекта</summary>
 
 - **Авторизация**  
   Вход в систему через логин и пароль
@@ -36,10 +37,14 @@ Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXs
 
 - **Страница с топиком**  
   Страница с топиком и комментариями к нему
+</details>
 
 ## Проект
 
-[Видео с демострацией работоспособности проекта](https://disk.yandex.ru/i/gpekWPn5ttRukQ)
+### Видео с демонстрацией работоспособности проекта
+
+- [Демо задач 5-6 спринтов](https://disk.yandex.ru/i/gpekWPn5ttRukQ)
+- [Демо задач 7-8 спринтов](https://disk.yandex.ru/i/Bmk4SXcfxSDy4w)
 
 ### Как запускать?
 
@@ -49,9 +54,10 @@ Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXs
 
 **Перед выпуском в production обязательно заполните файл данными для продакшена, как минимум замените секреты и ключи для базы данных!**
 
-- **Запуск в IDE** (для разработки и тестов)
+<details>
+  <summary>Запуск в IDE (для разработки и тестов)</summary>
 
-1. Убедитесь что у вас установлен `node` и `docker`
+1. Убедитесь что у вас установлены `node`, `docker` и `docker` запущен
 2. Выполните команду `yarn bootstrap` - это обязательный шаг, без него ничего работать не будет :)
 3. Выполните команду `yarn dev` чтобы запустить весь проект
 4. Выполните команду `yarn dev --scope=client` чтобы запустить только клиент
@@ -61,12 +67,14 @@ Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXs
 данных `postgres` и `pgadmin` в Docker контейнерах
 
 Данные для входа в pgadmin вы указывали в `.env` файле, в поле Host name/address нужно будет указать `postgres`
+</details>
 
-- **Запуск в Docker** (production сборка)
+<details>
+  <summary>Запуск в Docker (production сборка)</summary>
 
-1. Убедитесь что у вас установлен `Docker`
+1. Убедитесь что у вас установлен и запущен `Docker`
 2. Выполните команду `yarn build:docker` чтобы собрать образы
-3. Выполните команду `yarn preview:docker` чтобы запустить контейнеры
+3. Выполните команду `yarn preview:docker` чтобы запустить все контейнеры
 
 **Запустятся 4 сервиса:**
 
@@ -76,6 +84,10 @@ Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXs
 - pgadmin
 
 Данные для входа в pgadmin вы указывали в `.env` файле, в поле Host name/address нужно будет указать `postgres`
+</details>
+
+Если вам понадобится запустить только один сервис, просто уточните какой в команде
+`docker compose up {sevice_name}`, например `docker compose up client`
 
 ### Как добавить зависимости?
 
@@ -132,16 +144,3 @@ Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXs
 В качестве `root directory` укажите `packages/client`
 
 Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
-
-## Production окружение в докере
-
-Перед первым запуском выполните `node init.js`
-
-`docker compose up` - запустит три сервиса
-
-1. nginx, раздающий клиентскую статику (client)
-2. node, ваш сервер (server)
-3. postgres, вашу базу данных (postgres)
-
-Если вам понадобится только один сервис, просто уточните какой в команде
-`docker compose up {sevice_name}`, например `docker compose up server`
