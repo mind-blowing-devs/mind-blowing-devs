@@ -3,15 +3,18 @@ import { useEmojiReactions } from '../../hooks'
 import EmojiPicker from './EmojiPicker'
 
 interface IEmojiReactions {
-  replyId: number
+  replyId: string | number
 }
 
 export default function EmojiReactions({ replyId }: IEmojiReactions) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
+  // Преобразуем replyId в строку для хука
+  const replyIdStr = typeof replyId === 'number' ? String(replyId) : replyId
+
   // Используем хук для работы с эмодзи-реакциями
   const { reactions, isLoading, addReaction, removeReaction, error } = useEmojiReactions({
-    replyId,
+    replyId: replyIdStr,
   })
 
   // Функция для добавления/удаления реакции эмодзи

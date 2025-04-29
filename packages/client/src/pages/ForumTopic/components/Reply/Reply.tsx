@@ -32,7 +32,7 @@ export default function Reply({
         )}
       </div>
       <span className="font-roboto">{text}</span>
-      <EmojiReactions replyId={Number(id)} />
+      <EmojiReactions replyId={id} />
     </div>
   )
 }

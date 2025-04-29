@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { reactionAPI, EmojiReaction, AddReactionRequest } from '../api/reactionAPI'
 
 interface IUseEmojiReactions {
-  replyId: number
+  replyId: string
 }
 
 interface IUseEmojiReactionsReturn {
@@ -48,7 +48,7 @@ export const useEmojiReactions = ({ replyId }: IUseEmojiReactions): IUseEmojiRea
 
       try {
         const request: AddReactionRequest = {
-          replyId: String(replyId),
+          replyId: replyId,
           emoji,
         }
 
