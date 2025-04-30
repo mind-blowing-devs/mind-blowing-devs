@@ -58,9 +58,7 @@ export default function CreateTopic() {
           content="Create any Topic regarding Mind-blowing_Devs or Minesweeper Adventure game!"
         />
       </Helmet>
-      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">
-        Minesweeper Forum
-      </h1>
+      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-[#585656]">Minesweeper Forum</h1>
       <h2 className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
       </h2>
@@ -78,10 +76,7 @@ export default function CreateTopic() {
           onSubmit={handleSubmit(onSubmit)}>
           <TitleInput register={register} error={errors.topicTitle} />
           <CategoryInput register={register} />
-          <DescriptionInput
-            register={register}
-            error={errors.topicDescription}
-          />
+          <DescriptionInput register={register} error={errors.topicDescription} />
         </form>
       </div>
 

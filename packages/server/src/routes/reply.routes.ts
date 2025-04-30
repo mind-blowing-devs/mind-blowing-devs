@@ -1,9 +1,5 @@
 import express from 'express'
-import {
-  createReplyController,
-  deleteReplyController,
-  getRepliesController,
-} from '../controllers'
+import { createReplyController, deleteReplyController, getRepliesController } from '../controllers'
 import { validateRequestData } from '../middlewares'
 import { createReplySchema, getRepliesSchema, replyIdSchema } from '../schemas'
 
@@ -15,10 +11,6 @@ router.get(
   validateRequestData(getRepliesSchema, 'query'),
   getRepliesController as unknown as express.RequestHandler
 )
-router.delete(
-  '/:replyId',
-  validateRequestData(replyIdSchema, 'params'),
-  deleteReplyController
-)
+router.delete('/:replyId', validateRequestData(replyIdSchema, 'params'), deleteReplyController)
 
 export default router

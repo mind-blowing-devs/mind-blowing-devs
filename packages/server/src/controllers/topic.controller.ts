@@ -14,10 +14,7 @@ import {
   deleteTopicById,
 } from '../services'
 
-export const createTopicController = async (
-  req: CreateTopicRequest,
-  res: Response
-) => {
+export const createTopicController = async (req: CreateTopicRequest, res: Response) => {
   try {
     const topic = await createTopic(req.body)
     return res.status(201).json(topic)
@@ -26,10 +23,7 @@ export const createTopicController = async (
   }
 }
 
-export const getAllTopicsController = async (
-  req: GetAllTopicsRequest,
-  res: Response
-) => {
+export const getAllTopicsController = async (req: GetAllTopicsRequest, res: Response) => {
   try {
     const topicsWithPagination = await getAllTopics(req.query)
     return res.json(topicsWithPagination)
@@ -38,10 +32,7 @@ export const getAllTopicsController = async (
   }
 }
 
-export const getTopicByIdController = async (
-  req: Request<TopicIdParams>,
-  res: Response
-) => {
+export const getTopicByIdController = async (req: Request<TopicIdParams>, res: Response) => {
   try {
     const topic = await getTopicWithComments(req.params.id)
     return res.json(topic)
@@ -50,10 +41,7 @@ export const getTopicByIdController = async (
   }
 }
 
-export const updateTopicController = async (
-  req: UpdateTopicRequest,
-  res: Response
-) => {
+export const updateTopicController = async (req: UpdateTopicRequest, res: Response) => {
   try {
     const updatedTopic = await updateTopicById(req.params.id, req.body)
     return res.json(updatedTopic)
@@ -62,10 +50,7 @@ export const updateTopicController = async (
   }
 }
 
-export const deleteTopicController = async (
-  req: Request<TopicIdParams>,
-  res: Response
-) => {
+export const deleteTopicController = async (req: Request<TopicIdParams>, res: Response) => {
   try {
     await deleteTopicById(req.params)
     return res.status(204).send()

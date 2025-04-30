@@ -1,11 +1,7 @@
 import { Reply, Comment } from '../models'
 import { sequelize } from '../db'
 import { CreateReplyData, GetRepliesData } from '../types'
-import {
-  COMMENT_NOT_FOUND,
-  REPLY_NOT_FOUND,
-  PARENT_REPLY_NOT_FOUND,
-} from '../constants'
+import { COMMENT_NOT_FOUND, REPLY_NOT_FOUND, PARENT_REPLY_NOT_FOUND } from '../constants'
 
 export const createReply = async (data: CreateReplyData) => {
   const transaction = await sequelize.transaction()
@@ -55,12 +51,7 @@ export const createReply = async (data: CreateReplyData) => {
   }
 }
 
-export const getReplies = async ({
-  commentId,
-  parentReplyId,
-  offset,
-  limit,
-}: GetRepliesData) => {
+export const getReplies = async ({ commentId, parentReplyId, offset, limit }: GetRepliesData) => {
   const where = parentReplyId
     ? { parentReplyId } // if parentReplyId is provided, get replies to that reply
     : { commentId, parentReplyId: null } // if no parentReplyId, get top-level replies

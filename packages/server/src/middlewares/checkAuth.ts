@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import { getErrorObject, getAuthCookies, fetchYandexUser } from '../utils'
+import { User } from '../types/reaction.types'
 
-export const checkAuth = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+declare module 'express' {
+  interface Request {
+    user?: User
+  }
+}
+
+export const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (
     (req.method === 'GET' && req.path === '/api/visualthemes') ||
     (req.method === 'POST' && req.path === '/api/auth/signUp')
@@ -20,7 +23,11 @@ export const checkAuth = async (
       return res.status(403).json(getErrorObject('Unauthorized'))
     }
 
-    await fetchYandexUser(uuid, authCookie)
+    const yandexUser = await fetchYandexUser(uuid, authCookie)
+
+    req.user = {
+      id: yandexUser.id,
+    }
 
     return next()
   } catch (error) {

@@ -25,13 +25,9 @@ export const addReactionSchema = z.object({
     .string({
       required_error: 'Emoji is required',
     })
-    .refine(
-      (val): val is AvailableEmoji =>
-        ALL_AVAILABLE_EMOJIS.includes(val as AvailableEmoji),
-      {
-        message: `Emoji must be one of: ${ALL_AVAILABLE_EMOJIS.join(', ')}`,
-      }
-    ),
+    .refine((val): val is AvailableEmoji => ALL_AVAILABLE_EMOJIS.includes(val as AvailableEmoji), {
+      message: `Emoji must be one of: ${ALL_AVAILABLE_EMOJIS.join(', ')}`,
+    }),
 })
 
 /**

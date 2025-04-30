@@ -10,11 +10,7 @@ import {
   Leaderboard,
   Error,
 } from './pages'
-import {
-  NotAuthedProtectedRoutes,
-  AuthedProtectedRoutes,
-  ErrorBoundary,
-} from './components'
+import { NotAuthedProtectedRoutes, AuthedProtectedRoutes, ErrorBoundary } from './components'
 import App from './App'
 import { AuthProvider } from './hooks'
 import { AppDispatch, RootState } from './store'

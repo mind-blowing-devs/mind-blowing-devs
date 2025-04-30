@@ -1,9 +1,4 @@
-import type {
-  CreateTopicData,
-  GetAllTopicsData,
-  TopicIdParams,
-  UpdateTopicData,
-} from '../types'
+import type { CreateTopicData, GetAllTopicsData, TopicIdParams, UpdateTopicData } from '../types'
 import { Topic, Comment } from '../models'
 import { getPaginationData } from '../utils'
 import { TOPIC_NOT_FOUND } from '../constants'

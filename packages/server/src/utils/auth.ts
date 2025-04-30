@@ -22,14 +22,11 @@ export const fetchYandexUser = async (uuid: string, authCookie: string) => {
     return cached as User
   }
 
-  const response = await axios.get<User>(
-    `${process.env.YANDEX_API_URL}/auth/user`,
-    {
-      headers: {
-        Cookie: `uuid=${uuid}; authCookie=${authCookie};`,
-      },
-    }
-  )
+  const response = await axios.get<User>(`${process.env.YANDEX_API_URL}/auth/user`, {
+    headers: {
+      Cookie: `uuid=${uuid}; authCookie=${authCookie};`,
+    },
+  })
 
   cache.set(cacheKey, response.data)
   return response.data

@@ -7,7 +7,6 @@ export const USER_NOT_FOUND = 'USER_NOT_FOUND'
 export const REACTION_NOT_FOUND = 'REACTION_NOT_FOUND'
 export const UNAUTHORIZED_REACTION_REMOVAL = 'UNAUTHORIZED_REACTION_REMOVAL'
 
-
 export const NOT_FOUND_MESSAGES = {
   [TOPIC_NOT_FOUND]: 'Topic not found',
   [COMMENT_NOT_FOUND]: 'Comment not found',
@@ -16,5 +15,5 @@ export const NOT_FOUND_MESSAGES = {
   [VISUAL_THEME_NOT_FOUND]: 'Visual theme not found',
   [USER_NOT_FOUND]: 'User not found',
   [REACTION_NOT_FOUND]: 'Reaction not found',
-  [UNAUTHORIZED_REACTION_REMOVAL]: 'You can only remove your own reactions'
+  [UNAUTHORIZED_REACTION_REMOVAL]: 'You can only remove your own reactions',
 }

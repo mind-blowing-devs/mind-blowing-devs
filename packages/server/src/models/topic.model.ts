@@ -1,12 +1,4 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  Default,
-  HasMany,
-} from 'sequelize-typescript'
+import { Table, Column, Model, DataType, PrimaryKey, Default, HasMany } from 'sequelize-typescript'
 import { Comment } from './comment.model'
 import { v4 as uuidv4 } from 'uuid'
 

@@ -22,21 +22,13 @@ router.get(
   validateRequestData(getVisualThemesSchema, 'query'),
   getVisualThemesController as unknown as express.RequestHandler
 )
-router.post(
-  '/',
-  validateRequestData(createVisualThemeSchema),
-  createVisualThemeController
-)
+router.post('/', validateRequestData(createVisualThemeSchema), createVisualThemeController)
 router.delete(
   '/:visualThemeId',
   validateRequestData(visualThemeIdSchema, 'params'),
   deleteVisualThemeController
 )
-router.post(
-  '/user',
-  validateRequestData(setUserVisualThemeSchema),
-  setUserVisualThemeController
-)
+router.post('/user', validateRequestData(setUserVisualThemeSchema), setUserVisualThemeController)
 
 router.get(
   '/user/:userId',

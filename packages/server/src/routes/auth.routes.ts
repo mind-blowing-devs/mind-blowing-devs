@@ -5,9 +5,5 @@ import { createUserSchema } from '../schemas'
 
 const router = express.Router()
 
-router.post(
-  '/signUp',
-  validateRequestData(createUserSchema),
-  createUserController
-)
+router.post('/signUp', validateRequestData(createUserSchema), createUserController)
 export default router

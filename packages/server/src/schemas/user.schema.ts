@@ -26,10 +26,7 @@ const rules: { [key: string]: [RegExp, string] } = {
     /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
     'password must contain 8-40 chars, one uppercase letter, and a digit',
   ],
-  phone: [
-    /^\+?[0-9]{10,15}$/,
-    'phone number must contain 10-15 chars, using only digits',
-  ],
+  phone: [/^\+?[0-9]{10,15}$/, 'phone number must contain 10-15 chars, using only digits'],
 }
 
 export const createUserSchema = z.object({

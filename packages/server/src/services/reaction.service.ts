@@ -10,14 +10,9 @@ export interface ReactionWithCount {
 /**
  * Получение всех реакций для конкретного ответа
  */
-export const getReactionsForReply = async (
-  replyId: string
-): Promise<ReactionWithCount[]> => {
+export const getReactionsForReply = async (replyId: string): Promise<ReactionWithCount[]> => {
   const reactions = (await Reaction.findAll({
-    attributes: [
-      'emoji',
-      [sequelize.fn('COUNT', sequelize.col('emoji')), 'count'],
-    ],
+    attributes: ['emoji', [sequelize.fn('COUNT', sequelize.col('emoji')), 'count']],
     where: { replyId },
     group: ['emoji'],
     raw: true,
@@ -29,10 +24,7 @@ export const getReactionsForReply = async (
 /**
  * Получение реакций пользователя для конкретного ответа
  */
-export const getUserReactionsForReply = async (
-  replyId: string,
-  userId: number
-) => {
+export const getUserReactionsForReply = async (replyId: string, userId: number) => {
   const userReactions = await Reaction.findAll({
     where: {
       replyId,
@@ -47,11 +39,7 @@ export const getUserReactionsForReply = async (
 /**
  * Добавление новой реакции
  */
-export const addReaction = async (
-  replyId: string,
-  userId: number,
-  emoji: string
-) => {
+export const addReaction = async (replyId: string, userId: number, emoji: string) => {
   const transaction = await sequelize.transaction()
 
   try {

@@ -88,11 +88,8 @@ export default function ForumTopic() {
     try {
       await deleteTopicReply(commentId).then(() => {
         const updatedComments = comments.filter(item => item.id !== commentId)
-        const updatedTotalPages = Math.ceil(
-          updatedComments.length / commentsPerPage
-        )
-        const newPage =
-          page > updatedTotalPages ? Math.max(updatedTotalPages, 1) : page
+        const updatedTotalPages = Math.ceil(updatedComments.length / commentsPerPage)
+        const newPage = page > updatedTotalPages ? Math.max(updatedTotalPages, 1) : page
 
         setComments(updatedComments)
         setTotalPages(updatedTotalPages)
@@ -113,9 +110,7 @@ export default function ForumTopic() {
         <title>Topic / Minesweeper Adventure game</title>
         <meta name="description" content="Topic description" />
       </Helmet>
-      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
-        Minesweeper Forum
-      </h1>
+      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">Minesweeper Forum</h1>
       <h2 className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
       </h2>
@@ -127,15 +122,12 @@ export default function ForumTopic() {
           </h3>
           <h4 className="font-roboto w-full font-sm lg:text-base sm:text-sm sm:mb-[20px] mb-[8px] text-black sm:text-center text-left">
             {/* TODO: add Views functionality */}
-            Posted by: {topic.author} • {formatDate(topic.createdAt)} • Views:
-            142
+            Posted by: {topic.author} • {formatDate(topic.createdAt)} • Views: 142
           </h4>
           <p className="font-roboto">{topic.description}</p>
 
           <section className="w-full">
-            <h3 className="font-roboto font-semibold my-[30px]">
-              Replies ({comments.length})
-            </h3>
+            <h3 className="font-roboto font-semibold my-[30px]">Replies ({comments.length})</h3>
 
             {currentComments.map((comment, index) => (
               <Reply
@@ -170,9 +162,7 @@ export default function ForumTopic() {
             )}
           </section>
 
-          <form
-            className="w-full flex flex-col items-start"
-            onSubmit={handleSubmit(onSubmit)}>
+          <form className="w-full flex flex-col items-start" onSubmit={handleSubmit(onSubmit)}>
             <CommentInput register={register} error={errors.comment} />
             <button
               type="submit"

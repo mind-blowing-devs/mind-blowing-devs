@@ -23,10 +23,7 @@ interface IFormattedReaction {
 /**
  * Получение всех реакций для конкретного ответа
  */
-export const getReactionsController = async (
-  req: GetReactionsRequest,
-  res: Response
-) => {
+export const getReactionsController = async (req: GetReactionsRequest, res: Response) => {
   try {
     const { replyId } = req.query
 
@@ -37,9 +34,7 @@ export const getReactionsController = async (
     // Получаем все реакции
     const reactions = await getReactionsForReply(replyId)
 
-    const userReactions = req.user?.id
-      ? await getUserReactionsForReply(replyId, req.user.id)
-      : []
+    const userReactions = req.user?.id ? await getUserReactionsForReply(replyId, req.user.id) : []
 
     // Форматируем результат для клиента
     const formattedReactions: IFormattedReaction[] = reactions.map(reaction => {
@@ -65,10 +60,7 @@ export const getReactionsController = async (
 /**
  * Добавление реакции к комментарию
  */
-export const addReactionController = async (
-  req: AddReactionRequest,
-  res: Response
-) => {
+export const addReactionController = async (req: AddReactionRequest, res: Response) => {
   try {
     const { replyId, emoji } = req.body
 
@@ -94,10 +86,7 @@ export const addReactionController = async (
 /**
  * Удаление реакции эмодзи
  */
-export const removeReactionController = async (
-  req: RemoveReactionRequest,
-  res: Response
-) => {
+export const removeReactionController = async (req: RemoveReactionRequest, res: Response) => {
   try {
     const { id } = req.params
 
@@ -116,9 +105,7 @@ export const removeReactionController = async (
           return res.status(404).json({ error: 'Reaction not found' })
         }
         if (error.message === UNAUTHORIZED_REACTION_REMOVAL) {
-          return res
-            .status(403)
-            .json({ error: 'You can only remove your own reactions' })
+          return res.status(403).json({ error: 'You can only remove your own reactions' })
         }
       }
       throw error

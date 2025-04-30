@@ -36,11 +36,7 @@ export const createComment = async (data: CreateCommentData) => {
   }
 }
 
-export const getComments = async ({
-  topicId,
-  offset,
-  limit,
-}: GetCommentsData) => {
+export const getComments = async ({ topicId, offset, limit }: GetCommentsData) => {
   return await Comment.findAll({
     where: { topicId },
     order: [['createdAt', 'DESC']],

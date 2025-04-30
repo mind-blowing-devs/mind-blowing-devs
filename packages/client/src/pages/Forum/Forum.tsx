@@ -19,15 +19,13 @@ export default function Forum() {
       const response = await getAllTopics({ limit: 5, page })
 
       const apiTopics = response.data.topics
-      const formattedTopics: TopicItemProps[] = apiTopics.map(
-        (topic: ForumTopicsInfo) => ({
-          id: topic.id,
-          name: topic.title,
-          author: topic.author,
-          replies: topic.commentCount,
-          lastPost: topic.lastCommentAt ?? topic.createdAt,
-        })
-      )
+      const formattedTopics: TopicItemProps[] = apiTopics.map((topic: ForumTopicsInfo) => ({
+        id: topic.id,
+        name: topic.title,
+        author: topic.author,
+        replies: topic.commentCount,
+        lastPost: topic.lastCommentAt ?? topic.createdAt,
+      }))
 
       setTopics(formattedTopics)
       setTotalPages(response.data.pagination.totalPages || 1)
@@ -52,9 +50,7 @@ export default function Forum() {
         />
       </Helmet>
 
-      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">
-        Minesweeper Forum
-      </h1>
+      <h1 className="w-full mb-[5px] sm:mb-[13px] sm:text-xl text-font-color">Minesweeper Forum</h1>
       <h2 className="font-roboto font-sm w-full sm:text-base text-black lg:mb-[60px] sm:mb-[30px] mb-[10px]">
         Discuss strategies, share tips, and connect with other players!
       </h2>

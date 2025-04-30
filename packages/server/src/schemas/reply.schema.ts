@@ -3,11 +3,7 @@ import xss from 'xss'
 
 export const createReplySchema = z
   .object({
-    commentId: z
-      .string()
-      .uuid({ message: 'commentId must be a valid UUID' })
-      .nullable()
-      .optional(),
+    commentId: z.string().uuid({ message: 'commentId must be a valid UUID' }).nullable().optional(),
 
     parentReplyId: z
       .string()

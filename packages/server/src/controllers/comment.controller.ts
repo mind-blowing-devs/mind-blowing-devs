@@ -1,16 +1,9 @@
 import type { Response } from 'express'
-import type {
-  CreateCommentRequest,
-  DeleteCommentRequest,
-  GetCommentsRequest,
-} from '../types'
+import type { CreateCommentRequest, DeleteCommentRequest, GetCommentsRequest } from '../types'
 import { handleError } from '../utils'
 import { createComment, getComments, deleteComment } from '../services'
 
-export const createCommentController = async (
-  req: CreateCommentRequest,
-  res: Response
-) => {
+export const createCommentController = async (req: CreateCommentRequest, res: Response) => {
   try {
     const comment = await createComment(req.body)
     return res.status(201).json(comment)
@@ -19,10 +12,7 @@ export const createCommentController = async (
   }
 }
 
-export const getCommentsController = async (
-  req: GetCommentsRequest,
-  res: Response
-) => {
+export const getCommentsController = async (req: GetCommentsRequest, res: Response) => {
   try {
     const comments = await getComments(req.query)
     return res.json(comments)
@@ -31,10 +21,7 @@ export const getCommentsController = async (
   }
 }
 
-export const deleteCommentController = async (
-  req: DeleteCommentRequest,
-  res: Response
-) => {
+export const deleteCommentController = async (req: DeleteCommentRequest, res: Response) => {
   try {
     await deleteComment(req.params.commentId)
     return res.status(204).send()

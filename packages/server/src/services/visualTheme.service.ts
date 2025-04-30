@@ -1,9 +1,5 @@
 import { VisualTheme, User, UserVisualTheme } from '../models'
-import type {
-  CreateVisualThemeData,
-  GetVisualThemeData,
-  SetUserVisualThemeData,
-} from '../types'
+import type { CreateVisualThemeData, GetVisualThemeData, SetUserVisualThemeData } from '../types'
 import { sequelize } from '../db'
 // import { Op } from 'sequelize'
 import { VISUAL_THEME_NOT_FOUND, USER_NOT_FOUND } from '../constants'
@@ -24,10 +20,7 @@ export const createVisualTheme = async (data: CreateVisualThemeData) => {
   }
 }
 
-export const getVisualThemes = async ({
-  offset,
-  limit,
-}: GetVisualThemeData) => {
+export const getVisualThemes = async ({ offset, limit }: GetVisualThemeData) => {
   return await VisualTheme.findAll({
     order: [['createdAt', 'DESC']],
     offset,

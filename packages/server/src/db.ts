@@ -16,11 +16,9 @@ const envConfig =
 
 dotenv.config(envConfig)
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
 
-const POSTGRES_HOST =
-  process.env.NODE_ENV === 'development' ? 'localhost' : 'postgres'
+const POSTGRES_HOST = process.env.NODE_ENV === 'development' ? 'localhost' : 'postgres'
 
 export const sequelize = new Sequelize({
   dialect: 'postgres',
@@ -29,7 +27,7 @@ export const sequelize = new Sequelize({
   database: POSTGRES_DB,
   username: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
-  models: [Topic, Comment, Reply, Reaction, User, VisualTheme, UserVisualTheme]
+  models: [Topic, Comment, Reply, Reaction, User, VisualTheme, UserVisualTheme],
 })
 
 export const connectDB = async () => {

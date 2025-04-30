@@ -60,9 +60,7 @@ export const getAllTopics = async (params: {
   })
 }
 
-export const getTopicDetailed = async (
-  id: string
-): Promise<AxiosResponse<ForumTopicDataType>> => {
+export const getTopicDetailed = async (id: string): Promise<AxiosResponse<ForumTopicDataType>> => {
   return $axiosTopics.get(`/topics/${id}`)
 }
 

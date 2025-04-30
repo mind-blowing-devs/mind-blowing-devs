@@ -33,8 +33,6 @@ export type AddReactionRequest = Request<
   user?: User
 }
 
-export type RemoveReactionRequest = Request<
-  z.infer<typeof removeReactionSchema>
-> & {
+export type RemoveReactionRequest = Request<z.infer<typeof removeReactionSchema>> & {
   user?: User
 }

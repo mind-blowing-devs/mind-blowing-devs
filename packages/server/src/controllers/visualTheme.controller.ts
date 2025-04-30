@@ -15,10 +15,7 @@ import {
   getUserVisualTheme,
 } from '../services'
 
-export const createVisualThemeController = async (
-  req: CreateVisualThemeRequest,
-  res: Response
-) => {
+export const createVisualThemeController = async (req: CreateVisualThemeRequest, res: Response) => {
   try {
     const comment = await createVisualTheme(req.body)
     return res.status(201).json(comment)
@@ -27,10 +24,7 @@ export const createVisualThemeController = async (
   }
 }
 
-export const getVisualThemesController = async (
-  req: GetVisualThemeRequest,
-  res: Response
-) => {
+export const getVisualThemesController = async (req: GetVisualThemeRequest, res: Response) => {
   try {
     const vusualThemes = await getVisualThemes(req.query)
     return res.json(vusualThemes)
@@ -39,10 +33,7 @@ export const getVisualThemesController = async (
   }
 }
 
-export const deleteVisualThemeController = async (
-  req: DeleteVisualThemeRequest,
-  res: Response
-) => {
+export const deleteVisualThemeController = async (req: DeleteVisualThemeRequest, res: Response) => {
   try {
     await deleteVisualTheme(req.params.visualThemeId)
     return res.status(204).send()

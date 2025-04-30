@@ -1,4 +1,4 @@
-import React from 'react'
+import { EmojiReactions } from '../../../../components/EmojiReactions'
 
 export interface IReply {
   id: string
@@ -21,8 +21,7 @@ export default function Reply({
     <div className="group">
       <div className="font-roboto font-normal mb-[12px] flex justify-between">
         <div>
-          <span className="underline decoration-solid">{nickname}</span> •{' '}
-          {timestamp}
+          <span className="underline decoration-solid">{nickname}</span> • {timestamp}
         </div>
         {nickname === currentUserNickname && (
           <button
@@ -33,6 +32,7 @@ export default function Reply({
         )}
       </div>
       <span className="font-roboto">{text}</span>
+      <EmojiReactions replyId={id} />
     </div>
   )
 }

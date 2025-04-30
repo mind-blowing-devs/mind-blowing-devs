@@ -13,11 +13,7 @@ import {
 
 import { GameHeader, ResultModal, SettingsModal, GameField } from './components'
 import { GameController } from '../../controllers'
-import {
-  type GameData,
-  getRatingFieldName,
-  addUserToLeaderboard,
-} from '../../api'
+import { type GameData, getRatingFieldName, addUserToLeaderboard } from '../../api'
 import { PENDING_LEADERBOARD_FIELD_NAME, usePage } from '../../hooks'
 import useScreenSize from '../../hooks/useScreenSize'
 import { Helmet } from 'react-helmet'
@@ -30,14 +26,9 @@ type Theme = 'classic' | 'dark'
 const gameController = new GameController()
 
 function Game() {
-  const {
-    minesLeft,
-    minesRevealed,
-    status,
-    difficulty,
-    startTime,
-    finishTime,
-  } = useAppSelector(state => state.gameState)
+  const { minesLeft, minesRevealed, status, difficulty, startTime, finishTime } = useAppSelector(
+    state => state.gameState
+  )
   usePage({})
 
   useNotifications(status)
@@ -93,15 +84,11 @@ function Game() {
     }
   }
 
-  const submitLeaderboardResult = async (
-    data: GameData,
-    ratingFieldName: string
-  ) => {
+  const submitLeaderboardResult = async (data: GameData, ratingFieldName: string) => {
     const currentResult = Number(data[ratingFieldName])
     const previousResult = achievements.gameData[ratingFieldName]
 
-    const isNewRecord =
-      typeof previousResult !== 'number' || currentResult > previousResult
+    const isNewRecord = typeof previousResult !== 'number' || currentResult > previousResult
 
     if (!isNewRecord) {
       return
