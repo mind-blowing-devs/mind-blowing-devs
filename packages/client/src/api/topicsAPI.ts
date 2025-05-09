@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { $axiosTopics } from './baseAPI'
+import { $axios } from './baseAPI'
 
 export type CommentsType = {
   author: string
@@ -48,26 +48,26 @@ type ForumTopicsResponseType = {
 }
 
 export const createTopic = async (data: createTopicData) => {
-  return $axiosTopics.post('/topics', data)
+  return $axios.post('/topics', data)
 }
 
 export const getAllTopics = async (params: {
   page: number
   limit: number
 }): Promise<AxiosResponse<ForumTopicsResponseType>> => {
-  return $axiosTopics.get('/topics', {
+  return $axios.get('/topics', {
     params: params,
   })
 }
 
 export const getTopicDetailed = async (id: string): Promise<AxiosResponse<ForumTopicDataType>> => {
-  return $axiosTopics.get(`/topics/${id}`)
+  return $axios.get(`/topics/${id}`)
 }
 
 export const createTopicReply = async (data: createCommentData) => {
-  return $axiosTopics.post('/comments', data)
+  return $axios.post('/comments', data)
 }
 
 export const deleteTopicReply = async (commentId: string) => {
-  return $axiosTopics.delete(`/comments/${commentId}`)
+  return $axios.delete(`/comments/${commentId}`)
 }

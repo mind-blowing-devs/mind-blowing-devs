@@ -1,13 +1,27 @@
-import type { Response } from 'express'
-import type { CreateUserRequest } from '../types'
-import { handleError } from '../utils'
-import { createUser } from '../services'
+import type { Request, Response } from 'express'
+import { handleError, saveUserIdWithAuthCookie } from '../utils'
+import { YANDEX_API_BASE } from '../constants'
+import { getYandexUser } from '../services'
 
-export const createUserController = async (req: CreateUserRequest, res: Response) => {
+export const getUserController = async (req: Request, res: Response) => {
   try {
-    const user = await createUser(req.body)
-    return res.status(201).json(user)
+    const { uuid, authCookie } = req.userCookies ?? {}
+    const targetUrl = `${YANDEX_API_BASE}${req.path.replace('/api/yandex', '')}`
+
+    if (!uuid || !authCookie) {
+      throw new Error()
+    }
+
+    const { user, status } = await getYandexUser(uuid, authCookie, targetUrl)
+
+    if (!user.id) {
+      throw new Error()
+    }
+
+    await saveUserIdWithAuthCookie(authCookie, user.id)
+
+    return res.status(status).json(user)
   } catch (error) {
-    return handleError(error, res, 'error creating user')
+    return handleError(error, res)
   }
 }

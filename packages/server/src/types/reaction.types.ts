@@ -5,13 +5,7 @@ import {
   addReactionSchema,
   removeReactionSchema,
 } from '../schemas/reaction.schema'
-
-/**
- * Тип пользователя для запросов
- */
-export interface User {
-  id: number
-}
+import type { User } from './user.types'
 
 /**
  * Типы для контроллеров

@@ -21,33 +21,29 @@ export type OAuthYandexData = {
 }
 
 export const signUpApi = async (data: UserSignUpData) => {
-  return await $axios.post('/auth/signup', data)
+  return await $axios.post('/yandex/auth/signup', data)
 }
 
 export const signIn = async (data: UserSignInData): Promise<void> => {
-  return await $axios.post('/auth/signin', data)
+  return await $axios.post('/yandex/auth/signin', data)
 }
 
 export const logOut = async (): Promise<void> => {
-  return await $axios.post('/auth/logout')
+  return await $axios.post('/yandex/auth/logout')
 }
 
 export const checkIfAuthed = async (): Promise<User> => {
-  const { data } = await $axios.get('/auth/user')
+  const { data } = await $axios.get('/yandex/auth/user')
   return data
 }
 
-export const getYandexServiceId = async (
-  redirect_uri: string
-): Promise<string> => {
-  const { data } = await $axios.get('/oauth/yandex/service-id', {
+export const getYandexServiceId = async (redirect_uri: string): Promise<string> => {
+  const { data } = await $axios.get('/yandex/oauth/yandex/service-id', {
     params: { redirect_uri },
   })
   return data.service_id
 }
 
-export const signInWithYandex = async (
-  data: OAuthYandexData
-): Promise<void> => {
-  return await $axios.post('/oauth/yandex', data)
+export const signInWithYandex = async (data: OAuthYandexData): Promise<void> => {
+  return await $axios.post('/yandex/oauth/yandex', data)
 }

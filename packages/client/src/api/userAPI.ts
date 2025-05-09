@@ -17,14 +17,12 @@ export type ChangePasswordData = {
 }
 
 export const changeAvatarApi = async (data: FormData): Promise<User> => {
-  const response = await $axios.put('/user/profile/avatar', data, {
+  const response = await $axios.put('/yandex/user/profile/avatar', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
   return response.data
 }
 
-export const changePassword = async (
-  data: ChangePasswordData
-): Promise<void> => {
-  return await $axios.put('/user/password', data)
+export const changePassword = async (data: ChangePasswordData): Promise<void> => {
+  return await $axios.put('/yandex/user/password', data)
 }

@@ -1,13 +1,9 @@
 import axios from 'axios'
 
-export const $axios = axios.create({
-  baseURL: 'https://ya-praktikum.tech/api/v2',
-  headers: { 'Content-Type': 'application/json' },
-  withCredentials: true,
-})
+export const API_URL = 'http://localhost:5001/api'
 
-export const $axiosTopics = axios.create({
-  baseURL: 'http://localhost:5001/api',
+export const $axios = axios.create({
+  baseURL: API_URL,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 })
