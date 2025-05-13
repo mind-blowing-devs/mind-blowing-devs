@@ -79,7 +79,7 @@ export const setUserVisualTheme = async (data: SetUserVisualThemeData) => {
   }
 }
 
-export const getUserVisualTheme = async (userId: number) => {
+export const getUserVisualTheme = async (userId: string) => {
   const transaction = await sequelize.transaction()
 
   try {

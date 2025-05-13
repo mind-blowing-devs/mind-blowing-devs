@@ -23,8 +23,8 @@ export class UserVisualTheme extends Model {
   @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
   visualThemeId!: string
 
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  userId!: number
+  @Column({ type: DataType.UUID, allowNull: false })
+  userId!: string
 
   @BelongsTo(() => VisualTheme)
   visualTheme!: VisualTheme
