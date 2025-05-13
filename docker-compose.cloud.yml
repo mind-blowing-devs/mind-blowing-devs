@@ -3,7 +3,7 @@ version: '3.9'
 services:
   client:
     container_name: prakticum-client
-    image: ghcr.io/mind-blowing-devs/mind-blowing-devs/client:01d9bb3973319926659738f6c60d6387acd6a009
+    image: ghcr.io/mind-blowing-devs/mind-blowing-devs/client:9a3b27ac941a569eda69822762c82d3e4ac0680e
     restart: always
     ports:
       - '5000:5000'
@@ -11,15 +11,15 @@ services:
       - PORT=5000
       - CLIENT_PORT=5000
       - SERVER_PORT=5001
-      - EXTERNAL_SERVER_URL=http://VM_IP:5001
-      - INTERNAL_SERVER_URL=http://server:5001
+      - EXTERNAL_SERVER_URL=http://158.160.81.49:5001
+      - INTERNAL_SERVER_URL=http://prakticum-server:5001
       - ORIGIN_DEV_URL=http://localhost:5000
-      - ORIGIN_PROD_URL=http://VM_IP:5000
+      - ORIGIN_PROD_URL=http://158.160.81.49:5000
     networks:
       - practicum-network
   server:
     container_name: prakticum-server
-    image: ghcr.io/mind-blowing-devs/mind-blowing-devs/server:01d9bb3973319926659738f6c60d6387acd6a009
+    image: ghcr.io/mind-blowing-devs/mind-blowing-devs/server:9a3b27ac941a569eda69822762c82d3e4ac0680e
     restart: always
     depends_on:
       - postgres
@@ -33,10 +33,10 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
       POSTGRES_PORT: 5432
-      EXTERNAL_SERVER_URL: http://VM_IP:5001
-      INTERNAL_SERVER_URL: http://server:5001
+      EXTERNAL_SERVER_URL: http://158.160.81.49:5001
+      INTERNAL_SERVER_URL: http://prakticum-server:5001
       ORIGIN_DEV_URL: http://localhost:5000
-      ORIGIN_PROD_URL: http://VM_IP:5000
+      ORIGIN_PROD_URL: http://158.160.81.49:5000
     networks:
       - postgres-network
       - practicum-network
@@ -46,6 +46,7 @@ services:
       node /app/src/index.js"
 
   postgres:
+    container_name: postgres
     image: postgres:14
     ports:
       - '5432:5432'
@@ -53,8 +54,9 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./tmp/pgdata:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - postgres-network
   pgadmin:
@@ -68,7 +70,7 @@ services:
     ports:
       - '5466:5466'
     volumes:
-      - ./tmp/pgadmin-data:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
     depends_on:
       - postgres
     networks:
@@ -81,7 +83,7 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - ./tmp/redis-data:/var/lib/redis
+      - redis-data:/var/lib/redis
     networks:
       - practicum-network
 
@@ -90,3 +92,8 @@ networks:
     driver: bridge
   postgres-network:
     driver: bridge
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+  redis-data:
