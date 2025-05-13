@@ -3,7 +3,12 @@ version: '3.9'
 services:
   client:
     container_name: prakticum-client
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/mind-blowing-devs/client:${GITHUB_SHA}
+    image: prakticum-client
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+      args:
+        CLIENT_PORT: ${CLIENT_PORT}
     restart: always
     ports:
       - '${CLIENT_PORT}:${CLIENT_PORT}'
@@ -11,15 +16,16 @@ services:
       - PORT=${CLIENT_PORT}
       - CLIENT_PORT=${CLIENT_PORT}
       - SERVER_PORT=${SERVER_PORT}
-      - EXTERNAL_SERVER_URL=${EXTERNAL_SERVER_URL}
-      - INTERNAL_SERVER_URL=${INTERNAL_SERVER_URL}
-      - ORIGIN_DEV_URL=${ORIGIN_DEV_URL}
-      - ORIGIN_PROD_URL=${ORIGIN_PROD_URL}
     networks:
       - practicum-network
   server:
     container_name: prakticum-server
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/mind-blowing-devs/server:${GITHUB_SHA}
+    image: prackicum-server
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+      args:
+        SERVER_PORT: ${SERVER_PORT}
     restart: always
     depends_on:
       - postgres
