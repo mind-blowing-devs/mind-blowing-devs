@@ -1,91 +1,81 @@
-version: "3.9"
+version: '3.9'
 
 services:
-    client:
-        container_name: prakticum-client
-        image: prakticum-client
-        build:
-            context: .
-            dockerfile: Dockerfile.client
-            args:
-              CLIENT_PORT: ${CLIENT_PORT}
-        restart: always
-        ports:
-            - "${CLIENT_PORT}:${CLIENT_PORT}"
-        environment:
-          - PORT=${CLIENT_PORT}
-          - CLIENT_PORT=${CLIENT_PORT}
-          - SERVER_PORT=${SERVER_PORT}
-        networks:
-          - practicum-network
-    server:
-        container_name: prakticum-server
-        image: prackicum-server
-        build:
-            context: .
-            dockerfile: Dockerfile.server
-            args:
-              SERVER_PORT: ${SERVER_PORT}
-        restart: always
-        depends_on:
-          - postgres
-          - redis
-        ports:
-            - "${SERVER_PORT}:${SERVER_PORT}"
-        environment:
-          SERVER_PORT: ${SERVER_PORT}
-          REDIS_PORT: ${REDIS_PORT}
-          POSTGRES_USER: ${POSTGRES_USER}
-          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-          POSTGRES_DB: ${POSTGRES_DB}
-          POSTGRES_PORT: ${POSTGRES_PORT}
-        networks:
-          - postgres-network
-          - practicum-network
+  client:
+    container_name: prakticum-client
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/mind-blowing-devs/client:${GITHUB_SHA}
+    restart: always
+    ports:
+      - '${CLIENT_PORT}:${CLIENT_PORT}'
+    environment:
+      - PORT=${CLIENT_PORT}
+      - CLIENT_PORT=${CLIENT_PORT}
+      - SERVER_PORT=${SERVER_PORT}
+    networks:
+      - practicum-network
+  server:
+    container_name: prakticum-server
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/mind-blowing-devs/server:${GITHUB_SHA}
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '${SERVER_PORT}:${SERVER_PORT}'
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      REDIS_PORT: ${REDIS_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    networks:
+      - postgres-network
+      - practicum-network
 
-        command: sh -c "./wait-for.sh postgres:${POSTGRES_PORT} -- 
-         ./wait-for.sh redis:${REDIS_PORT} -- 
-         node /app/src/index.js"
+    command: sh -c "./wait-for.sh postgres:${POSTGRES_PORT} --
+      ./wait-for.sh redis:${REDIS_PORT} --
+      node /app/src/index.js"
 
-    postgres:
-      image: postgres:14
-      ports:
-        - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-      environment:
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_DB: ${POSTGRES_DB}
-      volumes:
-        - ./tmp/pgdata:/var/lib/postgresql/data
-      networks:
-        - postgres-network
-    pgadmin:
-      container_name: pgadmin
-      image: dpage/pgadmin4:4.18
-      restart: always
-      environment:
-        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-        PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
-      ports:
-        - "${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}"
-      volumes:
-        - ./tmp/pgadmin-data:/var/lib/pgadmin
-      depends_on:
-        - postgres
-      networks:
-        - postgres-network
-        
-    redis: 
-      container_name: redis
-      image: redis:7-alpine
-      restart: always
-      ports:
-        - "${REDIS_PORT}:${REDIS_PORT}"
-      volumes:
-        - ./tmp/redis-data:/var/lib/redis
-      networks:
-        - practicum-network
+  postgres:
+    image: postgres:14
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./tmp/pgdata:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:4.18
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
+    ports:
+      - '${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}'
+    volumes:
+      - ./tmp/pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    volumes:
+      - ./tmp/redis-data:/var/lib/redis
+    networks:
+      - practicum-network
 
 networks:
   practicum-network:
