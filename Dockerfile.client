@@ -1,5 +1,7 @@
 ARG NODE_VERSION=20
 ARG CLIENT_PORT=${CLIENT_PORT:-3000}
+ARG EXTERNAL_SERVER_URL=${EXTERNAL_SERVER_URL:-http://localhost:5001}
+ARG INTERNAL_SERVER_URL=${INTERNAL_SERVER_URL:-http://server:5001}
 
 # I use YARN_IGNORE_SCRIPTS to disable lefthook
 # Because it causes build to fail with node:$NODE_VERSION-bookworm
@@ -15,6 +17,11 @@ RUN YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile
 
 COPY . .
 
+# Pass environment variables to Vite during build
+ENV CLIENT_PORT=$CLIENT_PORT
+ENV EXTERNAL_SERVER_URL=$EXTERNAL_SERVER_URL
+ENV INTERNAL_SERVER_URL=$INTERNAL_SERVER_URL
+
 RUN yarn lerna bootstrap
 RUN rm -rf /app/packages/client/dist/ && yarn build --scope=client
 
@@ -26,6 +33,11 @@ COPY --from=builder /app/packages/client/dist/ /app/dist/
 COPY --from=builder /app/packages/client/server/ /app/server/
 COPY --from=builder /app/packages/client/package.json /app/package.json
 RUN YARN_IGNORE_SCRIPTS=1 yarn install --production=true
+
+# Pass environment variables to runtime
+ENV CLIENT_PORT=$CLIENT_PORT
+ENV EXTERNAL_SERVER_URL=$EXTERNAL_SERVER_URL
+ENV INTERNAL_SERVER_URL=$INTERNAL_SERVER_URL
 
 EXPOSE $CLIENT_PORT
 CMD [ "node", "/app/server/index.js" ]
