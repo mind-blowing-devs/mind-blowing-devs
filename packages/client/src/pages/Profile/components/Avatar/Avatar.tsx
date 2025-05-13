@@ -1,11 +1,12 @@
 import { memo } from 'react'
+import { API_URL } from '../../../../api/baseAPI'
 
 type AvatarProps = {
   avatar: string | null
 }
 
-const RESOURCES_URL = 'https://ya-praktikum.tech/api/v2/resources'
-const DEFAULT_AVATAR_URL = '/default-avatar.png'
+export const RESOURCES_URL = API_URL + '/yandex/resources'
+export const DEFAULT_AVATAR_URL = '/default-avatar.png'
 
 export default memo(function Avatar({ avatar }: AvatarProps) {
   return (

@@ -23,11 +23,8 @@ export const getRatingFieldName = (level: Difficulty): string => {
   return TEAM_NAME + level
 }
 
-export const addUserToLeaderboard = async (
-  gameData: GameData,
-  field: string
-): Promise<void> => {
-  await $axios.post('/leaderboard', {
+export const addUserToLeaderboard = async (gameData: GameData, field: string): Promise<void> => {
+  await $axios.post('/yandex/leaderboard', {
     data: gameData,
     ratingFieldName: field,
     teamName: TEAM_NAME,
@@ -38,6 +35,6 @@ export const getLeaderboard = async (
   data: Partial<GetLeaderboardData>,
   signal?: AbortSignal
 ): Promise<LeaderboardData> => {
-  const result = await $axios.post('/leaderboard/all', data, { signal })
+  const result = await $axios.post('/yandex/leaderboard/all', data, { signal })
   return result.data
 }

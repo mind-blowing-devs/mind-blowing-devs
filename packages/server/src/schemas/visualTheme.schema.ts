@@ -45,12 +45,9 @@ export const visualThemeIdSchema = z
 
 export const setUserVisualThemeSchema = z
   .object({
-    userId: z
-      .string({
-        required_error: 'userId is required',
-      })
-      .uuid({ message: 'invalid userId format' }),
-
+    userId: z.coerce.number({
+      required_error: 'userId is required',
+    }),
     visualThemeId: z
       .string({
         required_error: 'visualThemeId is required',
@@ -61,6 +58,6 @@ export const setUserVisualThemeSchema = z
 
 export const getUserVisualThemeSchema = z
   .object({
-    userId: z.string().uuid({ message: 'invalid userId format' }),
+    userId: z.coerce.number({ message: 'invalid userId format' }),
   })
   .strict()

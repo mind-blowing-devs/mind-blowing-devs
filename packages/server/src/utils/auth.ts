@@ -1,38 +1,24 @@
-import axios from 'axios'
-import { Cache } from '../utils'
+import redis from '../redisClient'
 
-type User = {
-  id: number
-  first_name: string
-  second_name: string
-  display_name: string
-  login: string
-  avatar: string
-  email: string
-  phone: string
-}
+export async function getCachedUser(authCookieValue: string) {
+  const raw = await redis.get(`auth:${authCookieValue}`)
 
-const cache = new Cache()
-
-export const fetchYandexUser = async (uuid: string, authCookie: string) => {
-  const cacheKey = `yandexUser_${uuid}`
-
-  const cached = cache.get(cacheKey)
-  if (cached) {
-    return cached as User
+  if (!raw) {
+    throw new Error('No data found for this key')
   }
 
-  const response = await axios.get<User>(`${process.env.YANDEX_API_URL}/auth/user`, {
-    headers: {
-      Cookie: `uuid=${uuid}; authCookie=${authCookie};`,
-    },
-  })
+  let value
+  try {
+    value = JSON.parse(raw as string)
+  } catch (error) {
+    console.error(error)
+    throw new Error('Failed to parse JSON data from Redis')
+  }
 
-  cache.set(cacheKey, response.data)
-  return response.data
+  return value
 }
 
-const parseCookies = (cookieString: string) => {
+export const parseCookies = (cookieString: string) => {
   return cookieString
     .split(';')
     .map(part => part.trim())
@@ -43,19 +29,4 @@ const parseCookies = (cookieString: string) => {
       }
       return acc
     }, {})
-}
-
-export const getAuthCookies = (cookieHeader: string | undefined) => {
-  const { uuid, authCookie } = parseCookies(cookieHeader || '')
-
-  const valid = uuid && authCookie
-
-  if (process.env.NODE_ENV === 'development' && !valid) {
-    return {
-      uuid: process.env.YANDEX_UUID,
-      authCookie: process.env.YANDEX_AUTH_COOKIE,
-    }
-  }
-
-  return { uuid, authCookie }
 }

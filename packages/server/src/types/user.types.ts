@@ -1,7 +1,10 @@
-import type { Request } from 'express'
-import type { AnyObject } from './utils.types'
-import { z } from 'zod'
-import { createUserSchema } from '../schemas'
-
-export type CreateUserData = z.infer<typeof createUserSchema>
-export type CreateUserRequest = Request<AnyObject, AnyObject, CreateUserData>
+export type User = Partial<{
+  id: number
+  first_name: string
+  second_name: string
+  display_name: string
+  login: string
+  avatar: string
+  email: string
+  phone: string
+}>
