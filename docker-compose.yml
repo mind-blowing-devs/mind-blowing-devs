@@ -29,6 +29,7 @@ services:
         restart: always
         depends_on:
           - postgres
+          - redis
         ports:
             - "${SERVER_PORT}:${SERVER_PORT}"
         environment:
@@ -42,7 +43,9 @@ services:
           - postgres-network
           - practicum-network
 
-        command: ./wait-for.sh postgres:${POSTGRES_PORT} -- node /app/src/index.js
+        command: sh -c "./wait-for.sh postgres:${POSTGRES_PORT} -- 
+         ./wait-for.sh redis:${REDIS_PORT} -- 
+         node /app/src/index.js"
 
     postgres:
       image: postgres:14
