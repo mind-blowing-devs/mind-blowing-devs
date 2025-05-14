@@ -77,10 +77,10 @@ Figma: [открыть проект](<https://www.figma.com/design/ukplBDMNzVFXs
 
 1. Убедитесь что у вас установлен и запущен `Docker`
 2. Выполните команду `yarn build:docker` чтобы собрать образы
-3. Получите сертификаты с помощью [Certbot](https://certbot.eff.org/instructions). Они должны находиться в `/etc/letsencrypt/live`.
+3. Получите сертификаты с помощью [Certbot](https://certbot.eff.org/instructions). Они должны находиться в `/etc/letsencrypt/live/{your.domain.com}`.
 4. Выполните команду `docker compose up -d` чтобы запустить все контейнеры
 
-**Запустятся 4 сервиса:**
+**Запустятся 5 сервисов:**
 
 - SSR-сервер
 - Backend-сервер
