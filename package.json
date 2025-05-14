@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "yarn && node init.js && lerna clean && yarn && lerna bootstrap",
-    "preview:docker": "docker compose up client server postgres pgadmin",
+    "preview:docker": "docker compose up client server redis postgres pgadmin",
     "build:docker": "docker compose build",
     "build": "lerna run build",
     "dev:client": "lerna run dev --scope=client",
