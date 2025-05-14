@@ -1,5 +1,5 @@
 export * from './getErrorObject'
 export * from './getPaginationData'
 export * from './handleError'
-export * from './cache'
 export * from './auth'
+export * from './redis'

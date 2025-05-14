@@ -15,6 +15,7 @@ services:
     env_file: ".env"
     networks:
       - practicum-network
+
   server:
     container_name: prakticum-server
     image: prackicum-server
@@ -26,6 +27,7 @@ services:
     restart: always
     depends_on:
       - postgres
+      - redis
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     env_file: ".env"
@@ -33,7 +35,7 @@ services:
       - postgres-network
       - practicum-network
 
-    command: ./wait-for.sh postgres:${POSTGRES_PORT} -- node /app/src/index.js
+    command: sh -c "./wait-for.sh postgres:${POSTGRES_PORT} -- ./wait-for.sh redis:${REDIS_PORT} -- node /app/src/index.js"
 
   postgres:
     image: postgres:14
@@ -44,6 +46,7 @@ services:
       - ./tmp/pgdata:/var/lib/postgresql/data
     networks:
       - postgres-network
+
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:4.18
@@ -57,6 +60,18 @@ services:
       - postgres
     networks:
       - postgres-network
+
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ./tmp/redis-data:/var/lib/redis
+    networks:
+      - practicum-network
+
   nginx:
     image: openquantumsafe/nginx-quic
     container_name: nginx
@@ -71,7 +86,7 @@ services:
     networks:
       - practicum-network
     restart: unless-stopped
-    command: ["nginx", "-g", "daemon off;"]
+    command: [ "nginx", "-g", "daemon off;" ]
 
 networks:
   practicum-network:

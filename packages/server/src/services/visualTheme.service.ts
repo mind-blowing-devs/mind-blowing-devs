@@ -1,8 +1,7 @@
-import { VisualTheme, User, UserVisualTheme } from '../models'
+import { VisualTheme, UserVisualTheme } from '../models'
 import type { CreateVisualThemeData, GetVisualThemeData, SetUserVisualThemeData } from '../types'
 import { sequelize } from '../db'
-// import { Op } from 'sequelize'
-import { VISUAL_THEME_NOT_FOUND, USER_NOT_FOUND } from '../constants'
+import { VISUAL_THEME_NOT_FOUND } from '../constants'
 
 export const createVisualTheme = async (data: CreateVisualThemeData) => {
   const transaction = await sequelize.transaction()
@@ -57,12 +56,6 @@ export const setUserVisualTheme = async (data: SetUserVisualThemeData) => {
       throw new Error(VISUAL_THEME_NOT_FOUND)
     }
 
-    const user = await User.findByPk(userId, { transaction })
-
-    if (!user) {
-      throw new Error(USER_NOT_FOUND)
-    }
-
     const existingRow = await UserVisualTheme.findOne({
       where: { userId },
       transaction,
@@ -86,15 +79,10 @@ export const setUserVisualTheme = async (data: SetUserVisualThemeData) => {
   }
 }
 
-export const getUserVisualTheme = async (userId: string) => {
+export const getUserVisualTheme = async (userId: number) => {
   const transaction = await sequelize.transaction()
 
   try {
-    const user = await User.findByPk(userId, { transaction })
-    if (!user) {
-      throw new Error(USER_NOT_FOUND)
-    }
-
     const userVisualTheme = await UserVisualTheme.findOne({
       where: { userId },
       include: VisualTheme,

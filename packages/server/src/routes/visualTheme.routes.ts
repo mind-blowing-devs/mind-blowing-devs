@@ -33,7 +33,7 @@ router.post('/user', validateRequestData(setUserVisualThemeSchema), setUserVisua
 router.get(
   '/user/:userId',
   validateRequestData(getUserVisualThemeSchema, 'params'),
-  getUserVisualThemeController
+  getUserVisualThemeController as unknown as express.RequestHandler
 )
 
 export default router

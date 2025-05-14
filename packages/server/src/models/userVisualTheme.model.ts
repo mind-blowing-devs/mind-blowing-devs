@@ -9,7 +9,6 @@ import {
   BelongsTo,
 } from 'sequelize-typescript'
 
-import { User } from './user.model'
 import { VisualTheme } from './visualTheme.model'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -24,12 +23,8 @@ export class UserVisualTheme extends Model {
   @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
   visualThemeId!: string
 
-  @ForeignKey(() => User)
-  @Column({ type: DataType.UUID, allowNull: false, onDelete: 'CASCADE' })
-  userId!: string
-
-  @BelongsTo(() => User)
-  user!: User
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  userId!: number
 
   @BelongsTo(() => VisualTheme)
   visualTheme!: VisualTheme

@@ -1,4 +1,4 @@
-import { $axiosTopics } from './baseAPI'
+import { $axios } from './baseAPI'
 
 /**
  * Тип для объекта реакции эмодзи
@@ -41,7 +41,7 @@ class ReactionAPI {
   //Получить все реакции для конкретного ответа
   async getReactions(replyId: string): Promise<EmojiReaction[]> {
     try {
-      const response = await $axiosTopics.get(`/reactions?replyId=${replyId}`)
+      const response = await $axios.get(`/reactions?replyId=${replyId}`)
       return response.data
     } catch (error) {
       console.error('Error fetching reactions:', error)
@@ -52,7 +52,7 @@ class ReactionAPI {
   // Добавить реакцию эмодзи к ответу
   async addReaction(data: AddReactionRequest): Promise<EmojiReaction | null> {
     try {
-      const response = await $axiosTopics.post('/reactions', data)
+      const response = await $axios.post('/reactions', data)
       return response.data
     } catch (error) {
       console.error('Error adding reaction:', error)
@@ -63,7 +63,7 @@ class ReactionAPI {
   // Удалить реакцию
   async removeReaction(reactionId: number): Promise<boolean> {
     try {
-      await $axiosTopics.delete(`/reactions/${reactionId}`)
+      await $axios.delete(`/reactions/${reactionId}`)
       return true
     } catch (error) {
       console.error('Error removing reaction:', error)
