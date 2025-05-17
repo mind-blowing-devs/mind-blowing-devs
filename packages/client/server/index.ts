@@ -13,9 +13,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // takes .env from the root when in development environment
-const envConfig = isDev
-  ? { path: path.resolve(__dirname, '../../../.env') }
-  : undefined
+const envConfig = isDev ? { path: path.resolve(__dirname, '../../../.env') } : undefined
 dotenv.config(envConfig)
 
 const port = Number(process.env.CLIENT_PORT) || 5000
@@ -34,13 +32,12 @@ async function createServer() {
     })
     app.use(vite.middlewares)
   } else {
-    app.use(
-      express.static(path.join(clientPath, 'dist/client'), { index: false })
-    )
+    app.use(express.static(path.join(clientPath, 'dist/client'), { index: false }))
   }
 
   app.get(/.*/, async (req, res, next) => {
     const url = req.originalUrl
+    const xRequestId = (req.headers['x-request-id'] || '') as string
 
     try {
       let render: (
@@ -50,31 +47,19 @@ async function createServer() {
 
       if (vite) {
         // Получаем файл client/index.html
-        template = await fs.readFile(
-          path.resolve(clientPath, 'index.html'),
-          'utf-8'
-        )
+        template = await fs.readFile(path.resolve(clientPath, 'index.html'), 'utf-8')
 
         // Применяем встроенные HTML-преобразования vite и плагинов
         template = await vite.transformIndexHtml(url, template)
 
         // Загружаем модуль клиента, он будет рендерить HTML-код
-        render = (
-          await vite.ssrLoadModule(
-            path.join(clientPath, 'src/entry-server.tsx')
-          )
-        ).render
+        render = (await vite.ssrLoadModule(path.join(clientPath, 'src/entry-server.tsx'))).render
       } else {
-        template = await fs.readFile(
-          path.join(clientPath, 'dist/client/index.html'),
-          'utf-8'
-        )
+        template = await fs.readFile(path.join(clientPath, 'dist/client/index.html'), 'utf-8')
 
         // Импортируем этот модуль и вызываем с начальным состоянием
         // entryPath fixes import since we cannot use default ones or __dirname
-        const entryPath = pathToFileURL(
-          path.join(clientPath, 'dist/server/entry-server.js')
-        ).href
+        const entryPath = pathToFileURL(path.join(clientPath, 'dist/server/entry-server.js')).href
         render = (await import(entryPath)).render
       }
 
@@ -89,10 +74,11 @@ async function createServer() {
         )
         .replace(
           `<!--ssr-initial-state-->`,
-          `<script>window.REDUX_INITIAL_STATE = ${serialize(initialState, {
+          `<script nonce="${xRequestId}">window.REDUX_INITIAL_STATE = ${serialize(initialState, {
             isJSON: true,
           })}</script>`
         )
+        .replace(/\*\*CSP_NONCE\*\*/g, xRequestId)
 
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).send(html)

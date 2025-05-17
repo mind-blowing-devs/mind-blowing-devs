@@ -42,7 +42,7 @@ export const render = async (req: ExpressRequest) => {
   const html = ReactDOM.renderToString(
     <ReduxProvider store={store}>
       <ThemeProvider>
-        <StaticRouterProvider router={router} context={context} />
+        <StaticRouterProvider router={router} context={context} nonce="**CSP_NONCE**" />
       </ThemeProvider>
     </ReduxProvider>
   )
