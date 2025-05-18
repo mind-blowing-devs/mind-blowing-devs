@@ -16,9 +16,17 @@ import {
 import { AppSpinner } from '../../components'
 import { useAppSelector } from '../../store'
 import { formatDate } from '../../utils'
+import SafeContent from '../../components/SafeContent/SafeContent'
+import { sanitizeString } from '../../utils/sanitize'
 
 const schema = z.object({
-  comment: z.string().min(1, 'Reply is required'),
+  comment: z
+    .string()
+    .min(1, 'Reply is required')
+    .refine(value => {
+      const sanitized = sanitizeString(value)
+      return !!sanitized
+    }, 'Comment contains potentially dangerous content'),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -118,13 +126,14 @@ export default function ForumTopic() {
       {topic ? (
         <div className="border-4 border-[#818181] bg-[#D9D9D9] flex flex-col justify-center items-center relative w-full lg:px-[32px] md:px-[15px] px-[10px] text-xs md:text-base sm:text-sm overflow-y-auto">
           <h3 className="font-roboto font-semibold w-full my-[2px] sm:my-[4px] lg:my-[12px] text-lg lg:text-xl sm:text-lg text-black sm:text-center text-left">
-            {topic.title}
+            <SafeContent content={topic.title} />
           </h3>
           <h4 className="font-roboto w-full font-sm lg:text-base sm:text-sm sm:mb-[20px] mb-[8px] text-black sm:text-center text-left">
             {/* TODO: add Views functionality */}
-            Posted by: {topic.author} • {formatDate(topic.createdAt)} • Views: 142
+            Posted by: <SafeContent content={topic.author} /> • {formatDate(topic.createdAt)} •
+            Views: 142
           </h4>
-          <p className="font-roboto">{topic.description}</p>
+          <SafeContent content={topic.description} className="font-roboto" />
 
           <section className="w-full">
             <h3 className="font-roboto font-semibold my-[30px]">Replies ({comments.length})</h3>
