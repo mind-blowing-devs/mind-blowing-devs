@@ -69,7 +69,8 @@ async function createServer() {
       const rawHost = req.headers.host.includes(':')
         ? req.headers.host.split(':')[0]
         : req.headers.host
-      const hostUrl = process.env.ALLOW_UNSAFE_HTTP ? `http://${rawHost}` : `https://${rawHost}`
+      const hostUrl =
+        process.env.ALLOW_UNSAFE_HTTP == 'true' ? `http://${rawHost}` : `https://${rawHost}`
       const apiServerUrl = isDev ? 'http://localhost:5001' : hostUrl
 
       // Заменяем комментарий на сгенерированную HTML-строку
