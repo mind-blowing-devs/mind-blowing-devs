@@ -1,0 +1,188 @@
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { AppInput, AppSpinner, Button, YandexIcon } from '../../components'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { getValidationRules } from '../../utils'
+import { useAuth, usePage } from '../../hooks'
+import { useState } from 'react'
+import { AxiosError } from 'axios'
+import { Helmet } from 'react-helmet'
+
+type PageInput = {
+  name:
+    | 'login'
+    | 'password'
+    | 'first_name'
+    | 'second_name'
+    | 'email'
+    | 'password_again'
+    | 'phone'
+  label: string
+  type?: string
+  error?: string
+}
+
+const pageInputs: PageInput[] = [
+  {
+    label: 'first name',
+    name: 'first_name',
+  },
+  {
+    label: 'second name',
+    name: 'second_name',
+  },
+  {
+    label: 'login',
+    name: 'login',
+  },
+  {
+    label: 'email',
+    type: 'email',
+    name: 'email',
+  },
+  {
+    label: 'password',
+    type: 'password',
+    name: 'password',
+  },
+  {
+    label: 'password again',
+    type: 'password',
+    name: 'password_again',
+  },
+  {
+    label: 'phone',
+    type: 'tel',
+    name: 'phone',
+  },
+]
+
+const keyValuePairs = pageInputs.map(({ name }) => {
+  if (name === 'password_again') {
+    return [name, z.string().min(1, 'you must confirm your password')] as const
+  }
+
+  const [regex, message] = getValidationRules(name)
+  return [name, z.string().regex(regex, message)] as const
+})
+
+const signUpSchema = z
+  .object(
+    keyValuePairs.reduce((acc, [key, value]) => {
+      acc[key] = value
+      return acc
+    }, {} as Record<(typeof pageInputs)[number]['name'], z.ZodString>)
+  )
+  .refine(data => data.password === data.password_again, {
+    message: 'you must enter matching passwords',
+    path: ['password_again'],
+  })
+
+function SignUp() {
+  type TSignUpSchema = z.infer<typeof signUpSchema>
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+    trigger,
+  } = useForm<TSignUpSchema>({
+    resolver: zodResolver(signUpSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
+  })
+  const { signUp, signInWithYandex } = useAuth()
+  usePage({})
+
+  const [errorHint, setErrorHint] = useState('')
+
+  const onSubmit = async (data: TSignUpSchema) => {
+    const isValid = await trigger() // Проверяем инпуты при submit
+    if (!isValid) {
+      return
+    }
+
+    try {
+      await signUp(data)
+    } catch (error: unknown) {
+      const reason = (
+        (error as AxiosError)?.response?.data as { reason: string }
+      )?.reason
+      setErrorHint(reason || 'Oops. Something went wrong. Try again later.')
+    }
+  }
+
+  return (
+    <main className="h-[100%] flex flex-col items-center justify-center gap-10 pt-[5rem] pb-[5rem] w-full">
+      <Helmet>
+        <title>Create your account / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Let's begin Minesweeper Adventure! Sign in or create an account to start sweeping mines!"
+        />
+      </Helmet>
+      <h1 className="text-font-color mb-4 max-w-[30rem] text-center">
+        Create your account to start sweeping mines!
+      </h1>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col  gap-10 bg-[#D9D9D9] p-12 border-4 border-gray-500 shadow-md max-w-[50rem]">
+        <div className="flex  flex-col gap-10">
+          {pageInputs.map(inputItem => (
+            <AppInput
+              key={inputItem.name}
+              register={register}
+              label={inputItem.label}
+              name={inputItem.name}
+              type={inputItem.type}
+              error={errors[inputItem.name as keyof TSignUpSchema]}
+            />
+          ))}
+        </div>
+
+        <div className="flex flex-col items-center gap-4">
+          {!isSubmitting ? (
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              variant="primary"
+              className="w-[240px]">
+              start game
+            </Button>
+          ) : (
+            <div className="h-[52px] flex items-center">
+              <AppSpinner color={'#000'} />
+            </div>
+          )}
+
+          <Button
+            type="button"
+            onClick={signInWithYandex}
+            variant="yandex"
+            className="w-[240px]"
+            icon={<YandexIcon width={20} height={20} />}>
+            sign in
+          </Button>
+        </div>
+
+        {errorHint && (
+          <p className="text-center text-[12px] text-red-500 mt-4">
+            {errorHint}
+          </p>
+        )}
+      </form>
+
+      <div className="text-font-color mt-4 flex flex-col gap-2">
+        <div className="flex text-[13px] gap-2">
+          <p>Have an account?</p>
+          <Link to="/signIn" className="text-black hover:opacity-50">
+            [Sign In]
+          </Link>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+export default SignUp

@@ -1,0 +1,77 @@
+import { useSearchParams } from 'react-router-dom'
+import { changePassword, type ChangePasswordData } from '../../api'
+import {
+  Avatar,
+  ProfileActions,
+  ProfileDetails,
+  ChangeAvatar,
+  ChangePassword,
+} from './components'
+import { useAppSelector, useAppDispatch, changeAvatar } from '../../store'
+import { useAuth, usePage } from '../../hooks'
+import { Helmet } from 'react-helmet'
+
+export default function Profile() {
+  const dispatch = useAppDispatch()
+  const { logout } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { user, achievements } = useAppSelector(state => state.user)
+
+  usePage({})
+
+  const editParam = searchParams.get('edit')
+  const isEditPassword = editParam === 'password'
+  const isEditAvatar = editParam === 'avatar'
+
+  const handleAvatarChange = async (data: FormData) => {
+    await dispatch(changeAvatar(data)).unwrap()
+  }
+
+  const handlePasswordChange = async (data: ChangePasswordData) => {
+    try {
+      await changePassword(data)
+    } catch (error) {
+      console.log(`changing password error: ${error}`)
+    }
+  }
+
+  let content = (
+    <ProfileDetails
+      username={user?.login ?? ''}
+      userAchievements={achievements}
+    />
+  )
+
+  let heading = 'My Profile'
+
+  if (isEditPassword) {
+    content = <ChangePassword onPasswordChange={handlePasswordChange} />
+    heading = 'Change Password'
+  } else if (isEditAvatar) {
+    content = <ChangeAvatar onAvatarChange={handleAvatarChange} />
+    heading = 'Change Avatar'
+  }
+
+  return (
+    <main className="flex flex-col items-center min-h-screen p-4 sm:p-6">
+      <Helmet>
+        <title>{heading} / Minesweeper Adventure game</title>
+        <meta
+          name="description"
+          content="Change your appearance by editing your name or changing avatar. You can change your password as well if you want more safety!"
+        />
+      </Helmet>
+      <h1 className="mt-2 sm:text-xl text-font-color">{heading}</h1>
+      <div className="border-4 border-[#818181] bg-[#D9D9D9] p-6 mt-8 w-full max-w-xl text-xs sm:text-sm md:text-base">
+        <Avatar avatar={user?.avatar ?? null} />
+        <section className="mt-10">{content}</section>
+      </div>
+
+      <ProfileActions
+        isEdit={isEditPassword || isEditAvatar}
+        setSearchParams={setSearchParams}
+        onLogOut={logout}
+      />
+    </main>
+  )
+}

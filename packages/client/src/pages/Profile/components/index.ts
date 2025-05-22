@@ -1,0 +1,7 @@
+export * from './Avatar'
+export * from './ChangeAvatar'
+export * from './ChangePassword'
+export * from './ProfileActions'
+export * from './ProfileDetails'
+export * from './Star'
+export * from './BestTime'

@@ -1,0 +1,40 @@
+name: Add Linear Link to PR
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  add-linear-link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PAT_TOKEN }}
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            const title = pr.title;
+            const body = pr.body || '';
+
+            // Ищем идентификатор задачи в формате MIN-XX
+            const issueIdMatch = title.match(/MIN-\d+/);
+
+            if (issueIdMatch && !body.includes('Linear Issue:')) {
+              const issueId = issueIdMatch[0];
+              const linearUrl = `https://linear.app/mind-blowing-devs/issue/${issueId}`;
+              
+              // Добавляем ссылку на Linear в описание PR
+              const newBody = body + `\n\n### Linear Issue: [${issueId}](${linearUrl})`;
+              
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                body: newBody
+              });
+            }
