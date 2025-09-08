@@ -1,4 +1,5 @@
-import { EmojiReactions } from '../../../../components/EmojiReactions'
+import SafeContent from '../../../../components/SafeContent/SafeContent'
+import EmojiReactions from '../../../../components/EmojiReactions/EmojiReactions'
 
 export interface IReply {
   id: string
@@ -21,7 +22,7 @@ export default function Reply({
     <div className="group">
       <div className="font-roboto font-normal mb-[12px] flex justify-between">
         <div>
-          <span className="underline decoration-solid">{nickname}</span> • {timestamp}
+          <SafeContent content={nickname} className="underline decoration-solid" /> • {timestamp}
         </div>
         {nickname === currentUserNickname && (
           <button
@@ -31,7 +32,7 @@ export default function Reply({
           </button>
         )}
       </div>
-      <span className="font-roboto">{text}</span>
+      <SafeContent content={text} className="font-roboto" />
       <EmojiReactions replyId={id} />
     </div>
   )

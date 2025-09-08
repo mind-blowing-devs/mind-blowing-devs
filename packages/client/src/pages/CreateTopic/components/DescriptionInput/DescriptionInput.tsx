@@ -1,5 +1,6 @@
 import type { FieldError, UseFormRegister } from 'react-hook-form'
 import type { CreateTopicFormValues } from '../../CreateTopic'
+import { sanitizeString } from '../../../../utils/sanitize'
 
 type InputProps = {
   register: UseFormRegister<CreateTopicFormValues>
@@ -15,7 +16,15 @@ export default function DescriptionInput({ register, error }: InputProps) {
       <textarea
         className="w-full h-auto lg:min-h-[130px] min-h-[80px] max-h-[192px] border-2 border-[#818181] bg-[#D9D9D9] outline-none"
         id="topicDescription"
-        {...register('topicDescription')}
+        {...register('topicDescription', {
+          validate: value => {
+            const sanitized = sanitizeString(value)
+            if (!sanitized) {
+              return 'Description contains potentially dangerous content'
+            }
+            return true
+          },
+        })}
       />
       {error && <p className="text-red-500 text-[10px]">{error.message}</p>}
     </div>

@@ -1,5 +1,6 @@
 import type { FieldError, UseFormRegister } from 'react-hook-form'
 import type { CreateTopicFormValues } from '../../CreateTopic'
+import { sanitizeString } from '../../../../utils/sanitize'
 
 type InputProps = {
   register: UseFormRegister<CreateTopicFormValues>
@@ -18,7 +19,15 @@ export default function TitleInput({ register, error }: InputProps) {
           type="text"
           id="topicTitle"
           className="bg-transparent outline-none w-[180px] border-b-[1px] border-black border-dashed"
-          {...register('topicTitle')}
+          {...register('topicTitle', {
+            validate: value => {
+              const sanitized = sanitizeString(value)
+              if (!sanitized) {
+                return 'Title contains potentially dangerous content'
+              }
+              return true
+            },
+          })}
         />
         ]
       </span>
